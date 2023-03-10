@@ -1,4 +1,5 @@
-﻿using System;
+﻿using corel_draw.Figures;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -21,7 +22,7 @@ namespace corel_draw
         {
             Figures.Rectangle rectangle = new Figures.Rectangle();
             Graphics graphics = this.CreateGraphics();
-            rectangle.DrawFigure(new PaintEventArgs(graphics, this.ClientRectangle), 150, 150, 100, 100);
+            rectangle.DrawFigure(new PaintEventArgs(graphics, this.ClientRectangle), 150, 150, 200, 100);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -36,6 +37,25 @@ namespace corel_draw
             PolygonForm polygon = new PolygonForm();
             polygon.Show();
             /*this.Hide();*/
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+
+            Figures.Square square = new Figures.Square();
+            Graphics graphics = this.CreateGraphics();
+            square.DrawFigure(new PaintEventArgs(graphics, this.ClientRectangle),50, 200, 0, 100);
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            Figures.Triagnle triangle = new Figures.Triagnle();
+            Graphics graphics = this.CreateGraphics();
+            Brush brush = new SolidBrush(Color.Black);
+            PointF point1 = new PointF(50, 50);
+            PointF point2 = new PointF(100, 150);
+            PointF point3 = new PointF(150, 50);
+            triangle.DrawTriangle(graphics, brush, point1, point2, point3);
         }
     }
 }
