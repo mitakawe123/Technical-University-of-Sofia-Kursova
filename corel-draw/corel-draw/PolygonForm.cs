@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace corel_draw
 {
-    public partial class Form1 : Form
+    public partial class PolygonForm : Form
     {
-        public Form1()
+        public PolygonForm()
         {
             InitializeComponent();
         }
