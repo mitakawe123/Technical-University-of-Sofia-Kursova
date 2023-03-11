@@ -13,6 +13,10 @@ namespace corel_draw
 {
     public partial class DrawingForm : Form
     {
+        public float xAxisVal;
+        public float yAxisVal;
+        public float widthVal;
+        public float heightVal;
         public DrawingForm()
         {
             InitializeComponent();
@@ -22,20 +26,20 @@ namespace corel_draw
         {
             Figures.Rectangle rectangle = new Figures.Rectangle();
             Graphics graphics = this.CreateGraphics();
-            rectangle.DrawFigure(new PaintEventArgs(graphics, this.ClientRectangle), 150, 150, 200, 100);
+            rectangle.DrawFigure(new PaintEventArgs(graphics, this.ClientRectangle), xAxisVal, yAxisVal, widthVal, heightVal);
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             PaintEventArgs paintEventArgs = new PaintEventArgs(this.CreateGraphics(), this.ClientRectangle);
             Figures.Circle circle = new Figures.Circle();
-            circle.DrawFigure(paintEventArgs, 100,100,100,100);
+            circle.DrawFigure(paintEventArgs, xAxisVal, yAxisVal, widthVal, heightVal);
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            PolygonForm polygon = new PolygonForm();
-            polygon.Show();
+            PolygonForm polygonForm = new PolygonForm();
+            polygonForm.Show();
             /*this.Hide();*/
         }
 
@@ -44,7 +48,8 @@ namespace corel_draw
 
             Figures.Square square = new Figures.Square();
             Graphics graphics = this.CreateGraphics();
-            square.DrawFigure(new PaintEventArgs(graphics, this.ClientRectangle),50, 200, 0, 100);
+            square.DrawFigure(new PaintEventArgs(graphics, this.ClientRectangle),xAxisVal, yAxisVal, widthVal, heightVal);
+            //here i need to make so that the width or height input in the main form is hidden
         }
 
         private void button5_Click(object sender, EventArgs e)
