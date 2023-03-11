@@ -108,6 +108,9 @@
             this.Controls.Add(this.button1);
             this.Name = "DrawingForm";
             this.Text = "Form1";
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DrawingForm_MouseDown);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DrawingForm_MouseMove);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.DrawingForm_MouseUp);
             this.ResumeLayout(false);
             this.PerformLayout();
 

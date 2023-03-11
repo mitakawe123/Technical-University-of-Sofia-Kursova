@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,12 +15,15 @@ namespace corel_draw.Figures
         private float _width;
         private float _height;
         private int sides;
-
         public float X { get; set; }
         public float Y { get; set; }
         public float Width { get; set; }
         public float Height { get; set; }
         public int Sides { get; set; }
+
+
+        public string CurrentFigureName { get; set; }
+
         public Figure(float x, float y, float width, float height)
         {
             X = x;
@@ -43,5 +47,7 @@ namespace corel_draw.Figures
 
         public virtual void DrawFigure(PaintEventArgs e, float x, float y, float width, float height) { }
         public virtual void DrawPolygon(PaintEventArgs e, float x, float y, float width, float height, int sides) { }
+
+      
     }
 }

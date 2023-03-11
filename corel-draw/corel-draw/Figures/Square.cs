@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace corel_draw.Figures
 {
-    internal class Square : Figure
+    internal  class Square : Figure
     {
         public override void DrawFigure(PaintEventArgs e, float x, float y, float width, float height)
         {

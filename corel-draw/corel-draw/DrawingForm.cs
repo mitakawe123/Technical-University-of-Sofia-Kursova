@@ -13,6 +13,10 @@ namespace corel_draw
 {
     public partial class DrawingForm : Form
     {
+        //private List<Figure> figures = new List<Figure>();
+        private Figure movingFigure;
+        // private Point mouseOffset;
+
         public float xAxisVal;
         public float yAxisVal;
         public float widthVal;
@@ -20,11 +24,13 @@ namespace corel_draw
         public DrawingForm()
         {
             InitializeComponent();
+
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             Figures.Rectangle rectangle = new Figures.Rectangle();
+            movingFigure.CurrentFigureName = "rectangle";
             Graphics graphics = this.CreateGraphics();
             rectangle.DrawFigure(new PaintEventArgs(graphics, this.ClientRectangle), xAxisVal, yAxisVal, widthVal, heightVal);
         }
@@ -33,6 +39,7 @@ namespace corel_draw
         {
             PaintEventArgs paintEventArgs = new PaintEventArgs(this.CreateGraphics(), this.ClientRectangle);
             Figures.Circle circle = new Figures.Circle();
+            movingFigure.CurrentFigureName = "circle";
             circle.DrawFigure(paintEventArgs, xAxisVal, yAxisVal, widthVal, heightVal);
         }
 
@@ -47,6 +54,7 @@ namespace corel_draw
         {
 
             Figures.Square square = new Figures.Square();
+            movingFigure.CurrentFigureName = "square";
             Graphics graphics = this.CreateGraphics();
             square.DrawFigure(new PaintEventArgs(graphics, this.ClientRectangle),xAxisVal, yAxisVal, widthVal, heightVal);
             //here i need to make so that the width or height input in the main form is hidden
@@ -61,6 +69,21 @@ namespace corel_draw
             PointF point2 = new PointF(100, 150);
             PointF point3 = new PointF(150, 50);
             triangle.DrawTriangle(graphics, brush, point1, point2, point3);
+        }
+
+        private void DrawingForm_MouseUp(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void DrawingForm_MouseMove(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void DrawingForm_MouseDown(object sender, MouseEventArgs e)
+        {
+
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace corel_draw.Figures
 {
-    internal class Polygon : Figure
+    internal  class Polygon : Figure
     {
         /*public override void DrawPolygon(PaintEventArgs e, float x, float y, float width, float height, int sides)
         {

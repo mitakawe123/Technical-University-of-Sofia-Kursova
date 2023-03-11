@@ -19,6 +19,7 @@ namespace corel_draw
 
         private void button1_Click(object sender, EventArgs e)
         {
+            //passing the values from calculation form to the main form
             string xAxis = textBox1.Text;
             string yAxis = textBox2.Text;
             string width= textBox3.Text;

@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace corel_draw.Figures
 {
-    internal class Triagnle : Figure
+    internal  class Triagnle : Figure
     {
         public void DrawTriangle(Graphics g, Brush brush, PointF point1, PointF point2, PointF point3)
         {

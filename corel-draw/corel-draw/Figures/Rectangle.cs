@@ -8,8 +8,9 @@ using System.Windows.Forms;
 
 namespace corel_draw.Figures
 {
-    internal class Rectangle : Figure
+    internal  class Rectangle : Figure
     {
+        private Rectangle rectangle;
         public override void DrawFigure(PaintEventArgs e, float x, float y, float width, float height)
         {
             base.DrawFigure(e, x, y, width, height);
@@ -17,6 +18,7 @@ namespace corel_draw.Figures
             Pen pen = new Pen(Color.Black, 5);
             g.DrawRectangle(pen, x, y, width, height);
         }
+      
         public Rectangle(float x, float y, float width, float height) : base(x, y, width, height)
         {
         }

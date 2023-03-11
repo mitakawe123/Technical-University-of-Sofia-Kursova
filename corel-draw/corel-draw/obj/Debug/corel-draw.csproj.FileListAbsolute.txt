@@ -10,3 +10,4 @@ C:\Users\dimitar.kyuchukov\Desktop\kursova-rabota-main\corel-draw\corel-draw\obj
 C:\Users\dimitar.kyuchukov\Desktop\kursova-rabota-main\corel-draw\corel-draw\obj\Debug\corel-draw.csproj.CoreCompileInputs.cache
 C:\Users\dimitar.kyuchukov\Desktop\kursova-rabota-main\corel-draw\corel-draw\obj\Debug\corel-draw.exe
 C:\Users\dimitar.kyuchukov\Desktop\kursova-rabota-main\corel-draw\corel-draw\obj\Debug\corel-draw.pdb
+C:\Users\dimitar.kyuchukov\Desktop\kursova-rabota-main\corel-draw\corel-draw\obj\Debug\corel_draw.CalculationForm.resources
