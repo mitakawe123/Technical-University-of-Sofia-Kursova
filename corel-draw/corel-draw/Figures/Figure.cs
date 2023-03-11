@@ -21,9 +21,6 @@ namespace corel_draw.Figures
         public float Height { get; set; }
         public int Sides { get; set; }
 
-
-        public string CurrentFigureName { get; set; }
-
         public Figure(float x, float y, float width, float height)
         {
             X = x;
@@ -47,7 +44,5 @@ namespace corel_draw.Figures
 
         public virtual void DrawFigure(PaintEventArgs e, float x, float y, float width, float height) { }
         public virtual void DrawPolygon(PaintEventArgs e, float x, float y, float width, float height, int sides) { }
-
-      
     }
 }

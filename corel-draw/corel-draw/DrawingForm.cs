@@ -13,6 +13,7 @@ namespace corel_draw
 {
     public partial class DrawingForm : Form
     {
+        CalculationForm calcForm = new CalculationForm();
         //private List<Figure> figures = new List<Figure>();
         private Figure movingFigure;
         // private Point mouseOffset;
@@ -29,8 +30,8 @@ namespace corel_draw
 
         private void button1_Click(object sender, EventArgs e)
         {
+            /*calcForm.Show();*/
             Figures.Rectangle rectangle = new Figures.Rectangle();
-            movingFigure.CurrentFigureName = "rectangle";
             Graphics graphics = this.CreateGraphics();
             rectangle.DrawFigure(new PaintEventArgs(graphics, this.ClientRectangle), xAxisVal, yAxisVal, widthVal, heightVal);
         }
@@ -39,7 +40,6 @@ namespace corel_draw
         {
             PaintEventArgs paintEventArgs = new PaintEventArgs(this.CreateGraphics(), this.ClientRectangle);
             Figures.Circle circle = new Figures.Circle();
-            movingFigure.CurrentFigureName = "circle";
             circle.DrawFigure(paintEventArgs, xAxisVal, yAxisVal, widthVal, heightVal);
         }
 
@@ -54,7 +54,6 @@ namespace corel_draw
         {
 
             Figures.Square square = new Figures.Square();
-            movingFigure.CurrentFigureName = "square";
             Graphics graphics = this.CreateGraphics();
             square.DrawFigure(new PaintEventArgs(graphics, this.ClientRectangle),xAxisVal, yAxisVal, widthVal, heightVal);
             //here i need to make so that the width or height input in the main form is hidden
@@ -85,5 +84,6 @@ namespace corel_draw
         {
 
         }
+        //https://github.com/jason557/MoveorCopyLine/blob/main/MoveorCopyLine/move_or_copy_a_line/Form1.cs
     }
 }
