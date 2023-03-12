@@ -29,18 +29,22 @@ namespace corel_draw
 
         private void button1_Click(object sender, EventArgs e)
         {
+            DrawingForm drawingForm = new DrawingForm();
             xAxisVal = float.Parse(textBox1.Text);
             yAxisVal = float.Parse(textBox2.Text);
-            if (isSquare) { 
-                widthVal = 0f; 
+            if (isSquare)
+            {
+                widthVal = 0f;
             }
-            else widthVal = float.Parse(textBox3.Text);
+            else
+            {
+                widthVal = float.Parse(textBox3.Text);
+            }
             heightVal = float.Parse(textBox4.Text);
             this.DialogResult = DialogResult.OK;
             this.Close();
-            DrawingForm drawingForm = new DrawingForm();
-            drawingForm.timer1.Enabled = true;
-       }
+/*            drawingForm.timer1.Enabled = true;
+*/       }
 
         private void CalculationForm_Load(object sender, EventArgs e)
         {

@@ -17,9 +17,18 @@ namespace corel_draw
         private List<Figure> figures = new List<Figure>();
         private bool isDragging = false;
         private Point lastMouseLocation;
+
         public DrawingForm()
         {
             InitializeComponent();
+        }
+
+        private void RedrawForm()
+        {
+            if(figures.Count > 0)
+            {
+                this.Invalidate();
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -31,6 +40,7 @@ namespace corel_draw
             {
                 calcForm.nameOfFigure = "Put your measurements for Rectangle";
                 Figures.Rectangle rectangle = new Figures.Rectangle();
+                RedrawForm();
                 Graphics graphics = this.CreateGraphics();
                 rectangle.DrawFigure(new PaintEventArgs(graphics, this.ClientRectangle), calcForm.xAxisVal, calcForm.yAxisVal, calcForm.widthVal, calcForm.heightVal);
                 figures.Add(rectangle);
@@ -106,6 +116,7 @@ namespace corel_draw
             
         }
 
+        //trying to move each figure with the key strokes   
         private void DrawingForm_KeyDown(object sender, KeyEventArgs e)
         {
             
@@ -122,7 +133,7 @@ namespace corel_draw
                 figures.Last().X -= 10;
             }
             if (e.KeyData == Keys.Right)
-            {
+            {   
                 figures.Last().X += 10;
             }
         }
