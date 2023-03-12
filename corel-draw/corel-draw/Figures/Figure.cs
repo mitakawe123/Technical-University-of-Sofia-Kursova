@@ -20,6 +20,7 @@ namespace corel_draw.Figures
         public float Width { get; set; }
         public float Height { get; set; }
         public int Sides { get; set; }
+        public bool isSelected { get; set; }
 
         public Figure(float x, float y, float width, float height)
         {
@@ -37,12 +38,20 @@ namespace corel_draw.Figures
             Sides = sides;
         }
 
-        public virtual void CalcFace()
+        public virtual float CalcFace()
         {
-
+            return 0f;
         }
 
         public virtual void DrawFigure(PaintEventArgs e, float x, float y, float width, float height) { }
         public virtual void DrawPolygon(PaintEventArgs e, float x, float y, float width, float height, int sides) { }
+
+        public void Move(int deltaX, int deltaY)
+        {
+            // Update the position of the figure based on the given deltaX and deltaY values
+            // For example:
+            X += deltaX;
+            Y += deltaY;
+        }
     }
 }

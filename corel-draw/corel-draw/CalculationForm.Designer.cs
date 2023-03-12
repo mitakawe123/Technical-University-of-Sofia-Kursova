@@ -42,7 +42,7 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(271, 112);
+            this.textBox1.Location = new System.Drawing.Point(271, 128);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(227, 26);
@@ -51,7 +51,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(268, 40);
+            this.label1.Location = new System.Drawing.Point(268, 79);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(250, 13);
             this.label1.TabIndex = 1;
@@ -70,7 +70,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(199, 115);
+            this.label2.Location = new System.Drawing.Point(199, 131);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(36, 13);
             this.label2.TabIndex = 3;
@@ -88,7 +88,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(199, 254);
+            this.label4.Location = new System.Drawing.Point(199, 287);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(38, 13);
             this.label4.TabIndex = 5;
@@ -97,7 +97,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(199, 318);
+            this.label5.Location = new System.Drawing.Point(199, 242);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(35, 13);
             this.label5.TabIndex = 6;
@@ -113,7 +113,7 @@
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(271, 245);
+            this.textBox3.Location = new System.Drawing.Point(271, 278);
             this.textBox3.Multiline = true;
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(227, 31);
@@ -121,7 +121,7 @@
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(271, 302);
+            this.textBox4.Location = new System.Drawing.Point(271, 226);
             this.textBox4.Multiline = true;
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(227, 29);

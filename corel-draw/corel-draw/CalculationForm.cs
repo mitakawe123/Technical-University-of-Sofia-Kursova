@@ -21,6 +21,7 @@ namespace corel_draw
         public float yAxisVal { get; set; }
         public float widthVal { get; set; }
         public float heightVal { get; set; }
+        public bool isSquare { get; set; }
         public CalculationForm()
         {
             InitializeComponent();
@@ -30,11 +31,16 @@ namespace corel_draw
         {
             xAxisVal = float.Parse(textBox1.Text);
             yAxisVal = float.Parse(textBox2.Text);
-            widthVal = float.Parse(textBox3.Text);
+            if (isSquare) { 
+                widthVal = 0f; 
+            }
+            else widthVal = float.Parse(textBox3.Text);
             heightVal = float.Parse(textBox4.Text);
             this.DialogResult = DialogResult.OK;
             this.Close();
-        }
+            DrawingForm drawingForm = new DrawingForm();
+            drawingForm.timer1.Enabled = true;
+       }
 
         private void CalculationForm_Load(object sender, EventArgs e)
         {
@@ -42,8 +48,14 @@ namespace corel_draw
 
         public void HideTextBoxForSquare()
         {
-            textBox4.Hide();
-            label5.Hide();
+            textBox3.Hide();
+            label4.Hide();
+        }
+
+        public void ShowTextBoxForSquare()
+        {
+            textBox3.Show();
+            label4.Show();
         }
     }
 }

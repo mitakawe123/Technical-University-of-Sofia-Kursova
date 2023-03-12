@@ -28,12 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // button1
@@ -95,6 +97,11 @@
             this.label1.TabIndex = 5;
             this.label1.Text = "What do you want to draw";
             // 
+            // timer1
+            // 
+            this.timer1.Interval = 50;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // DrawingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -108,6 +115,7 @@
             this.Controls.Add(this.button1);
             this.Name = "DrawingForm";
             this.Text = "Form1";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DrawingForm_KeyDown);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DrawingForm_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DrawingForm_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.DrawingForm_MouseUp);
@@ -124,6 +132,7 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Label label1;
+        public System.Windows.Forms.Timer timer1;
     }
 }
 
