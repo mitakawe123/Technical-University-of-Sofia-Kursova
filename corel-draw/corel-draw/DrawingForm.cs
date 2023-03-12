@@ -14,33 +14,39 @@ namespace corel_draw
     public partial class DrawingForm : Form
     {
         CalculationForm calcForm = new CalculationForm();
-        //private List<Figure> figures = new List<Figure>();
+        private List<Figure> figures = new List<Figure>();
         private Figure movingFigure;
         // private Point mouseOffset;
 
-        public float xAxisVal;
-        public float yAxisVal;
-        public float widthVal;
-        public float heightVal;
         public DrawingForm()
         {
             InitializeComponent();
-
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            /*calcForm.Show();*/
-            Figures.Rectangle rectangle = new Figures.Rectangle();
-            Graphics graphics = this.CreateGraphics();
-            rectangle.DrawFigure(new PaintEventArgs(graphics, this.ClientRectangle), xAxisVal, yAxisVal, widthVal, heightVal);
+            DialogResult result = calcForm.ShowDialog();
+            if(result == DialogResult.OK)
+            {
+                
+                calcForm.nameOfFigure = "Put your measurements for Rectangle";
+                Figures.Rectangle rectangle = new Figures.Rectangle();
+                Graphics graphics = this.CreateGraphics();
+                rectangle.DrawFigure(new PaintEventArgs(graphics, this.ClientRectangle), calcForm.xAxisVal, calcForm.yAxisVal, calcForm.widthVal, calcForm.heightVal);
+            }
         }
+
 
         private void button2_Click(object sender, EventArgs e)
         {
-            PaintEventArgs paintEventArgs = new PaintEventArgs(this.CreateGraphics(), this.ClientRectangle);
-            Figures.Circle circle = new Figures.Circle();
-            circle.DrawFigure(paintEventArgs, xAxisVal, yAxisVal, widthVal, heightVal);
+            DialogResult result = calcForm.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                calcForm.nameOfFigure = "Put your measurements for circle";
+                PaintEventArgs paintEventArgs = new PaintEventArgs(this.CreateGraphics(), this.ClientRectangle);
+                Figures.Circle circle = new Figures.Circle();
+                circle.DrawFigure(paintEventArgs, calcForm.xAxisVal, calcForm.yAxisVal, calcForm.widthVal, calcForm.heightVal);
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -52,15 +58,22 @@ namespace corel_draw
 
         private void button4_Click(object sender, EventArgs e)
         {
-
-            Figures.Square square = new Figures.Square();
-            Graphics graphics = this.CreateGraphics();
-            square.DrawFigure(new PaintEventArgs(graphics, this.ClientRectangle),xAxisVal, yAxisVal, widthVal, heightVal);
-            //here i need to make so that the width or height input in the main form is hidden
+/*            calcForm.HideTextBoxForSquare();
+*/            DialogResult result = calcForm.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                calcForm.nameOfFigure = "Put your measurements for square";
+                Figures.Square square = new Figures.Square();
+                Graphics graphics = this.CreateGraphics();
+                calcForm.heightVal = 0;
+                square.DrawFigure(new PaintEventArgs(graphics, this.ClientRectangle), calcForm.xAxisVal, calcForm.yAxisVal, calcForm.widthVal, calcForm.heightVal);
+            }
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
+            calcForm.Show();
+            calcForm.nameOfFigure = "Put your measurements for Triangle";
             Figures.Triagnle triangle = new Figures.Triagnle();
             Graphics graphics = this.CreateGraphics();
             Brush brush = new SolidBrush(Color.Black);

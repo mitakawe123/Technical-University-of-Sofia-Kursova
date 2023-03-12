@@ -42,10 +42,10 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(271, 84);
+            this.textBox1.Location = new System.Drawing.Point(271, 112);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(227, 44);
+            this.textBox1.Size = new System.Drawing.Size(227, 26);
             this.textBox1.TabIndex = 0;
             // 
             // label1
@@ -105,26 +105,26 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(271, 150);
+            this.textBox2.Location = new System.Drawing.Point(271, 178);
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(227, 44);
+            this.textBox2.Size = new System.Drawing.Size(227, 26);
             this.textBox2.TabIndex = 7;
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(271, 223);
+            this.textBox3.Location = new System.Drawing.Point(271, 245);
             this.textBox3.Multiline = true;
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(227, 44);
+            this.textBox3.Size = new System.Drawing.Size(227, 31);
             this.textBox3.TabIndex = 8;
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(271, 287);
+            this.textBox4.Location = new System.Drawing.Point(271, 302);
             this.textBox4.Multiline = true;
             this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(227, 44);
+            this.textBox4.Size = new System.Drawing.Size(227, 29);
             this.textBox4.TabIndex = 9;
             // 
             // CalculationForm
@@ -144,6 +144,7 @@
             this.Controls.Add(this.textBox1);
             this.Name = "CalculationForm";
             this.Text = "CalculationForm";
+            this.Load += new System.EventHandler(this.CalculationForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

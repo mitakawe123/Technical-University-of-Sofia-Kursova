@@ -12,6 +12,15 @@ namespace corel_draw
 {
     public partial class CalculationForm : Form
     {
+        public string nameOfFigure 
+        { 
+            get { return label1.Text; } 
+            set { label1.Text = value; } 
+        }
+        public float xAxisVal { get; set; }
+        public float yAxisVal { get; set; }
+        public float widthVal { get; set; }
+        public float heightVal { get; set; }
         public CalculationForm()
         {
             InitializeComponent();
@@ -19,16 +28,22 @@ namespace corel_draw
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //passing the values from calculation form to the main form
-            string xAxis = textBox1.Text;
-            string yAxis = textBox2.Text;
-            string width= textBox3.Text;
-            string height = textBox4.Text;
-            DrawingForm drawingForm = new DrawingForm();
-            drawingForm.xAxisVal = float.Parse(xAxis);
-            drawingForm.yAxisVal = float.Parse(yAxis);
-            drawingForm.widthVal = float.Parse(width);
-            drawingForm.heightVal = float.Parse(height);
+            xAxisVal = float.Parse(textBox1.Text);
+            yAxisVal = float.Parse(textBox2.Text);
+            widthVal = float.Parse(textBox3.Text);
+            heightVal = float.Parse(textBox4.Text);
+            this.DialogResult = DialogResult.OK;
+            this.Close();
+        }
+
+        private void CalculationForm_Load(object sender, EventArgs e)
+        {
+        }
+
+        public void HideTextBoxForSquare()
+        {
+            textBox4.Hide();
+            label5.Hide();
         }
     }
 }
