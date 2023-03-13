@@ -71,7 +71,6 @@ namespace corel_draw
             PolygonForm polygonForm = new PolygonForm();
             polygonForm.Show();
             /*this.Hide();*/
-            /*figures.Add();*/
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -94,17 +93,20 @@ namespace corel_draw
         private void button5_Click(object sender, EventArgs e)
         {
             RedrawForm();
-            calcForm.Show();
             calcForm.isSquare = false;
-            calcForm.nameOfFigure = "Put your measurements for Triangle";
-            Figures.Triagnle triangle = new Figures.Triagnle();
-            Graphics graphics = this.CreateGraphics();
-            Brush brush = new SolidBrush(Color.Black);
-            PointF point1 = new PointF(50, 50);
-            PointF point2 = new PointF(100, 150);
-            PointF point3 = new PointF(150, 50);
-            triangle.DrawTriangle(graphics, brush, point1, point2, point3);
-            figures.Add(triangle);
+            DialogResult result = calcForm.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                calcForm.nameOfFigure = "Put your measurements for Triangle";
+                Figures.Triagnle triangle = new Figures.Triagnle();
+                Graphics graphics = this.CreateGraphics();
+                Brush brush = new SolidBrush(Color.Black);
+                PointF point1 = new PointF(50, 50);
+                PointF point2 = new PointF(100, 100);
+                PointF point3 = new PointF(150, 100);
+                triangle.DrawTriangle(graphics, brush, point1, point2, point3);
+                figures.Add(triangle);
+            }
         }
 
         private void DrawingForm_MouseUp(object sender, MouseEventArgs e)
