@@ -18,6 +18,11 @@ namespace corel_draw.Figures
             //setting height the same for square so that i don't make another function for draw square 
             g.DrawRectangle(pen, x, y, height, height);
         }
+        public double CalculateSquareArea(double sideLength)
+        {
+            double area = sideLength * sideLength;
+            return area;
+        }
         public Square(float x, float y, float width,float height) : base(x, y, width,height)
         {
         }

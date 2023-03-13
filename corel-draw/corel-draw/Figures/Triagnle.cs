@@ -15,6 +15,11 @@ namespace corel_draw.Figures
             PointF[] points = { point1, point2, point3 };
             g.FillPolygon(brush, points);
         }
+        public double CalculateTriangleArea(double baseLength, double height)
+        {
+            double area = 0.5 * baseLength * height;
+            return area;
+        }
         public Triagnle(float x, float y, float width, float height) : base(x, y, width, height)
         {
         }

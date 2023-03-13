@@ -10,7 +10,7 @@ namespace corel_draw.Figures
 {
     internal  class Polygon : Figure
     {
-        /*public override void DrawPolygon(PaintEventArgs e, float x, float y, float width, float height, int sides)
+        public override void DrawPolygon(PaintEventArgs e, float x, float y, float width, float height, int sides)
         {
             base.DrawPolygon(e, x, y, width, height, sides);
             PointF[] points = new PointF[sides];
@@ -24,9 +24,12 @@ namespace corel_draw.Figures
                 points[i] = new PointF((float)x1, (float)y1);
             }
             e.Graphics.DrawPolygon(Pens.Black, points);
-        }*/
+        }
 
         public Polygon(float x, float y, float width, float height, int sides) : base(x, y, width, height, sides)
+        {
+        }
+        public Polygon() : base(0,0,0,0,0)
         {
         }
     }

@@ -27,12 +27,14 @@ namespace corel_draw
         {
             if(figures.Count > 0)
             {
+                figures.RemoveAt(0);
                 this.Invalidate();
             }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            RedrawForm();
             calcForm.isSquare = false;
             calcForm.ShowTextBoxForSquare();
             DialogResult result = calcForm.ShowDialog();
@@ -40,7 +42,6 @@ namespace corel_draw
             {
                 calcForm.nameOfFigure = "Put your measurements for Rectangle";
                 Figures.Rectangle rectangle = new Figures.Rectangle();
-                RedrawForm();
                 Graphics graphics = this.CreateGraphics();
                 rectangle.DrawFigure(new PaintEventArgs(graphics, this.ClientRectangle), calcForm.xAxisVal, calcForm.yAxisVal, calcForm.widthVal, calcForm.heightVal);
                 figures.Add(rectangle);
@@ -50,6 +51,7 @@ namespace corel_draw
 
         private void button2_Click(object sender, EventArgs e)
         {
+            RedrawForm();
             DialogResult result = calcForm.ShowDialog(); 
             calcForm.isSquare = false;
             calcForm.ShowTextBoxForSquare();
@@ -65,6 +67,7 @@ namespace corel_draw
 
         private void button3_Click(object sender, EventArgs e)
         {
+            RedrawForm();
             PolygonForm polygonForm = new PolygonForm();
             polygonForm.Show();
             /*this.Hide();*/
@@ -73,6 +76,8 @@ namespace corel_draw
 
         private void button4_Click(object sender, EventArgs e)
         {
+            RedrawForm();
+
             calcForm.isSquare = true;
             calcForm.HideTextBoxForSquare();
             DialogResult result = calcForm.ShowDialog();
@@ -88,6 +93,7 @@ namespace corel_draw
 
         private void button5_Click(object sender, EventArgs e)
         {
+            RedrawForm();
             calcForm.Show();
             calcForm.isSquare = false;
             calcForm.nameOfFigure = "Put your measurements for Triangle";
@@ -141,6 +147,11 @@ namespace corel_draw
         private void timer1_Tick(object sender, EventArgs e)
         {
             Invalidate();
+        }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+
         }
     }
 }

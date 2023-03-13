@@ -17,6 +17,13 @@ namespace corel_draw.Figures
             Pen pen = new Pen(Color.Black, 5);
             g.DrawEllipse(pen, x, y, width, height);
         }
+
+        public double CalculateCircleArea(double radius)
+        {
+            
+            double area = Math.PI * radius * radius;
+            return area;
+        }
         public Circle(float x, float y, float width, float height) : base(x, y, width, height)
         {
         }

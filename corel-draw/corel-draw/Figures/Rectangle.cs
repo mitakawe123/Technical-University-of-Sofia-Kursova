@@ -18,7 +18,13 @@ namespace corel_draw.Figures
             Pen pen = new Pen(Color.Black, 5);
             g.DrawRectangle(pen, x, y, width, height);
         }
-      
+
+        public double CalcArea(double width,double height)
+        {
+            double area = width * height;
+            return area;
+        }
+
         public Rectangle(float x, float y, float width, float height) : base(x, y, width, height)
         {
         }

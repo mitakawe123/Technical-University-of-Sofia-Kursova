@@ -38,11 +38,6 @@ namespace corel_draw.Figures
             Sides = sides;
         }
 
-        public virtual float CalcFace()
-        {
-            return 0f;
-        }
-
         public virtual void DrawFigure(PaintEventArgs e, float x, float y, float width, float height) { }
         public virtual void DrawPolygon(PaintEventArgs e, float x, float y, float width, float height, int sides) { }
 
