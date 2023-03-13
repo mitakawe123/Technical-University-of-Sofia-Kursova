@@ -12,6 +12,7 @@ namespace corel_draw
 {
     public partial class PolygonForm : Form
     {
+        DrawingForm drawingForm = new DrawingForm();
         
         public PolygonForm()
         {

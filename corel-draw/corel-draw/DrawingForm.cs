@@ -92,6 +92,7 @@ namespace corel_draw
 
         private void button5_Click(object sender, EventArgs e)
         {
+            //hardcode the values for triangle
             RedrawForm();
             calcForm.isSquare = false;
             DialogResult result = calcForm.ShowDialog();
