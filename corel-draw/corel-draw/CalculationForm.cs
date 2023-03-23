@@ -1,4 +1,5 @@
-﻿using System;
+﻿using corel_draw.Figures;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,11 +17,10 @@ namespace corel_draw
         public int Y { get; set; }
         public int Width_Value { get; set; }
         public int Height_Value { get; set; }
-        public CalculationForm()
+        public CalculationForm(Type type)
         {
             InitializeComponent();
-            Height_Input.Visible = false;
-            Height_Label.Visible = false;
+            Toggle_Height_Input_Visibility(type != typeof(Square));
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -47,11 +47,11 @@ namespace corel_draw
             }
             X = int.Parse(X_Input.Text);
             Y = int.Parse(Y_Input.Text);
+            Width_Value = int.Parse(Width_Input.Text);
             if (Height_Input.Visible)
                 Height_Value = int.Parse(Height_Input.Text);
             else
-                Height_Value= Width_Value;
-            Width_Value = int.Parse(Width_Input.Text);
+                Height_Value = Width_Value;
             this.DialogResult = DialogResult.OK;
             this.Close();
         }

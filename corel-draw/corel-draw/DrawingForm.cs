@@ -25,37 +25,36 @@ namespace corel_draw
             InitializeComponent();
         }
 
-        private void CreateFigure(bool showHeightField,Type figureType)
+        private void CreateFigure(Type figureType)
         {
             //change logic here for polygon
-            CalculationForm calculationForm = new CalculationForm();
-            calculationForm.Toggle_Height_Input_Visibility(showHeightField);
+            CalculationForm calculationForm = new CalculationForm(figureType);
             DialogResult result = calculationForm.ShowDialog();
             if (result == DialogResult.OK)
             {
-                if (figureType == typeof(Figures.Square))
+               /* if (figureType == typeof(Figures.Square))
                 {
                     Figure figure = (Figure)Activator.CreateInstance(figureType, new object[] { calculationForm.X, calculationForm.Y, calculationForm.Height_Value, calculationForm.Height_Value });
                     drawnFigures.Add(figure);
                     pictureBox1.Invalidate();
                 }
                 else
-                {
+                {*/
                     Figure figure = (Figure)Activator.CreateInstance(figureType, new object[] { calculationForm.X, calculationForm.Y, calculationForm.Width_Value, calculationForm.Height_Value });
                     drawnFigures.Add(figure);
                     pictureBox1.Invalidate();
-                }
+                /*}*/
             }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            CreateFigure(true,typeof(Figures.Rectangle));
+            CreateFigure(typeof(Figures.Rectangle));
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            CreateFigure(true, typeof(Figures.Circle));
+            CreateFigure(typeof(Circle));
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -66,7 +65,7 @@ namespace corel_draw
 
         private void button4_Click(object sender, EventArgs e)
         {
-            CreateFigure(false, typeof(Figures.Square));
+            CreateFigure(typeof(Square));
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -101,7 +100,7 @@ namespace corel_draw
 
                 button.Click += (object sender1, EventArgs e1) =>
                 {
-                    CreateFigure(true, figureTypes[index]);
+                    CreateFigure(figureTypes[index]);
                 };
                 Controls.Add(button);
                 button.Show();
