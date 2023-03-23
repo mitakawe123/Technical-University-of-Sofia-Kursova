@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33424.131
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "corel-draw", "corel-draw\corel-draw.csproj", "{DB82537F-96D8-47FB-B270-A2791732D189}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DB82537F-96D8-47FB-B270-A2791732D189}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB82537F-96D8-47FB-B270-A2791732D189}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB82537F-96D8-47FB-B270-A2791732D189}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB82537F-96D8-47FB-B270-A2791732D189}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {79E46AE9-C657-49DB-9928-C7E270F1CB40}
+	EndGlobalSection
+EndGlobal
