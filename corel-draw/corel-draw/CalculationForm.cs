@@ -17,6 +17,7 @@ namespace corel_draw
         public int Y { get; set; }
         public int Width_Value { get; set; }
         public int Height_Value { get; set; }
+        public int Sides_Value { get; set; }
         public CalculationForm(Type type)
         {
             InitializeComponent();
@@ -45,6 +46,11 @@ namespace corel_draw
                 MessageBox.Show("Please enter a value for height.");
                 return;
             }
+            if (string.IsNullOrWhiteSpace(Sides_Input.Text))
+            {
+                MessageBox.Show("Please enter a value for sides.");
+                return;
+            }
             X = int.Parse(X_Input.Text);
             Y = int.Parse(Y_Input.Text);
             Width_Value = int.Parse(Width_Input.Text);
@@ -52,6 +58,7 @@ namespace corel_draw
                 Height_Value = int.Parse(Height_Input.Text);
             else
                 Height_Value = Width_Value;
+            Sides_Value = int.Parse(Sides_Input.Text);
             this.DialogResult = DialogResult.OK;
             this.Close();
         }

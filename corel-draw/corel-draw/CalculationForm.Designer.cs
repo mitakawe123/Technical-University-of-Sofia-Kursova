@@ -38,6 +38,8 @@
             this.Y_Input = new System.Windows.Forms.TextBox();
             this.Height_Input = new System.Windows.Forms.TextBox();
             this.Width_Input = new System.Windows.Forms.TextBox();
+            this.Sides_Input = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // X_Input
@@ -59,7 +61,7 @@
             // 
             // Draw_Button
             // 
-            this.Draw_Button.Location = new System.Drawing.Point(296, 352);
+            this.Draw_Button.Location = new System.Drawing.Point(296, 361);
             this.Draw_Button.Name = "Draw_Button";
             this.Draw_Button.Size = new System.Drawing.Size(177, 71);
             this.Draw_Button.TabIndex = 2;
@@ -127,11 +129,30 @@
             this.Width_Input.Size = new System.Drawing.Size(227, 29);
             this.Width_Input.TabIndex = 9;
             // 
+            // Sides_Input
+            // 
+            this.Sides_Input.Location = new System.Drawing.Point(271, 324);
+            this.Sides_Input.Multiline = true;
+            this.Sides_Input.Name = "Sides_Input";
+            this.Sides_Input.Size = new System.Drawing.Size(227, 31);
+            this.Sides_Input.TabIndex = 10;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(199, 342);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(33, 13);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "Sides";
+            // 
             // CalculationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.Sides_Input);
             this.Controls.Add(this.Width_Input);
             this.Controls.Add(this.Height_Input);
             this.Controls.Add(this.Y_Input);
@@ -162,5 +183,7 @@
         private System.Windows.Forms.TextBox Y_Input;
         private System.Windows.Forms.TextBox Height_Input;
         private System.Windows.Forms.TextBox Width_Input;
+        private System.Windows.Forms.TextBox Sides_Input;
+        private System.Windows.Forms.Label label1;
     }
 }

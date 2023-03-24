@@ -17,16 +17,14 @@ namespace corel_draw.Figures
             this._sides = sides;
         }
 
-        public Polygon() : base(0,0,0,0){}
-
         public override void Draw(Graphics g)
         {
             Point[] points = new Point[]
             {
-            new Point(100, 100),
-            new Point(150, 150),
-            new Point(200, 100),
-            new Point(150, 50)
+                new Point(100, 100),
+                new Point(150, 150),
+                new Point(200, 100),
+                new Point(150, 50)
             };
             g.DrawPolygon(Pens.Black, points);
         }

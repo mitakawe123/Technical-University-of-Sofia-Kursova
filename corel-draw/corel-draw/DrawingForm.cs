@@ -32,18 +32,30 @@ namespace corel_draw
             DialogResult result = calculationForm.ShowDialog();
             if (result == DialogResult.OK)
             {
-               /* if (figureType == typeof(Figures.Square))
+                Figure figure;
+                if (figureType == typeof(Polygon))
                 {
-                    Figure figure = (Figure)Activator.CreateInstance(figureType, new object[] { calculationForm.X, calculationForm.Y, calculationForm.Height_Value, calculationForm.Height_Value });
-                    drawnFigures.Add(figure);
-                    pictureBox1.Invalidate();
+                    figure = (Figure)Activator.CreateInstance(figureType, new object[]
+                    {
+                        calculationForm.X,
+                        calculationForm.Y,
+                        calculationForm.Width_Value,
+                        calculationForm.Height_Value,
+                        7
+                    });
                 }
                 else
-                {*/
-                    Figure figure = (Figure)Activator.CreateInstance(figureType, new object[] { calculationForm.X, calculationForm.Y, calculationForm.Width_Value, calculationForm.Height_Value });
-                    drawnFigures.Add(figure);
-                    pictureBox1.Invalidate();
-                /*}*/
+                {
+                    figure = (Figure)Activator.CreateInstance(figureType, new object[]
+                    {
+                        calculationForm.X,
+                        calculationForm.Y,
+                        calculationForm.Width_Value,
+                        calculationForm.Height_Value
+                    });
+                }
+                drawnFigures.Add(figure);
+                pictureBox1.Invalidate();
             }
         }
 
@@ -60,7 +72,7 @@ namespace corel_draw
         private void button3_Click(object sender, EventArgs e)
         {
             //still working on the polygon type figures
-            PolygonForm polygonForm = new PolygonForm();
+            CreateFigure(typeof(Polygon));
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -71,7 +83,7 @@ namespace corel_draw
         private void button5_Click(object sender, EventArgs e)
         {
             //still working on the polygon type figures
-            TriangleForm triangleForm = new TriangleForm();
+            CreateFigure(typeof(Triagnle));
         }
 
         private void DrawingForm_Load(object sender, EventArgs e)

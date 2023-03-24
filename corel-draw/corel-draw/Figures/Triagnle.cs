@@ -13,15 +13,14 @@ namespace corel_draw.Figures
         public Triagnle(int x, int y, int width, int height) : base(x, y, width, height)
         {
         }
-        public Triagnle() : base(0, 0, 0, 0) { }
 
         public override void Draw(Graphics g)
         {
             Point[] points = new Point[]
             {
-            new Point(100, 100),
-            new Point(200, 100),
-            new Point(150, 50)
+                new Point(100, 100),
+                new Point(150, 150),
+                new Point(150, 150)
             };
             g.DrawPolygon(Pens.Black, points);   
         }

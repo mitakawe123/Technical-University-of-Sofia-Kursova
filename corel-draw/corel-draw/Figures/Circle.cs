@@ -18,8 +18,6 @@ namespace corel_draw.Figures
         public Circle(int x, int y, int width, int height) : base(x, y, width, height)
         {
         }
-
-        public Circle() : base(0, 0, 0, 0) { }
         public override void Draw(Graphics g)
         { 
            g.DrawEllipse(Pens.Black, location.X, location.Y, width, height);
