@@ -12,7 +12,7 @@ namespace corel_draw
 {
     public partial class PolygonSides : Form
     {
-        public int Sides { get; set; }
+        public int Sides { get; private set; }
         public PolygonSides()
         {
             InitializeComponent(); 
@@ -34,13 +34,17 @@ namespace corel_draw
                 else
                 {
                     Sides = number;
+                    DialogResult = DialogResult.OK;
                     Close();
-                    PolygonTypeForm polygonTypeForm = new PolygonTypeForm(Sides);
-                    polygonTypeForm.ShowDialog();
                 }
             }
             else
                 MessageBox.Show("Please enter a valid number.");
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

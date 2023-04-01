@@ -29,20 +29,16 @@ namespace corel_draw
         {
             if (PolygonType)
             {
-                PolygonSides sidesPolygon = new PolygonSides();
-                DialogResult result = sidesPolygon.ShowDialog();
-                if (result == DialogResult.OK)
+                PolygonSides polygonSides = new PolygonSides();
+                DialogResult sidesResult = polygonSides.ShowDialog();
+                if(sidesResult == DialogResult.OK)
                 {
-                    /*Figure figure = (Figure)Activator.CreateInstance(figureType, new object[]
+                    PolygonTypeForm polygonTypeForm = new PolygonTypeForm(polygonSides.Sides);
+                    DialogResult polygonTypeResult = polygonTypeForm.ShowDialog();
+                    if(polygonTypeResult == DialogResult.OK)
                     {
-                        calculationForm.X,
-                        calculationForm.Y,
-                        calculationForm.Width_Value,
-                        calculationForm.Height_Value
-                    });*/
-
-                    //drawnFigures.Add(figure);
-                    pictureBox1.Invalidate();
+                        List<Point> coordinates = polygonTypeForm.PolygonPoints;
+                    }
                 }
             }
             else
@@ -68,29 +64,22 @@ namespace corel_draw
 
         private void button1_Click(object sender, EventArgs e)
         {
-            CreateFigure(typeof(Figures.Rectangle),false);
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            CreateFigure(typeof(Circle),false);
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            PolygonSides polygonSides = new PolygonSides();
-            polygonSides.ShowDialog();
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            CreateFigure(typeof(Square), false);
-        }
+       }
 
         private void button5_Click(object sender, EventArgs e)
         {
-            PolygonSides polygonSides = new PolygonSides();
-            polygonSides.ShowDialog();
         }
 
         private void DrawingForm_Load(object sender, EventArgs e)
@@ -120,10 +109,7 @@ namespace corel_draw
 
                 button.Click += (object sender1, EventArgs e1) =>
                 {
-                    //if (figureType == typeof(Square) || figureType == typeof(Figures.Rectangle) || figureType == typeof(Circle))
-                    //{
-                        CreateFigure(figureTypes[index],isPolygonType);
-                    //}
+                    CreateFigure(figureTypes[index],isPolygonType);
                 };
                 Controls.Add(button);
                 button.Show();

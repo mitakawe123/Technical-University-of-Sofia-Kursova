@@ -13,7 +13,15 @@ namespace corel_draw
 {
     public partial class PolygonTypeForm : Form
     {
+        private List<Point> _polygonPoints = new List<Point>();
+
+        public List<Point> PolygonPoints
+        {
+            get { return _polygonPoints; }
+        }
+
         private int _sides;
+
         public PolygonTypeForm(int sides)
         {
             InitializeComponent();
@@ -34,6 +42,7 @@ namespace corel_draw
             for (int i = 0; i < _sides; i++)
             {
                 System.Windows.Forms.Label labelX = new System.Windows.Forms.Label();
+                labelX.Name = $"labelX{i + 1}";
                 labelX.Text = $"Position X{i + 1}:";
                 labelX.Top = topMargin + (i * controlHeight);
                 labelX.Left = leftMargin;
@@ -44,9 +53,11 @@ namespace corel_draw
                 inputTextBoxX.Top = topMargin + (i * controlHeight);
                 inputTextBoxX.Left = leftMargin + 100;
                 inputTextBoxX.Width = controlWidth / 2;
+                inputTextBoxX.Name = $"inputTextBoxX{i + 1}";
                 Controls.Add(inputTextBoxX);
 
                 System.Windows.Forms.Label labelY = new System.Windows.Forms.Label();
+                labelY.Name = $"labelY{i + 1}";
                 labelY.Text = $"Position Y{i + 1}:";
                 labelY.Top = topMargin + (i * controlHeight);
                 labelY.Left = leftMargin + controlWidth / 2 + 100;
@@ -57,8 +68,24 @@ namespace corel_draw
                 inputTextBoxY.Top = topMargin + (i * controlHeight);
                 inputTextBoxY.Left = leftMargin + controlWidth / 2 + 200;
                 inputTextBoxY.Width = controlWidth / 2;
+                inputTextBoxY.Name = $"inputTextBoxY{i + 1}";
                 Controls.Add(inputTextBoxY);
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            for (int i = 1; i <= _sides; i++)
+            {
+                TextBox inputTextBoxX = (TextBox)Controls.Find($"inputTextBoxX{i}", true)[0];
+                TextBox inputTextBoxY = (TextBox)Controls.Find($"inputTextBoxY{i}", true)[0];
+                int x = int.Parse(inputTextBoxX.Text);
+                int y = int.Parse(inputTextBoxY.Text);
+                _polygonPoints.Add(new Point(x, y));
+            }
+
+            this.DialogResult = DialogResult.OK;
+            this.Close();
         }
     }
 }

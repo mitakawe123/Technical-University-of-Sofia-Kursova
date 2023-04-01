@@ -41,6 +41,7 @@
             this.label1.Size = new System.Drawing.Size(275, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Enter the number of sides you want your polygon to have";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // button1
             // 

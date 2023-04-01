@@ -8,29 +8,25 @@ using System.Windows.Forms;
 
 namespace corel_draw.Figures
 {
-    internal  class Polygon : Figure
+    internal class Polygon : Figure
     {
         private int _sides;
-        public int Sides { get; set; }
-        public Polygon(int x,int y,int width,int height, int sides):base(x,y,width,height)
+
+        public Polygon(int x, int y, int width, int height, PolygonSides polygonSides) : base(x, y, width, height)
         {
-            _sides = sides;
+            this.polygonSides = polygonSides;
+            _sides = polygonSides.Sides;
         }
 
         public override void Draw(Graphics g)
         {
-            Point[] points = new Point[]
-            {
-                new Point(100, 100),
-                new Point(150, 150),
-                new Point(200, 100),
-                new Point(150, 50)
-            };
+            Point[] points = new Point[_sides];
             g.DrawPolygon(Pens.Black, points);
         }
+
         public override void CalcArea()
         {
-            
+
         }
     }
 }
