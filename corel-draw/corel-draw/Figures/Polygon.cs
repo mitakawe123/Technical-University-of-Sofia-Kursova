@@ -14,7 +14,7 @@ namespace corel_draw.Figures
         public int Sides { get; set; }
         public Polygon(int x,int y,int width,int height, int sides):base(x,y,width,height)
         {
-            this._sides = sides;
+            _sides = sides;
         }
 
         public override void Draw(Graphics g)

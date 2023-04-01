@@ -64,6 +64,18 @@
     <Compile Include="Figures\Rectangle.cs" />
     <Compile Include="Figures\Square.cs" />
     <Compile Include="Figures\Triagnle.cs" />
+    <Compile Include="PolygonSides.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PolygonSides.Designer.cs">
+      <DependentUpon>PolygonSides.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PolygonTypeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PolygonTypeForm.Designer.cs">
+      <DependentUpon>PolygonTypeForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="CalculationForm.resx">
@@ -72,6 +84,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DrawingForm.resx">
       <DependentUpon>DrawingForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PolygonSides.resx">
+      <DependentUpon>PolygonSides.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PolygonTypeForm.resx">
+      <DependentUpon>PolygonTypeForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -25,65 +25,72 @@ namespace corel_draw
             InitializeComponent();
         }
 
-        private void CreateFigure(Type figureType)
+        private void CreateFigure(Type figureType, bool PolygonType)
         {
-            //change logic here for polygon
-            CalculationForm calculationForm = new CalculationForm(figureType);
-            DialogResult result = calculationForm.ShowDialog();
-            if (result == DialogResult.OK)
+            if (PolygonType)
             {
-                Figure figure;
-                if (figureType == typeof(Polygon))
+                PolygonSides sidesPolygon = new PolygonSides();
+                DialogResult result = sidesPolygon.ShowDialog();
+                if (result == DialogResult.OK)
                 {
-                    figure = (Figure)Activator.CreateInstance(figureType, new object[]
+                    /*Figure figure = (Figure)Activator.CreateInstance(figureType, new object[]
                     {
                         calculationForm.X,
                         calculationForm.Y,
                         calculationForm.Width_Value,
-                        calculationForm.Height_Value,
-                        7
-                    });
+                        calculationForm.Height_Value
+                    });*/
+
+                    //drawnFigures.Add(figure);
+                    pictureBox1.Invalidate();
                 }
-                else
+            }
+            else
+            {
+                CalculationForm calculationForm = new CalculationForm(figureType);
+                DialogResult result = calculationForm.ShowDialog();
+                if (result == DialogResult.OK)
                 {
-                    figure = (Figure)Activator.CreateInstance(figureType, new object[]
+                    Figure figure = (Figure)Activator.CreateInstance(figureType, new object[]
                     {
                         calculationForm.X,
                         calculationForm.Y,
                         calculationForm.Width_Value,
                         calculationForm.Height_Value
                     });
+
+                    drawnFigures.Add(figure);
+                    pictureBox1.Invalidate();
                 }
-                drawnFigures.Add(figure);
-                pictureBox1.Invalidate();
             }
         }
 
+
         private void button1_Click(object sender, EventArgs e)
         {
-            CreateFigure(typeof(Figures.Rectangle));
+            CreateFigure(typeof(Figures.Rectangle),false);
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            CreateFigure(typeof(Circle));
+            CreateFigure(typeof(Circle),false);
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            //still working on the polygon type figures
-            CreateFigure(typeof(Polygon));
+            PolygonSides polygonSides = new PolygonSides();
+            polygonSides.ShowDialog();
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            CreateFigure(typeof(Square));
+            CreateFigure(typeof(Square), false);
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
-            //still working on the polygon type figures
-            CreateFigure(typeof(Triagnle));
+            PolygonSides polygonSides = new PolygonSides();
+            polygonSides.ShowDialog();
         }
 
         private void DrawingForm_Load(object sender, EventArgs e)
@@ -99,6 +106,7 @@ namespace corel_draw
             for (int i = 0; i < figureTypes.Length; i++)
             {
                 var figureType = figureTypes[i];
+                bool isPolygonType = figureType == typeof(Square) || figureType == typeof(Figures.Rectangle) || figureType == typeof(Circle) ? false: true;
                 int index = i;
                 var button = new Button
                 {
@@ -112,7 +120,10 @@ namespace corel_draw
 
                 button.Click += (object sender1, EventArgs e1) =>
                 {
-                    CreateFigure(figureTypes[index]);
+                    //if (figureType == typeof(Square) || figureType == typeof(Figures.Rectangle) || figureType == typeof(Circle))
+                    //{
+                        CreateFigure(figureTypes[index],isPolygonType);
+                    //}
                 };
                 Controls.Add(button);
                 button.Show();
