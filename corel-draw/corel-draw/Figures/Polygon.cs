@@ -11,16 +11,17 @@ namespace corel_draw.Figures
     internal class Polygon : Figure
     {
         private int _sides;
+        private List<Point> _points;
 
-        public Polygon(int x, int y, int width, int height, PolygonSides polygonSides) : base(x, y, width, height)
+        public Polygon(List<Point> coordinates, int x, int y, int width, int height) : base(x, y, width, height)
         {
-            this.polygonSides = polygonSides;
-            _sides = polygonSides.Sides;
+            _points = coordinates;
+            _sides = coordinates.Count;
         }
 
         public override void Draw(Graphics g)
         {
-            Point[] points = new Point[_sides];
+            Point[] points = _points.ToArray();
             g.DrawPolygon(Pens.Black, points);
         }
 

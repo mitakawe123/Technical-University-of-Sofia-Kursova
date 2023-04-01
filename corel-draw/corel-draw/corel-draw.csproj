@@ -63,7 +63,6 @@
     <Compile Include="Figures\Polygon.cs" />
     <Compile Include="Figures\Rectangle.cs" />
     <Compile Include="Figures\Square.cs" />
-    <Compile Include="Figures\Triagnle.cs" />
     <Compile Include="PolygonSides.cs">
       <SubType>Form</SubType>
     </Compile>

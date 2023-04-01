@@ -31,13 +31,24 @@ namespace corel_draw
             {
                 PolygonSides polygonSides = new PolygonSides();
                 DialogResult sidesResult = polygonSides.ShowDialog();
-                if(sidesResult == DialogResult.OK)
+                if (sidesResult == DialogResult.OK)
                 {
                     PolygonTypeForm polygonTypeForm = new PolygonTypeForm(polygonSides.Sides);
                     DialogResult polygonTypeResult = polygonTypeForm.ShowDialog();
-                    if(polygonTypeResult == DialogResult.OK)
+                    if (polygonTypeResult == DialogResult.OK)
                     {
                         List<Point> coordinates = polygonTypeForm.PolygonPoints;
+                        Figure figure = (Polygon)Activator.CreateInstance(typeof(Polygon), new object[]
+                        {
+                            coordinates,
+                            100,
+                            200,
+                            100,
+                            200
+                        });
+
+                        drawnFigures.Add(figure);
+                        pictureBox1.Invalidate();
                     }
                 }
             }
@@ -52,7 +63,7 @@ namespace corel_draw
                         calculationForm.X,
                         calculationForm.Y,
                         calculationForm.Width_Value,
-                        calculationForm.Height_Value
+                        calculationForm.Height_Value,
                     });
 
                     drawnFigures.Add(figure);
