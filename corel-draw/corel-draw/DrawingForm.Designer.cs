@@ -30,6 +30,8 @@
         {
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.Undo_Btn = new System.Windows.Forms.Button();
+            this.Redo_Btn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -54,11 +56,33 @@
             this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
             this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
             // 
+            // Undo_Btn
+            // 
+            this.Undo_Btn.Location = new System.Drawing.Point(0, 0);
+            this.Undo_Btn.Name = "Undo_Btn";
+            this.Undo_Btn.Size = new System.Drawing.Size(75, 23);
+            this.Undo_Btn.TabIndex = 7;
+            this.Undo_Btn.Text = "UNDO";
+            this.Undo_Btn.UseVisualStyleBackColor = true;
+            this.Undo_Btn.Click += new System.EventHandler(this.Undo_Btn_Click);
+            // 
+            // Redo_Btn
+            // 
+            this.Redo_Btn.Location = new System.Drawing.Point(71, 0);
+            this.Redo_Btn.Name = "Redo_Btn";
+            this.Redo_Btn.Size = new System.Drawing.Size(75, 23);
+            this.Redo_Btn.TabIndex = 8;
+            this.Redo_Btn.Text = "REDO";
+            this.Redo_Btn.UseVisualStyleBackColor = true;
+            this.Redo_Btn.Click += new System.EventHandler(this.Redo_Btn_Click);
+            // 
             // DrawingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1073, 633);
+            this.Controls.Add(this.Redo_Btn);
+            this.Controls.Add(this.Undo_Btn);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label1);
             this.Name = "DrawingForm";
@@ -73,6 +97,8 @@
         #endregion
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Button Undo_Btn;
+        private System.Windows.Forms.Button Redo_Btn;
     }
 }
 

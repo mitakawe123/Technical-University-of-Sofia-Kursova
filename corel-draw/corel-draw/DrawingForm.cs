@@ -17,9 +17,13 @@ namespace corel_draw
     public partial class DrawingForm : Form
     {
         private List<Figure> drawnFigures = new List<Figure>();
+        private Stack<Figure> undoFigures = new Stack<Figure>();
+        private Stack<Figure> redoFigures = new Stack<Figure>();
         private Figure currentFigure;
+        private Figure lastFigure;
         private bool isDragging = false;
         private Point offset;
+        private Stack<Figure> figureStack = new Stack<Figure>();
         public DrawingForm()
         {
             InitializeComponent();
@@ -43,6 +47,7 @@ namespace corel_draw
                         });
 
                         drawnFigures.Add(figure);
+                        lastFigure = figure;
                         pictureBox1.Invalidate();
                     }
                 }
@@ -62,6 +67,7 @@ namespace corel_draw
                     });
 
                     drawnFigures.Add(figure);
+                    lastFigure = figure;
                     pictureBox1.Invalidate();
                 }
             }
@@ -104,8 +110,13 @@ namespace corel_draw
 
         private void DeleteMenuItem_Click(object sender, EventArgs e)
         {
-            drawnFigures.Remove(currentFigure);
-            pictureBox1.Invalidate();
+            if (currentFigure != null)
+            {
+                drawnFigures.Remove(currentFigure);
+                undoFigures.Push(currentFigure);
+                currentFigure = null;
+                pictureBox1.Invalidate();
+            }
         }
 
         private void ColorMenuItem_Click(object sender, EventArgs e)
@@ -182,11 +193,34 @@ namespace corel_draw
             isDragging = false;
         }
 
+
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             foreach (Figure figure in drawnFigures)
             {
                 figure.Draw(e.Graphics);
+            }
+        }
+
+        private void Redo_Btn_Click(object sender, EventArgs e)
+        {
+            if (redoFigures.Count > 0)
+            {
+                Figure lastRedoFigure = redoFigures.Pop();
+                drawnFigures.Remove(lastRedoFigure);
+                undoFigures.Push(lastRedoFigure);
+                pictureBox1.Invalidate();
+            }
+        }
+
+        private void Undo_Btn_Click(object sender, EventArgs e)
+        {
+            if (undoFigures.Count > 0)
+            {
+                Figure lastDeletedFigure = undoFigures.Pop();
+                drawnFigures.Add(lastDeletedFigure);
+                redoFigures.Push(lastDeletedFigure);
+                pictureBox1.Invalidate();
             }
         }
     }
