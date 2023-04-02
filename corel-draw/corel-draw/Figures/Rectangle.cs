@@ -20,7 +20,7 @@ namespace corel_draw.Figures
 
         public override void Draw(Graphics g)
         {            
-            g.DrawRectangle(Pens.Black, location.X, location.Y, width, height);
+            g.DrawRectangle(new Pen(Color, 5), location.X, location.Y, width, height);
         }
     }
 }

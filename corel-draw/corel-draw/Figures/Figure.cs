@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 
 namespace corel_draw.Figures
 {
@@ -7,6 +8,7 @@ namespace corel_draw.Figures
         protected Point location;
         protected int width;
         protected int height;
+        public Color Color { get; set; }
 
         public Point Location
         {
@@ -22,11 +24,12 @@ namespace corel_draw.Figures
             location = new Point(x, y);
             this.width = width;
             this.height = height;
+            Color = Color.Black; 
         }
 
         public abstract void Draw(Graphics g);
         public abstract void CalcArea();
-        public bool Contains(Point point)
+        public virtual bool Contains(Point point)
         {
             return location.X <= point.X && point.X <= location.X + width && location.Y <= point.Y && point.Y <= location.Y + height;
         }

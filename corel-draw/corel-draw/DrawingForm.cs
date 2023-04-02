@@ -37,14 +37,9 @@ namespace corel_draw
                     DialogResult polygonTypeResult = polygonTypeForm.ShowDialog();
                     if (polygonTypeResult == DialogResult.OK)
                     {
-                        List<Point> coordinates = polygonTypeForm.PolygonPoints;
                         Figure figure = (Polygon)Activator.CreateInstance(typeof(Polygon), new object[]
                         {
-                            coordinates,
-                            100,
-                            200,
-                            100,
-                            200
+                            polygonTypeForm.PolygonPoints
                         });
 
                         drawnFigures.Add(figure);
@@ -72,27 +67,6 @@ namespace corel_draw
             }
         }
 
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-       }
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-        }
-
         private void DrawingForm_Load(object sender, EventArgs e)
         {
             pictureBox1.BackColor = Color.White;
@@ -106,7 +80,7 @@ namespace corel_draw
             for (int i = 0; i < figureTypes.Length; i++)
             {
                 var figureType = figureTypes[i];
-                bool isPolygonType = figureType == typeof(Square) || figureType == typeof(Figures.Rectangle) || figureType == typeof(Circle) ? false: true;
+                bool isPolygonType = figureType == typeof(Polygon) ? true : false;
                 int index = i;
                 var button = new Button
                 {
@@ -128,11 +102,37 @@ namespace corel_draw
             }
         }
 
+        private void DeleteMenuItem_Click(object sender, EventArgs e)
+        {
+            drawnFigures.Remove(currentFigure);
+            pictureBox1.Invalidate();
+        }
+
+        private void ColorMenuItem_Click(object sender, EventArgs e)
+        {
+            ColorDialog colorDialog = new ColorDialog();
+            if (colorDialog.ShowDialog() == DialogResult.OK)
+            {
+                if (currentFigure != null)
+                {
+                    currentFigure.Color = colorDialog.Color;
+                    pictureBox1.Invalidate();
+                }
+            }
+        }
+
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
             foreach (Figure figure in drawnFigures)
             {
-                if (figure.Contains(e.Location))
+                if (figure is Polygon && figure.Contains(e.Location))
+                {
+                    currentFigure = figure;
+                    isDragging = true;
+                    offset = new Point(e.X - figure.Location.X, e.Y - figure.Location.Y);
+                    break;
+                }
+                else if (figure.Contains(e.Location))
                 {
                     currentFigure = figure;
                     isDragging = true;
@@ -140,8 +140,34 @@ namespace corel_draw
                     break;
                 }
             }
-        }
 
+            //delete
+            if (e.Button == MouseButtons.Right)
+            {
+                foreach (Figure figure in drawnFigures)
+                {
+                    if (figure.Contains(e.Location))
+                    {
+                        currentFigure = figure;
+
+                        ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
+
+                        // delete 
+                        ToolStripMenuItem deleteMenuItem = new ToolStripMenuItem("Delete");
+                        deleteMenuItem.Click += new EventHandler(DeleteMenuItem_Click);
+                        contextMenuStrip.Items.Add(deleteMenuItem);
+
+                        // color
+                        ToolStripMenuItem colorMenuItem = new ToolStripMenuItem("Change Color");
+                        colorMenuItem.Click += new EventHandler(ColorMenuItem_Click);
+                        contextMenuStrip.Items.Add(colorMenuItem);
+
+                        contextMenuStrip.Show(pictureBox1, e.Location);
+                        break;
+                    }
+                }
+            }
+        }
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
             if (isDragging)
@@ -162,11 +188,6 @@ namespace corel_draw
             {
                 figure.Draw(e.Graphics);
             }
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

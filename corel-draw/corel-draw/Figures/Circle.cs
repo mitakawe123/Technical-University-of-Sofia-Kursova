@@ -20,7 +20,7 @@ namespace corel_draw.Figures
         }
         public override void Draw(Graphics g)
         { 
-           g.DrawEllipse(Pens.Black, location.X, location.Y, width, height);
+           g.DrawEllipse(new Pen(Color, 5), location.X, location.Y, width, height);
         }
     }
 }
