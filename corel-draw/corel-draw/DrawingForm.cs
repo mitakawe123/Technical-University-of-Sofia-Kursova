@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -100,7 +101,7 @@ namespace corel_draw
 
                 button.Click += (object sender1, EventArgs e1) =>
                 {
-                    CreateFigure(figureTypes[index],isPolygonType);
+                    CreateFigure(figureTypes[index], isPolygonType);
                 };
                 Controls.Add(button);
                 button.Show();
@@ -132,9 +133,22 @@ namespace corel_draw
                     pictureBox1.Invalidate();
                 }
             }
-        }
+        }        
 
-       
+        private void EditToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CalculationForm calculationForm = new CalculationForm(currentFigure.GetType());
+            DialogResult result = calculationForm.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                currentFigure.Location = new Point(calculationForm.X, calculationForm.Y);
+                //not setting correctly
+                currentFigure.Width = calculationForm.Width_Value;
+                currentFigure.Height = calculationForm.Height_Value;
+                pictureBox1.Invalidate();
+            }
+        }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
@@ -156,7 +170,6 @@ namespace corel_draw
                 }
             }
 
-            //delete
             if (e.Button == MouseButtons.Right)
             {
                 foreach (Figure figure in drawnFigures)
@@ -176,6 +189,12 @@ namespace corel_draw
                         ToolStripMenuItem colorMenuItem = new ToolStripMenuItem("Change Color");
                         colorMenuItem.Click += new EventHandler(ColorMenuItem_Click);
                         contextMenuStrip.Items.Add(colorMenuItem);
+
+                        //edit
+                        ToolStripMenuItem editToolStripMenuItem = new ToolStripMenuItem("Edit");
+                        editToolStripMenuItem.Tag = currentFigure;
+                        editToolStripMenuItem.Click += new EventHandler(EditToolStripMenuItem_Click);
+                        contextMenuStrip.Items.Add(editToolStripMenuItem);
 
                         contextMenuStrip.Show(pictureBox1, e.Location);
                         break;
@@ -228,11 +247,6 @@ namespace corel_draw
                 redoFigures.Push(lastDeletedFigure);
                 pictureBox1.Invalidate();
             }
-        }
-
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }

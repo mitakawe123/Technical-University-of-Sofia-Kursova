@@ -84,7 +84,6 @@
             this.actionList.Name = "actionList";
             this.actionList.Size = new System.Drawing.Size(213, 407);
             this.actionList.TabIndex = 9;
-            this.actionList.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // DrawingForm
             // 
