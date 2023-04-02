@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace corel_draw
 {
@@ -18,6 +19,7 @@ namespace corel_draw
         public int Width_Value { get; set; }
         public int Height_Value { get; set; }
         public int Sides_Value { get; set; }
+
         public CalculationForm(Type type)
         {
             InitializeComponent();

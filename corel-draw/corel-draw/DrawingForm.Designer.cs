@@ -32,6 +32,7 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.Undo_Btn = new System.Windows.Forms.Button();
             this.Redo_Btn = new System.Windows.Forms.Button();
+            this.actionList = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -76,11 +77,21 @@
             this.Redo_Btn.UseVisualStyleBackColor = true;
             this.Redo_Btn.Click += new System.EventHandler(this.Redo_Btn_Click);
             // 
+            // actionList
+            // 
+            this.actionList.FormattingEnabled = true;
+            this.actionList.Location = new System.Drawing.Point(1068, 93);
+            this.actionList.Name = "actionList";
+            this.actionList.Size = new System.Drawing.Size(213, 407);
+            this.actionList.TabIndex = 9;
+            this.actionList.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
+            // 
             // DrawingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1073, 633);
+            this.ClientSize = new System.Drawing.Size(1344, 630);
+            this.Controls.Add(this.actionList);
             this.Controls.Add(this.Redo_Btn);
             this.Controls.Add(this.Undo_Btn);
             this.Controls.Add(this.pictureBox1);
@@ -99,6 +110,7 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button Undo_Btn;
         private System.Windows.Forms.Button Redo_Btn;
+        private System.Windows.Forms.ListBox actionList;
     }
 }
 

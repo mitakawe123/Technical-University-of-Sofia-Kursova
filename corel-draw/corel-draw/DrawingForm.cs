@@ -19,11 +19,11 @@ namespace corel_draw
         private List<Figure> drawnFigures = new List<Figure>();
         private Stack<Figure> undoFigures = new Stack<Figure>();
         private Stack<Figure> redoFigures = new Stack<Figure>();
-        private Figure currentFigure;
         private Figure lastFigure;
+
+        private Figure currentFigure;
         private bool isDragging = false;
         private Point offset;
-        private Stack<Figure> figureStack = new Stack<Figure>();
         public DrawingForm()
         {
             InitializeComponent();
@@ -114,6 +114,7 @@ namespace corel_draw
             {
                 drawnFigures.Remove(currentFigure);
                 undoFigures.Push(currentFigure);
+                actionList.Items.Add($"Delete {currentFigure.GetType().Name}");
                 currentFigure = null;
                 pictureBox1.Invalidate();
             }
@@ -127,10 +128,13 @@ namespace corel_draw
                 if (currentFigure != null)
                 {
                     currentFigure.Color = colorDialog.Color;
+                    actionList.Items.Add($"Change Color to {colorDialog.Color.Name}");
                     pictureBox1.Invalidate();
                 }
             }
         }
+
+       
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
@@ -207,6 +211,7 @@ namespace corel_draw
             if (redoFigures.Count > 0)
             {
                 Figure lastRedoFigure = redoFigures.Pop();
+                actionList.Items.Add($"Redo {lastRedoFigure.GetType().Name}");
                 drawnFigures.Remove(lastRedoFigure);
                 undoFigures.Push(lastRedoFigure);
                 pictureBox1.Invalidate();
@@ -218,10 +223,16 @@ namespace corel_draw
             if (undoFigures.Count > 0)
             {
                 Figure lastDeletedFigure = undoFigures.Pop();
+                actionList.Items.Add($"Undo {lastDeletedFigure.GetType().Name}");
                 drawnFigures.Add(lastDeletedFigure);
                 redoFigures.Push(lastDeletedFigure);
                 pictureBox1.Invalidate();
             }
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
