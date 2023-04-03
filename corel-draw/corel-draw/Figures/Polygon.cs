@@ -36,6 +36,7 @@ namespace corel_draw.Figures
             g.DrawPolygon(new Pen(Color, 5), points);
         }
 
+        //Jordan Curve Theorem
         public override bool Contains(Point point)
         {
             bool inside = false;

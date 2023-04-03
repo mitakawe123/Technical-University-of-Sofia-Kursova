@@ -137,11 +137,16 @@ namespace corel_draw
             CalculationForm calculationForm = new CalculationForm(currentFigure.GetType());
             DialogResult result = calculationForm.ShowDialog();
 
+            if (currentFigure.GetType() == typeof(Polygon))
+            {
+                //TODO: check for polygon and open the corrent form
+            } 
+
             if (result == DialogResult.OK)
             {
                 if (currentFigure.GetType() == typeof(Polygon))
                 {
-                    //TODO: Open the PolygonTypeForm and update the new location for the polygon
+                    //TODO: set the correct location for polygon when edit
                 }
                 else
                 {
