@@ -12,7 +12,6 @@ namespace corel_draw.Figures
 {
     internal class Polygon : Figure
     {
-        private int _sides;
         private List<Point> _points;
 
         public List<Point> Points
@@ -24,13 +23,11 @@ namespace corel_draw.Figures
         public Polygon(List<Point> coordinates) : base(0, 0, 0, 0)
         {
             _points = coordinates;
-            _sides = coordinates.Count;
         }
 
         public Polygon(List<Point> coordinates, int x, int y, int width, int height) : base(x, y, width, height)
         {
             _points = coordinates;
-            _sides = coordinates.Count;
         }
 
         public override void Draw(Graphics g)
@@ -41,19 +38,25 @@ namespace corel_draw.Figures
 
         public override bool Contains(Point point)
         {
-            if (_points == null || _points.Count < 3)
-                return false;
+            bool inside = false;
+            int count = _points.Count;
 
-            using (GraphicsPath path = new GraphicsPath())
+            for (int i = 0, j = count - 1; i < count; j = i++)
             {
-                path.AddPolygon(_points.ToArray());
-                return path.IsVisible(point);
+                if (((_points[i].Y > point.Y) != (_points[j].Y > point.Y)) &&
+                    (point.X < (_points[j].X - _points[i].X) * (point.Y - _points[i].Y) / (_points[j].Y - _points[i].Y) + _points[i].X))
+                {
+                    inside = !inside;
+                }
             }
+
+            return inside;
         }
+
 
         public override void CalcArea()
         {
-
+            // TODO: Calculate the area of the polygon
         }
     }
 }

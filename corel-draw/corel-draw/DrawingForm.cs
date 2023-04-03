@@ -20,7 +20,6 @@ namespace corel_draw
         private List<Figure> drawnFigures = new List<Figure>();
         private Stack<Figure> undoFigures = new Stack<Figure>();
         private Stack<Figure> redoFigures = new Stack<Figure>();
-        private Figure lastFigure;
 
         private Figure currentFigure;
         private bool isDragging = false;
@@ -42,13 +41,12 @@ namespace corel_draw
                     DialogResult polygonTypeResult = polygonTypeForm.ShowDialog();
                     if (polygonTypeResult == DialogResult.OK)
                     {
-                        Figure figure = (Polygon)Activator.CreateInstance(typeof(Polygon), new object[]
+                        Figure figure = (Figure)Activator.CreateInstance(figureType, new object[]
                         {
                             polygonTypeForm.PolygonPoints
                         });
 
                         drawnFigures.Add(figure);
-                        lastFigure = figure;
                         pictureBox1.Invalidate();
                     }
                 }
@@ -68,7 +66,6 @@ namespace corel_draw
                     });
 
                     drawnFigures.Add(figure);
-                    lastFigure = figure;
                     pictureBox1.Invalidate();
                 }
             }
@@ -142,12 +139,18 @@ namespace corel_draw
 
             if (result == DialogResult.OK)
             {
-                currentFigure.Location = new Point(calculationForm.X, calculationForm.Y);
-                //not setting correctly
-                currentFigure.Width = calculationForm.Width_Value;
-                currentFigure.Height = calculationForm.Height_Value;
-                //actionList.Items.Add($"Change Color to {currentFigure.GetType().Name}");
-                pictureBox1.Invalidate();
+                if (currentFigure.GetType() == typeof(Polygon))
+                {
+                    //TODO: Open the PolygonTypeForm and update the new location for the polygon
+                }
+                else
+                {
+                    currentFigure.Location = new Point(calculationForm.X, calculationForm.Y);
+                    currentFigure.Width = calculationForm.Width_Value;
+                    currentFigure.Height = calculationForm.Height_Value;
+                    actionList.Items.Add($"Edit {currentFigure.GetType().Name}");
+                    pictureBox1.Invalidate();
+                }
             }
         }
 
@@ -155,14 +158,7 @@ namespace corel_draw
         {
             foreach (Figure figure in drawnFigures)
             {
-                if (figure is Polygon && figure.Contains(e.Location))
-                {
-                    currentFigure = figure;
-                    isDragging = true;
-                    offset = new Point(e.X - figure.Location.X, e.Y - figure.Location.Y);
-                    break;
-                }
-                else if (figure.Contains(e.Location))
+                if (figure.Contains(e.Location))
                 {
                     currentFigure = figure;
                     isDragging = true;
