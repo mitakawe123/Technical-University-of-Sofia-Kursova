@@ -15,8 +15,16 @@ namespace corel_draw.Figures
             get { return location; }
             set { location = value; }
         }
-        public int Width { get; set; }
-        public int Height { get; set; }
+        public int Width 
+        {
+            get { return width; }
+            set { width = value; }
+        }
+        public int Height
+        {
+            get { return height; }
+            set { height = value; }
+        }
 
 
         public Figure(int x, int y, int width, int height)

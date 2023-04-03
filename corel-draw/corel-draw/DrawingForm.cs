@@ -146,6 +146,7 @@ namespace corel_draw
                 //not setting correctly
                 currentFigure.Width = calculationForm.Width_Value;
                 currentFigure.Height = calculationForm.Height_Value;
+                //actionList.Items.Add($"Change Color to {currentFigure.GetType().Name}");
                 pictureBox1.Invalidate();
             }
         }
