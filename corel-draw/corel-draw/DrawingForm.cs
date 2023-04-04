@@ -158,12 +158,20 @@ namespace corel_draw
                 }
             }
         }
+        private Point? lastPoint = null;
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
             foreach (Figure figure in drawnFigures)
             {
-                if (figure.Contains(e.Location))
+                if (figure is Polygon polygon && polygon.Contains(e.Location))
+                {
+                    currentFigure = figure;
+                    isDragging = true;
+                    lastPoint = e.Location;
+                    break;
+                }
+                else if (figure.Contains(e.Location))
                 {
                     currentFigure = figure;
                     isDragging = true;
@@ -206,7 +214,18 @@ namespace corel_draw
         }
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
-            if (isDragging)
+            if (isDragging && currentFigure is Polygon polygon)
+            {
+                int dx = e.X - lastPoint.Value.X;
+                int dy = e.Y - lastPoint.Value.Y;
+                lastPoint = e.Location;
+                for (int i = 0; i < polygon.Points.Count; i++)
+                {
+                    polygon.Points[i] = new Point(polygon.Points[i].X + dx, polygon.Points[i].Y + dy);
+                }
+                pictureBox1.Invalidate();
+            }
+            else if (isDragging)
             {
                 currentFigure.Location = new Point(e.X - offset.X, e.Y - offset.Y);
                 pictureBox1.Invalidate();
@@ -215,7 +234,8 @@ namespace corel_draw
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
         {
-            isDragging = false;
+            isDragging = false; 
+            lastPoint = null;
         }
 
 

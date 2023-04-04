@@ -25,11 +25,6 @@ namespace corel_draw.Figures
             _points = coordinates;
         }
 
-        public Polygon(List<Point> coordinates, int x, int y, int width, int height) : base(x, y, width, height)
-        {
-            _points = coordinates;
-        }
-
         public override void Draw(Graphics g)
         {
             Point[] points = _points.ToArray();
@@ -53,7 +48,6 @@ namespace corel_draw.Figures
 
             return inside;
         }
-
 
         public override void CalcArea()
         {

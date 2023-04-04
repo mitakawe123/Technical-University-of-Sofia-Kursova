@@ -41,10 +41,5 @@ namespace corel_draw.Figures
         {
             return location.X <= point.X && point.X <= location.X + width && location.Y <= point.Y && point.Y <= location.Y + height;
         }
-
-        public void Move(int dx, int dy)
-        {
-            location = new Point(location.X + dx, location.Y + dy); 
-        }
     }
 }
