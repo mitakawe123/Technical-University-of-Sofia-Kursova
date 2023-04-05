@@ -27,16 +27,9 @@ namespace corel_draw
         {
             if (int.TryParse(Polygon_Sides.Text, out int number))
             {
-                if (number > 5 || number < 2)
-                {
-                    MessageBox.Show("Please enter a number between 2 and 5.");
-                }
-                else
-                {
-                    Sides = number;
-                    DialogResult = DialogResult.OK;
-                    Close();
-                }
+                Sides = number;
+                DialogResult = DialogResult.OK;
+                Close();
             }
             else
                 MessageBox.Show("Please enter a valid number.");

@@ -10,10 +10,10 @@ namespace corel_draw.Figures
 {
     internal class Circle:Figure
     {
-        
-
-        public override void CalcArea()
+        public override double CalcArea()
         {
+            double radius = width / 2.0;
+            return Math.PI * radius * radius;
         }
         public Circle(int x, int y, int width, int height) : base(x, y, width, height)
         {

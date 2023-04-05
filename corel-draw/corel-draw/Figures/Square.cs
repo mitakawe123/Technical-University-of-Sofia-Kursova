@@ -17,8 +17,9 @@ namespace corel_draw.Figures
         { 
             g.DrawRectangle(new Pen(Color, 5), location.X, location.Y, width, width);
         }
-        public override void CalcArea()
+        public override double CalcArea()
         {
+            return width * width;
         }
     }
 }

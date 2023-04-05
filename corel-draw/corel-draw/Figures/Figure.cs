@@ -36,7 +36,7 @@ namespace corel_draw.Figures
         }
 
         public abstract void Draw(Graphics g);
-        public abstract void CalcArea();
+        public abstract double CalcArea();
         public virtual bool Contains(Point point)
         {
             return location.X <= point.X && point.X <= location.X + width && location.Y <= point.Y && point.Y <= location.Y + height;

@@ -10,8 +10,8 @@ namespace corel_draw.Figures
 {
     internal class Rectangle : Figure
     {
-        public override void CalcArea()
-        {
+        public override double CalcArea() {
+            return width * height;
         }
 
         public Rectangle(int x, int y, int width, int height) : base(x, y, width, height)

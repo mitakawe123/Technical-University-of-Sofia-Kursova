@@ -24,6 +24,8 @@ namespace corel_draw
         private Figure currentFigure;
         private bool isDragging = false;
         private Point offset;
+        private Point? lastPoint = null;
+
         public DrawingForm()
         {
             InitializeComponent();
@@ -158,7 +160,6 @@ namespace corel_draw
                 }
             }
         }
-        private Point? lastPoint = null;
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {

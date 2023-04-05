@@ -49,9 +49,25 @@ namespace corel_draw.Figures
             return inside;
         }
 
-        public override void CalcArea()
+        public override double CalcArea()
         {
-            // TODO: Calculate the area of the polygon
+            //if user draw a line
+            if(_points.Count == 2)
+            {
+                return 0;
+            }
+
+            double area = 0;
+
+            //Shoelace formula
+            int j = _points.Count - 1;
+            for (int i = 0; i < _points.Count; i++)
+            {
+                area += (_points[j].X + _points[i].X) * (_points[j].Y - _points[i].Y);
+                j = i;
+            }
+
+            return Math.Abs(area / 2);
         }
     }
 }
