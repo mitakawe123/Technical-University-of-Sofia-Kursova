@@ -47,9 +47,9 @@ namespace corel_draw
                         {
                             polygonTypeForm.PolygonPoints
                         });
-
+                        actionList.Items.Add($"The area of the {figure.GetType().Name} is: {figure.CalcArea():F2}");
                         drawnFigures.Add(figure);
-                        pictureBox1.Invalidate();
+                        DrawingBox.Invalidate();
                     }
                 }
             }
@@ -66,27 +66,27 @@ namespace corel_draw
                         calculationForm.Width_Value,
                         calculationForm.Height_Value,
                     });
-
+                    actionList.Items.Add($"The area of the {figure.GetType().Name} is: {figure.CalcArea():F2}");
                     drawnFigures.Add(figure);
-                    pictureBox1.Invalidate();
+                    DrawingBox.Invalidate();
                 }
             }
         }
 
         private void DrawingForm_Load(object sender, EventArgs e)
         {
-            pictureBox1.BackColor = Color.White;
-            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-            pictureBox1.MouseDown += pictureBox1_MouseDown;
-            pictureBox1.MouseMove += pictureBox1_MouseMove;
-            pictureBox1.MouseUp += pictureBox1_MouseUp;
+            DrawingBox.BackColor = Color.White;
+            DrawingBox.SizeMode = PictureBoxSizeMode.StretchImage;
+            DrawingBox.MouseDown += pictureBox1_MouseDown;
+            DrawingBox.MouseMove += pictureBox1_MouseMove;
+            DrawingBox.MouseUp += pictureBox1_MouseUp;
 
             var figureTypes = typeof(Figure).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(Figure))).ToArray();
             var buttonWidth = (Width - 150) / figureTypes.Length;
             for (int i = 0; i < figureTypes.Length; i++)
             {
                 var figureType = figureTypes[i];
-                bool isPolygonType = figureType == typeof(Polygon) ? true : false;
+                bool isPolygonType = figureType == typeof(Polygon);
                 int index = i;
                 var button = new Button
                 {
@@ -116,7 +116,7 @@ namespace corel_draw
                 undoFigures.Push(currentFigure);
                 actionList.Items.Add($"Delete {currentFigure.GetType().Name}");
                 currentFigure = null;
-                pictureBox1.Invalidate();
+                DrawingBox.Invalidate();
             }
         }
 
@@ -129,7 +129,7 @@ namespace corel_draw
                 {
                     currentFigure.Color = colorDialog.Color;
                     actionList.Items.Add($"Change Color to {colorDialog.Color.Name}");
-                    pictureBox1.Invalidate();
+                    DrawingBox.Invalidate();
                 }
             }
         }        
@@ -156,7 +156,7 @@ namespace corel_draw
                     currentFigure.Width = calculationForm.Width_Value;
                     currentFigure.Height = calculationForm.Height_Value;
                     actionList.Items.Add($"Edit {currentFigure.GetType().Name}");
-                    pictureBox1.Invalidate();
+                    DrawingBox.Invalidate();
                 }
             }
         }
@@ -207,7 +207,7 @@ namespace corel_draw
                         editToolStripMenuItem.Click += new EventHandler(EditToolStripMenuItem_Click);
                         contextMenuStrip.Items.Add(editToolStripMenuItem);
 
-                        contextMenuStrip.Show(pictureBox1, e.Location);
+                        contextMenuStrip.Show(DrawingBox, e.Location);
                         break;
                     }
                 }
@@ -224,12 +224,12 @@ namespace corel_draw
                 {
                     polygon.Points[i] = new Point(polygon.Points[i].X + dx, polygon.Points[i].Y + dy);
                 }
-                pictureBox1.Invalidate();
+                DrawingBox.Invalidate();
             }
             else if (isDragging)
             {
                 currentFigure.Location = new Point(e.X - offset.X, e.Y - offset.Y);
-                pictureBox1.Invalidate();
+                DrawingBox.Invalidate();
             }
         }
 
@@ -256,7 +256,7 @@ namespace corel_draw
                 actionList.Items.Add($"Redo {lastRedoFigure.GetType().Name}");
                 drawnFigures.Remove(lastRedoFigure);
                 undoFigures.Push(lastRedoFigure);
-                pictureBox1.Invalidate();
+                DrawingBox.Invalidate();
             }
         }
 
@@ -268,7 +268,7 @@ namespace corel_draw
                 actionList.Items.Add($"Undo {lastDeletedFigure.GetType().Name}");
                 drawnFigures.Add(lastDeletedFigure);
                 redoFigures.Push(lastDeletedFigure);
-                pictureBox1.Invalidate();
+                DrawingBox.Invalidate();
             }
         }
     }

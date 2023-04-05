@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.DrawingBox = new System.Windows.Forms.PictureBox();
             this.Undo_Btn = new System.Windows.Forms.Button();
             this.Redo_Btn = new System.Windows.Forms.Button();
             this.actionList = new System.Windows.Forms.ListBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DrawingBox)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -45,23 +45,23 @@
             this.label1.TabIndex = 5;
             this.label1.Text = "What do you want to draw";
             // 
-            // pictureBox1
+            // DrawingBox
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(32, 93);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1012, 411);
-            this.pictureBox1.TabIndex = 6;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
-            this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
-            this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
-            this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
+            this.DrawingBox.Location = new System.Drawing.Point(32, 93);
+            this.DrawingBox.Name = "DrawingBox";
+            this.DrawingBox.Size = new System.Drawing.Size(1012, 411);
+            this.DrawingBox.TabIndex = 6;
+            this.DrawingBox.TabStop = false;
+            this.DrawingBox.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
+            this.DrawingBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
+            this.DrawingBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
+            this.DrawingBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
             // 
             // Undo_Btn
             // 
             this.Undo_Btn.Location = new System.Drawing.Point(0, 0);
             this.Undo_Btn.Name = "Undo_Btn";
-            this.Undo_Btn.Size = new System.Drawing.Size(75, 23);
+            this.Undo_Btn.Size = new System.Drawing.Size(75, 41);
             this.Undo_Btn.TabIndex = 7;
             this.Undo_Btn.Text = "UNDO";
             this.Undo_Btn.UseVisualStyleBackColor = true;
@@ -71,7 +71,7 @@
             // 
             this.Redo_Btn.Location = new System.Drawing.Point(71, 0);
             this.Redo_Btn.Name = "Redo_Btn";
-            this.Redo_Btn.Size = new System.Drawing.Size(75, 23);
+            this.Redo_Btn.Size = new System.Drawing.Size(75, 41);
             this.Redo_Btn.TabIndex = 8;
             this.Redo_Btn.Text = "REDO";
             this.Redo_Btn.UseVisualStyleBackColor = true;
@@ -93,12 +93,12 @@
             this.Controls.Add(this.actionList);
             this.Controls.Add(this.Redo_Btn);
             this.Controls.Add(this.Undo_Btn);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.DrawingBox);
             this.Controls.Add(this.label1);
             this.Name = "DrawingForm";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.DrawingForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DrawingBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -106,7 +106,7 @@
 
         #endregion
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox DrawingBox;
         private System.Windows.Forms.Button Undo_Btn;
         private System.Windows.Forms.Button Redo_Btn;
         private System.Windows.Forms.ListBox actionList;

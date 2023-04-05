@@ -34,10 +34,5 @@ namespace corel_draw
             else
                 MessageBox.Show("Please enter a valid number.");
         }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }
