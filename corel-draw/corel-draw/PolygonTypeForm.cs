@@ -73,8 +73,25 @@ namespace corel_draw
             }
         }
 
+        private bool IsPolygonWithinBounds(List<Point> points, Rectangle bounds)
+        {
+            foreach (Point point in points)
+            {
+                if (!bounds.Contains(point))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
+           /* if(IsPolygonWithinBounds(_polygonPoints,))
+            {
+                MessageBox.Show("Please enter coordinates that are inside the drawing form");
+                return;
+            }*/
             for (int i = 1; i <= _sides; i++)
             {
                 TextBox inputTextBoxX = (TextBox)Controls.Find($"inputTextBoxX{i}", true)[0];

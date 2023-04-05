@@ -18,6 +18,7 @@ namespace corel_draw
         public int Y { get; set; }
         public int Width_Value { get; set; }
         public int Height_Value { get; set; }
+        public bool isInsidePictureBox { get; set; }
 
         public CalculationForm(Type type)
         {
@@ -47,6 +48,11 @@ namespace corel_draw
                 MessageBox.Show("Please enter a value for height.");
                 return;
             }
+           /* if(!isInsidePictureBox)
+            {
+                MessageBox.Show("Please enter coordinates that are inside the drawing form");
+                return;
+            }*/
             X = int.Parse(X_Input.Text);
             Y = int.Parse(Y_Input.Text);
             Width_Value = int.Parse(Width_Input.Text);

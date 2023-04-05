@@ -40,6 +40,16 @@ namespace corel_draw
                 if (sidesResult == DialogResult.OK)
                 {
                     PolygonTypeForm polygonTypeForm = new PolygonTypeForm(polygonSides.Sides);
+                    //check if user put coordinates that are inside the picture box
+                   /* for(int i = 0; i < polygonSides.Sides;i++)
+                    {
+                        if (polygonTypeForm.PolygonPoints[i].X < DrawingBox.ClientRectangle.Left )
+                        {
+                            polygonTypeForm.isInsidePictureBox = false;
+                            return;
+                        }
+                    }*/
+                  
                     DialogResult polygonTypeResult = polygonTypeForm.ShowDialog();
                     if (polygonTypeResult == DialogResult.OK)
                     {
@@ -57,6 +67,15 @@ namespace corel_draw
             {
                 CalculationForm calculationForm = new CalculationForm(figureType);
                 DialogResult result = calculationForm.ShowDialog();
+              /*  //check if user put coordinates that are inside the picture box
+                if (calculationForm.X < DrawingBox.ClientRectangle.Left || 
+                    calculationForm.Y + calculationForm.Width_Value > DrawingBox.ClientRectangle.Right ||
+                    calculationForm.Y< DrawingBox.ClientRectangle.Top || 
+                    calculationForm.Y + calculationForm.Height_Value > DrawingBox.ClientRectangle.Bottom)
+                {
+                    calculationForm.isInsidePictureBox = false;
+                    return;
+                }*/
                 if (result == DialogResult.OK)
                 {
                     Figure figure = (Figure)Activator.CreateInstance(figureType, new object[]
@@ -215,7 +234,7 @@ namespace corel_draw
                         colorMenuItem.Click += new EventHandler(ColorMenuItem_Click);
                         contextMenuStrip.Items.Add(colorMenuItem);
 
-                        //edit
+                        // edit
                         ToolStripMenuItem editToolStripMenuItem = new ToolStripMenuItem("Edit");
                         editToolStripMenuItem.Tag = currentFigure;
                         editToolStripMenuItem.Click += new EventHandler(EditToolStripMenuItem_Click);

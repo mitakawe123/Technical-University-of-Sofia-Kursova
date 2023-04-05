@@ -27,6 +27,11 @@ namespace corel_draw
         {
             if (int.TryParse(Polygon_Sides.Text, out int number))
             {
+                if(number < 2)
+                {
+                    MessageBox.Show("Please enter a number above 1");
+                    return;
+                }
                 Sides = number;
                 DialogResult = DialogResult.OK;
                 Close();
