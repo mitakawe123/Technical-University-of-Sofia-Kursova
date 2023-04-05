@@ -136,26 +136,40 @@ namespace corel_draw
 
         private void EditToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CalculationForm calculationForm = new CalculationForm(currentFigure.GetType());
-            DialogResult result = calculationForm.ShowDialog();
-
             if (currentFigure.GetType() == typeof(Polygon))
             {
-                //TODO: check for polygon and open the corrent form
-            } 
-
-            if (result == DialogResult.OK)
-            {
-                if (currentFigure.GetType() == typeof(Polygon))
+                Polygon polygon = (Polygon)currentFigure;
+                PolygonSides polygonSides = new PolygonSides();
+                DialogResult sidesResult = polygonSides.ShowDialog();
+                if (sidesResult == DialogResult.OK)
                 {
-                    //TODO: set the correct location for polygon when edit
+                    int sides = polygonSides.Sides;
+                    List<Point> newPolygonPoints = new List<Point>();
+                 
+                    PolygonTypeForm polygonTypeForm = new PolygonTypeForm(sides);
+                    DialogResult polygonTypeResult = polygonTypeForm.ShowDialog();
+                    if (polygonTypeResult == DialogResult.OK)
+                    {
+                        for (int i = 0; i < sides; i++)
+                        {
+                            newPolygonPoints = polygonTypeForm.PolygonPoints;
+
+                            polygon.Points = newPolygonPoints;
+                            actionList.Items.Add($"Edit {currentFigure.GetType().Name} with new area of: {currentFigure.CalcArea():F2}");
+                            DrawingBox.Invalidate();
+                        }
+                    }
                 }
-                else
+            } else
+            {
+                CalculationForm calculationForm = new CalculationForm(currentFigure.GetType());
+                DialogResult result = calculationForm.ShowDialog();
+                if(result == DialogResult.OK)
                 {
                     currentFigure.Location = new Point(calculationForm.X, calculationForm.Y);
                     currentFigure.Width = calculationForm.Width_Value;
                     currentFigure.Height = calculationForm.Height_Value;
-                    actionList.Items.Add($"Edit {currentFigure.GetType().Name}");
+                    actionList.Items.Add($"Edit {currentFigure.GetType().Name} with new area of: {currentFigure.CalcArea():F2}");
                     DrawingBox.Invalidate();
                 }
             }
