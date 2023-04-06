@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddedLogic\ActionsHistory.cs" />
     <Compile Include="CalculationForm.cs">
       <SubType>Form</SubType>
     </Compile>

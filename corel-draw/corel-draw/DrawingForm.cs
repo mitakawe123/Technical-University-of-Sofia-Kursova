@@ -1,4 +1,5 @@
-﻿using corel_draw.Figures;
+﻿using corel_draw.AddedLogic;
+using corel_draw.Figures;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -23,6 +24,7 @@ namespace corel_draw
         private List<Point> clickedPoints = new List<Point>();
         private List<Point> originalClickedPoints = new List<Point>();
         private Bitmap bitmap;
+        ActionsHistory actionsHistory;
 
         private Figure currentFigure;
         private bool isDragging = false;
@@ -35,6 +37,7 @@ namespace corel_draw
         {
             InitializeComponent(); 
             bitmap = new Bitmap(DrawingBox.Width, DrawingBox.Height);
+            actionsHistory = new ActionsHistory();
         }
 
         private void CreateFigure(Type figureType, bool PolygonType)
