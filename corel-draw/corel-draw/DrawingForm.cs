@@ -20,75 +20,43 @@ namespace corel_draw
         private List<Figure> drawnFigures = new List<Figure>();
         private Stack<Figure> undoFigures = new Stack<Figure>();
         private Stack<Figure> redoFigures = new Stack<Figure>();
+        private List<Point> clickedPoints = new List<Point>();
+        private Bitmap bitmap;
 
         private Figure currentFigure;
         private bool isDragging = false;
         private Point offset;
         private Point? lastPoint = null;
 
+        private PolygonSides polygonSides = new PolygonSides();
+
         public DrawingForm()
         {
-            InitializeComponent();
+            InitializeComponent(); 
+            bitmap = new Bitmap(DrawingBox.Width, DrawingBox.Height);
         }
 
         private void CreateFigure(Type figureType, bool PolygonType)
         {
             if (PolygonType)
             {
-                PolygonSides polygonSides = new PolygonSides();
-                DialogResult sidesResult = polygonSides.ShowDialog();
-                if (sidesResult == DialogResult.OK)
-                {
-                    PolygonTypeForm polygonTypeForm = new PolygonTypeForm(polygonSides.Sides);
-                    //check if user put coordinates that are inside the picture box
-                   /* for(int i = 0; i < polygonSides.Sides;i++)
-                    {
-                        if (polygonTypeForm.PolygonPoints[i].X < DrawingBox.ClientRectangle.Left )
-                        {
-                            polygonTypeForm.isInsidePictureBox = false;
-                            return;
-                        }
-                    }*/
-                  
-                    DialogResult polygonTypeResult = polygonTypeForm.ShowDialog();
-                    if (polygonTypeResult == DialogResult.OK)
-                    {
-                        Figure figure = (Figure)Activator.CreateInstance(figureType, new object[]
-                        {
-                            polygonTypeForm.PolygonPoints
-                        });
-                        actionList.Items.Add($"The area of the {figure.GetType().Name} is: {figure.CalcArea():F2}");
-                        drawnFigures.Add(figure);
-                        DrawingBox.Invalidate();
-                    }
-                }
+                polygonSides.ShowDialog();
+                return;
             }
-            else
+            CalculationForm calculationForm = new CalculationForm(figureType);
+            DialogResult result = calculationForm.ShowDialog();
+            if (result == DialogResult.OK)
             {
-                CalculationForm calculationForm = new CalculationForm(figureType);
-                DialogResult result = calculationForm.ShowDialog();
-              /*  //check if user put coordinates that are inside the picture box
-                if (calculationForm.X < DrawingBox.ClientRectangle.Left || 
-                    calculationForm.Y + calculationForm.Width_Value > DrawingBox.ClientRectangle.Right ||
-                    calculationForm.Y< DrawingBox.ClientRectangle.Top || 
-                    calculationForm.Y + calculationForm.Height_Value > DrawingBox.ClientRectangle.Bottom)
+                Figure figure = (Figure)Activator.CreateInstance(figureType, new object[]
                 {
-                    calculationForm.isInsidePictureBox = false;
-                    return;
-                }*/
-                if (result == DialogResult.OK)
-                {
-                    Figure figure = (Figure)Activator.CreateInstance(figureType, new object[]
-                    {
                         calculationForm.X,
                         calculationForm.Y,
                         calculationForm.Width_Value,
                         calculationForm.Height_Value,
-                    });
-                    actionList.Items.Add($"The area of the {figure.GetType().Name} is: {figure.CalcArea():F2}");
-                    drawnFigures.Add(figure);
-                    DrawingBox.Invalidate();
-                }
+                });
+                actionList.Items.Add($"The area of the {figure.GetType().Name} is: {figure.CalcArea():F2}");
+                drawnFigures.Add(figure);
+                DrawingBox.Invalidate();
             }
         }
 
@@ -96,9 +64,6 @@ namespace corel_draw
         {
             DrawingBox.BackColor = Color.White;
             DrawingBox.SizeMode = PictureBoxSizeMode.StretchImage;
-            DrawingBox.MouseDown += pictureBox1_MouseDown;
-            DrawingBox.MouseMove += pictureBox1_MouseMove;
-            DrawingBox.MouseUp += pictureBox1_MouseUp;
 
             var figureTypes = typeof(Figure).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(Figure))).ToArray();
             var buttonWidth = (Width - 150) / figureTypes.Length;
@@ -165,19 +130,7 @@ namespace corel_draw
                     int sides = polygonSides.Sides;
                     List<Point> newPolygonPoints = new List<Point>();
                  
-                    PolygonTypeForm polygonTypeForm = new PolygonTypeForm(sides);
-                    DialogResult polygonTypeResult = polygonTypeForm.ShowDialog();
-                    if (polygonTypeResult == DialogResult.OK)
-                    {
-                        for (int i = 0; i < sides; i++)
-                        {
-                            newPolygonPoints = polygonTypeForm.PolygonPoints;
-
-                            polygon.Points = newPolygonPoints;
-                            actionList.Items.Add($"Edit {currentFigure.GetType().Name} with new area of: {currentFigure.CalcArea():F2}");
-                            DrawingBox.Invalidate();
-                        }
-                    }
+                  
                 }
             } else
             {
@@ -196,54 +149,84 @@ namespace corel_draw
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-            foreach (Figure figure in drawnFigures)
-            {
-                if (figure is Polygon polygon && polygon.Contains(e.Location))
-                {
-                    currentFigure = figure;
-                    isDragging = true;
-                    lastPoint = e.Location;
-                    break;
-                }
-                else if (figure.Contains(e.Location))
-                {
-                    currentFigure = figure;
-                    isDragging = true;
-                    offset = new Point(e.X - figure.Location.X, e.Y - figure.Location.Y);
-                    break;
-                }
-            }
-
-            if (e.Button == MouseButtons.Right)
+            if (!polygonSides.isDrawing)
             {
                 foreach (Figure figure in drawnFigures)
                 {
-                    if (figure.Contains(e.Location))
+                    if (figure is Polygon polygon && polygon.Contains(e.Location))
                     {
                         currentFigure = figure;
-
-                        ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
-
-                        // delete 
-                        ToolStripMenuItem deleteMenuItem = new ToolStripMenuItem("Delete");
-                        deleteMenuItem.Click += new EventHandler(DeleteMenuItem_Click);
-                        contextMenuStrip.Items.Add(deleteMenuItem);
-
-                        // color
-                        ToolStripMenuItem colorMenuItem = new ToolStripMenuItem("Change Color");
-                        colorMenuItem.Click += new EventHandler(ColorMenuItem_Click);
-                        contextMenuStrip.Items.Add(colorMenuItem);
-
-                        // edit
-                        ToolStripMenuItem editToolStripMenuItem = new ToolStripMenuItem("Edit");
-                        editToolStripMenuItem.Tag = currentFigure;
-                        editToolStripMenuItem.Click += new EventHandler(EditToolStripMenuItem_Click);
-                        contextMenuStrip.Items.Add(editToolStripMenuItem);
-
-                        contextMenuStrip.Show(DrawingBox, e.Location);
+                        isDragging = true;
+                        lastPoint = e.Location;
+                        break;
+                    }
+                    else if (figure.Contains(e.Location))
+                    {
+                        currentFigure = figure;
+                        isDragging = true;
+                        offset = new Point(e.X - figure.Location.X, e.Y - figure.Location.Y);
                         break;
                     }
                 }
+
+                if (e.Button == MouseButtons.Right)
+                {
+                    foreach (Figure figure in drawnFigures)
+                    {
+                        if (figure.Contains(e.Location))
+                        {
+                            currentFigure = figure;
+
+                            ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
+
+                            // delete 
+                            ToolStripMenuItem deleteMenuItem = new ToolStripMenuItem("Delete");
+                            deleteMenuItem.Click += new EventHandler(DeleteMenuItem_Click);
+                            contextMenuStrip.Items.Add(deleteMenuItem);
+
+                            // color
+                            ToolStripMenuItem colorMenuItem = new ToolStripMenuItem("Change Color");
+                            colorMenuItem.Click += new EventHandler(ColorMenuItem_Click);
+                            contextMenuStrip.Items.Add(colorMenuItem);
+
+                            // edit
+                            ToolStripMenuItem editToolStripMenuItem = new ToolStripMenuItem("Edit");
+                            editToolStripMenuItem.Tag = currentFigure;
+                            editToolStripMenuItem.Click += new EventHandler(EditToolStripMenuItem_Click);
+                            contextMenuStrip.Items.Add(editToolStripMenuItem);
+
+                            contextMenuStrip.Show(DrawingBox, e.Location);
+                            break;
+                        }
+                    }
+                }
+                return;
+            }
+
+            clickedPoints.Add(e.Location);
+
+            if (clickedPoints.Count > 1)
+            {
+                using (Graphics g = Graphics.FromImage(bitmap))
+                {
+                    Pen pen = new Pen(Color.Black, 2f);
+                    g.DrawLine(pen, clickedPoints[clickedPoints.Count - 2], clickedPoints[clickedPoints.Count - 1]);
+                }
+            }
+
+            DrawingBox.Invalidate();
+
+            if (clickedPoints.Count == polygonSides.Sides)
+            {
+                using (Graphics g = Graphics.FromImage(bitmap))
+                {
+                    Pen pen = new Pen(Color.Black, 2f);
+                    g.DrawLine(pen, clickedPoints[clickedPoints.Count - 2], clickedPoints[clickedPoints.Count - 1]);
+                }
+
+                drawnFigures.Add(new Polygon(clickedPoints.ToList()));
+                clickedPoints.Clear();
+                polygonSides.isDrawing = false;
             }
         }
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
@@ -275,9 +258,32 @@ namespace corel_draw
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
-            foreach (Figure figure in drawnFigures)
+            using (Pen pen = new Pen(Color.Black, 2f))
             {
-                figure.Draw(e.Graphics);
+                if (polygonSides.isDrawing)
+                {
+                    if (clickedPoints.Count > 1)
+                    {
+                        e.Graphics.DrawLines(pen, clickedPoints.ToArray());
+                        e.Graphics.DrawLine(pen, clickedPoints[clickedPoints.Count - 1], clickedPoints[0]);
+                    }
+
+                    using (GraphicsPath path = new GraphicsPath())
+                    {
+                        foreach (Point p in clickedPoints)
+                        {
+                            path.AddEllipse(p.X - 3, p.Y - 3, 6, 6);
+                        }
+                        e.Graphics.FillPath(Brushes.Black, path);
+                    }
+                }
+                else
+                {
+                    foreach (Figure figure in drawnFigures)
+                    {
+                        figure.Draw(e.Graphics);
+                    }
+                }
             }
         }
 

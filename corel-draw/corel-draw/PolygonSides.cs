@@ -13,26 +13,24 @@ namespace corel_draw
     public partial class PolygonSides : Form
     {
         public int Sides { get; private set; }
+        public bool isDrawing { get; set; }
+
         public PolygonSides()
         {
             InitializeComponent(); 
-        }
-
-        private void PolygonSides_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             if (int.TryParse(Polygon_Sides.Text, out int number))
             {
-                if(number < 2)
+                if(number < 3)
                 {
-                    MessageBox.Show("Please enter a number above 1");
+                    MessageBox.Show("Please enter a number above 2");
                     return;
                 }
                 Sides = number;
+                isDrawing = true;
                 DialogResult = DialogResult.OK;
                 Close();
             }

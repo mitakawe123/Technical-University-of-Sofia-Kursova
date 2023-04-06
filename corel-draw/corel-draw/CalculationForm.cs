@@ -48,11 +48,6 @@ namespace corel_draw
                 MessageBox.Show("Please enter a value for height.");
                 return;
             }
-           /* if(!isInsidePictureBox)
-            {
-                MessageBox.Show("Please enter coordinates that are inside the drawing form");
-                return;
-            }*/
             X = int.Parse(X_Input.Text);
             Y = int.Parse(Y_Input.Text);
             Width_Value = int.Parse(Width_Input.Text);

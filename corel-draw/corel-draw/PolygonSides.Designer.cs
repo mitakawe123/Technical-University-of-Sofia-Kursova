@@ -48,7 +48,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(185, 75);
             this.button1.TabIndex = 1;
-            this.button1.Text = "button1";
+            this.button1.Text = "Start Drawing";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -70,7 +70,6 @@
             this.Controls.Add(this.label1);
             this.Name = "PolygonSides";
             this.Text = "PolygonSides";
-            this.Load += new System.EventHandler(this.PolygonSides_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

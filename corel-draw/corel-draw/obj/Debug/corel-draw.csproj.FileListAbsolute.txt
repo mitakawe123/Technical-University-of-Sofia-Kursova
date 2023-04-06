@@ -11,4 +11,3 @@ C:\Users\dimitar.kyuchukov\Desktop\kursova-rabota-main\corel-draw\corel-draw\obj
 C:\Users\dimitar.kyuchukov\Desktop\kursova-rabota-main\corel-draw\corel-draw\obj\Debug\corel-draw.pdb
 C:\Users\dimitar.kyuchukov\Desktop\kursova-rabota-main\corel-draw\corel-draw\obj\Debug\corel_draw.CalculationForm.resources
 C:\Users\dimitar.kyuchukov\Desktop\kursova-rabota-main\corel-draw\corel-draw\obj\Debug\corel_draw.PolygonSides.resources
-C:\Users\dimitar.kyuchukov\Desktop\kursova-rabota-main\corel-draw\corel-draw\obj\Debug\corel_draw.PolygonTypeForm.resources
