@@ -12,17 +12,19 @@ namespace corel_draw.Figures
 {
     internal class Polygon : Figure
     {
-        private List<Point> _points;
-
-        public List<Point> Points
-        {
-            get { return _points; }
-            set { _points = value; }
-        }
+        private readonly List<Point> _points;
 
         public Polygon(List<Point> coordinates) : base(0, 0, 0, 0)
         {
             _points = coordinates;
+        }
+
+        public void Move(Point delta)
+        {
+            for (int i = 0; i < _points.Count; i++)
+            {
+                _points[i] = new Point(_points[i].X + delta.X, _points[i].Y + delta.Y);
+            }
         }
 
         public override void Draw(Graphics g)

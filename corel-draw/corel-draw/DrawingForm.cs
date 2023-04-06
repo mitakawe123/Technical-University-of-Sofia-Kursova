@@ -233,13 +233,9 @@ namespace corel_draw
         {
             if (isDragging && currentFigure is Polygon polygon)
             {
-                int dx = e.X - lastPoint.Value.X;
-                int dy = e.Y - lastPoint.Value.Y;
+                Point delta = new Point(e.X - lastPoint.Value.X, e.Y - lastPoint.Value.Y);
                 lastPoint = e.Location;
-                for (int i = 0; i < polygon.Points.Count; i++)
-                {
-                    polygon.Points[i] = new Point(polygon.Points[i].X + dx, polygon.Points[i].Y + dy);
-                }
+                polygon.Move(delta);
                 DrawingBox.Invalidate();
             }
             else if (isDragging)
