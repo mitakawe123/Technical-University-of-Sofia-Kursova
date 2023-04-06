@@ -11,3 +11,6 @@ C:\Users\dimitar.kyuchukov\Desktop\kursova-rabota-main\corel-draw\corel-draw\obj
 C:\Users\dimitar.kyuchukov\Desktop\kursova-rabota-main\corel-draw\corel-draw\obj\Debug\corel-draw.pdb
 C:\Users\dimitar.kyuchukov\Desktop\kursova-rabota-main\corel-draw\corel-draw\obj\Debug\corel_draw.CalculationForm.resources
 C:\Users\dimitar.kyuchukov\Desktop\kursova-rabota-main\corel-draw\corel-draw\obj\Debug\corel_draw.PolygonSides.resources
+C:\Users\dimitar.kyuchukov\Desktop\kursova-rabota-main\corel-draw\corel-draw\bin\Debug\Newtonsoft.Json.dll
+C:\Users\dimitar.kyuchukov\Desktop\kursova-rabota-main\corel-draw\corel-draw\bin\Debug\Newtonsoft.Json.xml
+C:\Users\dimitar.kyuchukov\Desktop\kursova-rabota-main\corel-draw\corel-draw\obj\Debug\corel-draw.csproj.CopyComplete

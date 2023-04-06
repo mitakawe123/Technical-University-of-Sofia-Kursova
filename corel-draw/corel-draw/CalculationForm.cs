@@ -18,7 +18,6 @@ namespace corel_draw
         public int Y { get; set; }
         public int Width_Value { get; set; }
         public int Height_Value { get; set; }
-        public bool isInsidePictureBox { get; set; }
 
         public CalculationForm(Type type)
         {
@@ -28,7 +27,7 @@ namespace corel_draw
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(X_Input.Text))
+            if (string.IsNullOrWhiteSpace(X_Input.Text))    
             {
                 MessageBox.Show("Please enter a value for X axis.");
                 return;
