@@ -55,6 +55,7 @@
     <Compile Include="CalculationForm.Designer.cs">
       <DependentUpon>CalculationForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Components\ActionCommand .cs" />
     <Compile Include="DrawingForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -66,6 +67,7 @@
     <Compile Include="Figures\Polygon.cs" />
     <Compile Include="Figures\Rectangle.cs" />
     <Compile Include="Figures\Square.cs" />
+    <Compile Include="Interfaces\ICommand.cs" />
     <Compile Include="PolygonSides.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,6 +95,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="JsonFiles\DataFigures.json" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -107,9 +110,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Interfaces\" />
-    <Folder Include="JsonFiles\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

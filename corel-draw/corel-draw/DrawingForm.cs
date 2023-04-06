@@ -1,10 +1,13 @@
 ﻿using corel_draw.Figures;
+using corel_draw.Interfaces;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -21,9 +24,8 @@ namespace corel_draw
         private Stack<Figure> undoFigures = new Stack<Figure>();
         private Stack<Figure> redoFigures = new Stack<Figure>();
         private List<Point> clickedPoints = new List<Point>();
-        private List<Point> originalClickedPoints = new List<Point>();
+        
         private Bitmap bitmap;
-
         private Figure currentFigure;
         private bool isDragging = false;
         private Point offset;
@@ -57,6 +59,9 @@ namespace corel_draw
                         calculationForm.Height_Value,
                 });
                 actionList.Items.Add($"The area of the {figure.GetType().Name} is: {figure.CalcArea():F2}");
+                string json = JsonConvert.SerializeObject(figure);
+                string path = "C:\\Users\\dimitar.kyuchukov\\Desktop\\kursova-rabota-main\\corel-draw\\corel-draw\\JsonFiles\\DataFigures.json";
+                File.WriteAllText(path, json);
                 drawnFigures.Add(figure);
                 DrawingBox.Invalidate();
             }
