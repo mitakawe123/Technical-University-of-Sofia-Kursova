@@ -12,7 +12,7 @@ namespace corel_draw.Figures
     {
         public override double CalcArea()
         {
-            double radius = width / 2.0;
+            double radius = Width / 2.0;
             return Math.PI * radius * radius;
         }
         public Circle(int x, int y, int width, int height) : base(x, y, width, height)
@@ -20,7 +20,7 @@ namespace corel_draw.Figures
         }
         public override void Draw(Graphics g)
         { 
-           g.DrawEllipse(new Pen(Color, 5), location.X, location.Y, width, height);
+           g.DrawEllipse(new Pen(Color, 5), Location.X, Location.Y, Width, Height);
         }
     }
 }

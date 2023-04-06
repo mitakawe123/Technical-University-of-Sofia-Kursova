@@ -21,6 +21,7 @@ namespace corel_draw
         private Stack<Figure> undoFigures = new Stack<Figure>();
         private Stack<Figure> redoFigures = new Stack<Figure>();
         private List<Point> clickedPoints = new List<Point>();
+        private List<Point> originalClickedPoints = new List<Point>();
         private Bitmap bitmap;
 
         private Figure currentFigure;
@@ -41,6 +42,7 @@ namespace corel_draw
             if (PolygonType)
             {
                 polygonSides.ShowDialog();
+                //actionList.Items.Add($"The area of the Polygon is: {currentFigure.CalcArea():F2}");
                 return;
             }
             CalculationForm calculationForm = new CalculationForm(figureType);
@@ -120,17 +122,14 @@ namespace corel_draw
 
         private void EditToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (currentFigure.GetType() == typeof(Polygon))
+            if (currentFigure is Polygon polygon)
             {
-                Polygon polygon = (Polygon)currentFigure;
-                PolygonSides polygonSides = new PolygonSides();
-                DialogResult sidesResult = polygonSides.ShowDialog();
-                if (sidesResult == DialogResult.OK)
+                polygonSides = new PolygonSides();
+                DialogResult result = polygonSides.ShowDialog();
+                if(result == DialogResult.OK)
                 {
-                    int sides = polygonSides.Sides;
-                    List<Point> newPolygonPoints = new List<Point>();
-                 
-                  
+                    drawnFigures.Remove(currentFigure);
+                    actionList.Items.Add($"Edit {currentFigure.GetType().Name} with new area of: {currentFigure.CalcArea():F2}");
                 }
             } else
             {

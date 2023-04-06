@@ -19,11 +19,11 @@ namespace corel_draw.Figures
             _points = coordinates;
         }
 
-        public void Move(Point delta)
+        public void Move(Point newPoint)
         {
             for (int i = 0; i < _points.Count; i++)
             {
-                _points[i] = new Point(_points[i].X + delta.X, _points[i].Y + delta.Y);
+                _points[i] = new Point(_points[i].X + newPoint.X, _points[i].Y + newPoint.Y);
             }
         }
 
@@ -31,6 +31,12 @@ namespace corel_draw.Figures
         {
             Point[] points = _points.ToArray();
             g.DrawPolygon(new Pen(Color, 5), points);
+        }
+
+        public void editPolygon(List<Point> newCoordinates)
+        {
+            _points.Clear();
+            _points.AddRange(newCoordinates);
         }
 
         //Jordan Curve Theorem
@@ -53,12 +59,6 @@ namespace corel_draw.Figures
 
         public override double CalcArea()
         {
-            //if user draw a line
-            if(_points.Count == 2)
-            {
-                return 0;
-            }
-
             double area = 0;
 
             //Shoelace formula

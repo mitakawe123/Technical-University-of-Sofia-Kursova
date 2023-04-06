@@ -15,11 +15,11 @@ namespace corel_draw.Figures
         }
         public override void Draw(Graphics g)
         { 
-            g.DrawRectangle(new Pen(Color, 5), location.X, location.Y, width, width);
+            g.DrawRectangle(new Pen(Color, 5), Location.X, Location.Y, Width, Width);
         }
         public override double CalcArea()
         {
-            return width * width;
+            return Width * Width;
         }
     }
 }

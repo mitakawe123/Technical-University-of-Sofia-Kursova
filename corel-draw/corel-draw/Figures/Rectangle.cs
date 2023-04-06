@@ -11,7 +11,7 @@ namespace corel_draw.Figures
     internal class Rectangle : Figure
     {
         public override double CalcArea() {
-            return width * height;
+            return Width * Height;
         }
 
         public Rectangle(int x, int y, int width, int height) : base(x, y, width, height)
@@ -20,7 +20,7 @@ namespace corel_draw.Figures
 
         public override void Draw(Graphics g)
         {            
-            g.DrawRectangle(new Pen(Color, 5), location.X, location.Y, width, height);
+            g.DrawRectangle(new Pen(Color, 5), Location.X, Location.Y, Width, Height);
         }
     }
 }

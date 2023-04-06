@@ -5,41 +5,38 @@ namespace corel_draw.Figures
 {
     internal abstract class Figure
     {
-        protected Point location;
-        protected int width;
-        protected int height;
+        private Point _location;
+        private int _width;
+        private int _height;
         public Color Color { get; set; }
 
         public Point Location
         {
-            get { return location; }
-            set { location = value; }
+            get { return _location; }
+            set { _location = value; }
         }
         public int Width 
         {
-            get { return width; }
-            set { width = value; }
+            get { return _width; }
+            set { _width = value; }
         }
         public int Height
         {
-            get { return height; }
-            set { height = value; }
+            get { return _height; }
+            set { _height = value; }
         }
-
 
         public Figure(int x, int y, int width, int height)
         {
-            location = new Point(x, y);
-            this.width = width;
-            this.height = height;
+            _location = new Point(x, y);
+            _width = width;
+            _height = height;
             Color = Color.Black; 
         }
 
         public abstract void Draw(Graphics g);
         public abstract double CalcArea();
-        public virtual bool Contains(Point point)
-        {
-            return location.X <= point.X && point.X <= location.X + width && location.Y <= point.Y && point.Y <= location.Y + height;
-        }
+        public virtual bool Contains(Point point) => _location.X <= point.X && point.X <= _location.X + _width && _location.Y <= point.Y && point.Y <= _location.Y + _height;
+        
     }
 }
