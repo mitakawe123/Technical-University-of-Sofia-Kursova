@@ -65,7 +65,7 @@
             this.Draw_Button.TabIndex = 4;
             this.Draw_Button.Text = "Draw";
             this.Draw_Button.UseVisualStyleBackColor = true;
-            this.Draw_Button.Click += new System.EventHandler(this.button1_Click);
+            this.Draw_Button.Click += new System.EventHandler(this.DrawButton_Click);
             // 
             // X_Label
             // 

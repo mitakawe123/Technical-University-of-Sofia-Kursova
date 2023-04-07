@@ -25,7 +25,7 @@ namespace corel_draw
             Toggle_Height_Input_Visibility(type != typeof(Square));
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void DrawButton_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(X_Input.Text)) 
             {

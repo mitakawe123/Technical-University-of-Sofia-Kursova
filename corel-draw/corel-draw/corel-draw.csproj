@@ -55,8 +55,8 @@
     <Compile Include="CalculationForm.Designer.cs">
       <DependentUpon>CalculationForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Components\ActionCommand .cs" />
     <Compile Include="Components\DrawingData.cs" />
+    <Compile Include="Components\FigureState.cs" />
     <Compile Include="DrawingForm.cs">
       <SubType>Form</SubType>
     </Compile>

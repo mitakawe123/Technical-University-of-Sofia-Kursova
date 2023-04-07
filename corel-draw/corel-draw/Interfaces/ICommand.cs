@@ -8,7 +8,7 @@ namespace corel_draw.Interfaces
 {
     public interface ICommand
     {
-        void Execute();
+        void Do();
         void Undo();
     }
 }

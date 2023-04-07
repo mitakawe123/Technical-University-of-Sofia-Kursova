@@ -34,8 +34,10 @@ namespace corel_draw.Figures
             get { return _height; }
             set { _height = value; }
         }
-
-        public Figure() { }
+        public Figure() 
+        {
+            //need empty constructor for deserialize the data in the json file
+        }
 
         public Figure(int x, int y, int width, int height)
         {
