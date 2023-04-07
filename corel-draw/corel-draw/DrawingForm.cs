@@ -2,20 +2,15 @@
 using corel_draw.Figures;
 using corel_draw.Interfaces;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Button = System.Windows.Forms.Button;
 
 namespace corel_draw
@@ -23,10 +18,10 @@ namespace corel_draw
     public partial class DrawingForm : Form
     {
         private readonly List<Figure> drawnFigures = new List<Figure>();
-        private readonly Stack<Figure> undoFigures = new Stack<Figure>();
-        private readonly Stack<Figure> redoFigures = new Stack<Figure>();
         private readonly List<Point> clickedPoints = new List<Point>();
-        
+        List<ICommand> commandHistory = new List<ICommand>();
+        int commandIndex = -1; // current position in history
+
         private readonly Bitmap bitmap;
         private Figure currentFigure;
         private bool isDragging = false;
@@ -62,7 +57,12 @@ namespace corel_draw
                 });
                 actionList.Items.Add($"The area of the {figure.GetType().Name} is: {figure.CalcArea():F2}");
                 figure.Name = figure.GetType().Name;
-                drawnFigures.Add(figure);
+
+                ICommand command = new AddFigure(figure, drawnFigures);
+                command.Do();
+                commandHistory.Add(command);
+                commandIndex = commandHistory.Count - 1;
+
                 DrawingBox.Invalidate();
             }
         }
@@ -103,8 +103,10 @@ namespace corel_draw
         {
             if (currentFigure != null)
             {
-                drawnFigures.Remove(currentFigure);
-                undoFigures.Push(currentFigure);
+                ICommand command = new DeleteCommand(currentFigure, drawnFigures);
+                command.Do();
+                commandHistory.Add(command);
+                commandIndex = commandHistory.Count - 1;
                 actionList.Items.Add($"Delete {currentFigure.GetType().Name}");
                 currentFigure = null;
                 DrawingBox.Invalidate();
@@ -232,8 +234,12 @@ namespace corel_draw
                 currentFigure = new Polygon(clickedPoints.ToList());
                 drawnFigures.Add(currentFigure);
                 currentFigure.Name = currentFigure.GetType().Name;
-
                 actionList.Items.Add($"The area of the {currentFigure.GetType().Name} is: {currentFigure.CalcArea():F2}");
+
+                ICommand command = new AddFigure(currentFigure, drawnFigures);
+                command.Do();
+                commandHistory.Add(command);
+                commandIndex = commandHistory.Count - 1;
 
                 clickedPoints.Clear();
                 polygonSides.isDrawing = false;
@@ -294,24 +300,22 @@ namespace corel_draw
 
         private void Redo_Btn_Click(object sender, EventArgs e)
         {
-            if (redoFigures.Count > 0)
+            MessageBox.Show(commandHistory.Count.ToString());
+            if (commandIndex < commandHistory.Count - 1)
             {
-                Figure lastRedoFigure = redoFigures.Pop();
-                actionList.Items.Add($"Redo {lastRedoFigure.GetType().Name}");
-                drawnFigures.Remove(lastRedoFigure);
-                undoFigures.Push(lastRedoFigure);
+                commandIndex++;
+                commandHistory[commandIndex].Do();
                 DrawingBox.Invalidate();
             }
         }
 
         private void Undo_Btn_Click(object sender, EventArgs e)
         {
-            if (undoFigures.Count > 0)
+            if (commandIndex >= 0)
             {
-                Figure lastDeletedFigure = undoFigures.Pop();
-                actionList.Items.Add($"Undo {lastDeletedFigure.GetType().Name}");
-                drawnFigures.Add(lastDeletedFigure);
-                redoFigures.Push(lastDeletedFigure);
+                commandHistory[commandIndex].Undo(); 
+                commandHistory.RemoveAt(commandIndex);
+                commandIndex--;
                 DrawingBox.Invalidate();
             }
         }
