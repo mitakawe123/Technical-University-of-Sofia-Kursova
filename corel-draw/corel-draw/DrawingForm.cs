@@ -1,6 +1,8 @@
-﻿using corel_draw.Figures;
+﻿using corel_draw.Components;
+using corel_draw.Figures;
 using corel_draw.Interfaces;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,17 +23,18 @@ namespace corel_draw
     public partial class DrawingForm : Form
     {
         private List<Figure> drawnFigures = new List<Figure>();
-        private Stack<Figure> undoFigures = new Stack<Figure>();
-        private Stack<Figure> redoFigures = new Stack<Figure>();
-        private List<Point> clickedPoints = new List<Point>();
+        private readonly Stack<Figure> undoFigures = new Stack<Figure>();
+        private readonly Stack<Figure> redoFigures = new Stack<Figure>();
+        private readonly List<Point> clickedPoints = new List<Point>();
         
-        private Bitmap bitmap;
+        private readonly Bitmap bitmap;
         private Figure currentFigure;
         private bool isDragging = false;
         private Point offset;
         private Point? lastPoint = null;
 
         private PolygonSides polygonSides = new PolygonSides();
+        private readonly string path = "../../JsonFiles/DataFigures.json";
 
         public DrawingForm()
         {
@@ -60,9 +63,6 @@ namespace corel_draw
                 actionList.Items.Add($"The area of the {figure.GetType().Name} is: {figure.CalcArea():F2}");
                 figure.Name = figure.GetType().Name;
                 drawnFigures.Add(figure);
-                string json = JsonConvert.SerializeObject(new { drawnFigures });
-                string path = "../../JsonFiles/DataFigures.json";
-                File.WriteAllText(path, json);
                 DrawingBox.Invalidate();
             }
         }
@@ -127,14 +127,13 @@ namespace corel_draw
 
         private void EditToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (currentFigure is Polygon polygon)
+            if (currentFigure is Polygon)
             {
                 polygonSides = new PolygonSides();
                 DialogResult result = polygonSides.ShowDialog();
                 if(result == DialogResult.OK)
                 {
                     drawnFigures.Remove(currentFigure);
-                    actionList.Items.Add($"Edit {currentFigure.GetType().Name} with new area of: {currentFigure.CalcArea():F2}");
                 }
             } else
             {
@@ -145,13 +144,13 @@ namespace corel_draw
                     currentFigure.Location = new Point(calculationForm.X, calculationForm.Y);
                     currentFigure.Width = calculationForm.Width_Value;
                     currentFigure.Height = calculationForm.Height_Value;
-                    actionList.Items.Add($"Edit {currentFigure.GetType().Name} with new area of: {currentFigure.CalcArea():F2}");
+                    actionList.Items.Add($"The area of the {currentFigure.GetType().Name} is: {currentFigure.CalcArea():F2}");
                     DrawingBox.Invalidate();
                 }
             }
         }
 
-        private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
+        private void DrawingBox_MouseDown(object sender, MouseEventArgs e)
         {
             if (!polygonSides.isDrawing)
             {
@@ -194,8 +193,10 @@ namespace corel_draw
                             contextMenuStrip.Items.Add(colorMenuItem);
 
                             // edit
-                            ToolStripMenuItem editToolStripMenuItem = new ToolStripMenuItem("Edit");
-                            editToolStripMenuItem.Tag = currentFigure;
+                            ToolStripMenuItem editToolStripMenuItem = new ToolStripMenuItem("Edit")
+                            {
+                                Tag = currentFigure
+                            };
                             editToolStripMenuItem.Click += new EventHandler(EditToolStripMenuItem_Click);
                             contextMenuStrip.Items.Add(editToolStripMenuItem);
 
@@ -230,6 +231,7 @@ namespace corel_draw
 
                 currentFigure = new Polygon(clickedPoints.ToList());
                 drawnFigures.Add(currentFigure);
+                currentFigure.Name = currentFigure.GetType().Name;
 
                 actionList.Items.Add($"The area of the {currentFigure.GetType().Name} is: {currentFigure.CalcArea():F2}");
 
@@ -237,7 +239,7 @@ namespace corel_draw
                 polygonSides.isDrawing = false;
             }
         }
-        private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
+        private void DrawingBox_MouseMove(object sender, MouseEventArgs e)
         {
             if (isDragging && currentFigure is Polygon polygon)
             {
@@ -253,13 +255,13 @@ namespace corel_draw
             }
         }
 
-        private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
+        private void DrawingBox_MouseUp(object sender, MouseEventArgs e)
         {
             isDragging = false; 
             lastPoint = null;
         }
 
-        private void pictureBox1_Paint(object sender, PaintEventArgs e)
+        private void DrawingBox_Paint(object sender, PaintEventArgs e)
         {
             using (Pen pen = new Pen(Color.Black, 2f))
             {
@@ -311,6 +313,59 @@ namespace corel_draw
                 drawnFigures.Add(lastDeletedFigure);
                 redoFigures.Push(lastDeletedFigure);
                 DrawingBox.Invalidate();
+            }
+        }
+
+        private void SaveToFile_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var drawingData = new DrawingData { DrawnFigures = drawnFigures };
+                string json = JsonConvert.SerializeObject(drawingData);
+                File.WriteAllText(path, json);
+                MessageBox.Show("File saved successfully.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error saving file: {ex.Message}");
+            }
+        }
+
+        private void LoadFromFile_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string json = File.ReadAllText(path);
+                var drawingData = JsonConvert.DeserializeObject<DrawingData>(json);
+
+                foreach (var figureData in drawingData.DrawnFigures)
+                {
+                    Figure figure;
+                    switch (figureData.Name)
+                    {
+                        case "Circle":
+                            figure = new Circle(figureData.Location.X, figureData.Location.Y, figureData.Width, figureData.Height);
+                            break;
+                        case "Rectangle":
+                            figure = new Figures.Rectangle(figureData.Location.X, figureData.Location.Y, figureData.Width, figureData.Height);
+                            break;
+                        case "Square":
+                            figure = new Square(figureData.Location.X, figureData.Location.Y, figureData.Width, figureData.Width);
+                            break;
+                        default:
+                            throw new ArgumentException($"Invalid figure name: {figureData.Name}");
+                    }
+                    figure.Color = figureData.Color;
+                    drawnFigures.Add(figure);
+
+                }
+
+                DrawingBox.Invalidate();
+                MessageBox.Show("File loaded successfully.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading file: {ex.Message}");
             }
         }
     }

@@ -33,6 +33,8 @@
             this.Undo_Btn = new System.Windows.Forms.Button();
             this.Redo_Btn = new System.Windows.Forms.Button();
             this.actionList = new System.Windows.Forms.ListBox();
+            this.SaveToFile = new System.Windows.Forms.Button();
+            this.LoadFromFile = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.DrawingBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -52,10 +54,10 @@
             this.DrawingBox.Size = new System.Drawing.Size(1012, 411);
             this.DrawingBox.TabIndex = 6;
             this.DrawingBox.TabStop = false;
-            this.DrawingBox.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
-            this.DrawingBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
-            this.DrawingBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
-            this.DrawingBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
+            this.DrawingBox.Paint += new System.Windows.Forms.PaintEventHandler(this.DrawingBox_Paint);
+            this.DrawingBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DrawingBox_MouseDown);
+            this.DrawingBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DrawingBox_MouseMove);
+            this.DrawingBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.DrawingBox_MouseUp);
             // 
             // Undo_Btn
             // 
@@ -85,11 +87,33 @@
             this.actionList.Size = new System.Drawing.Size(213, 407);
             this.actionList.TabIndex = 9;
             // 
+            // SaveToFile
+            // 
+            this.SaveToFile.Location = new System.Drawing.Point(1239, 0);
+            this.SaveToFile.Name = "SaveToFile";
+            this.SaveToFile.Size = new System.Drawing.Size(104, 41);
+            this.SaveToFile.TabIndex = 10;
+            this.SaveToFile.Text = "Save to File";
+            this.SaveToFile.UseVisualStyleBackColor = true;
+            this.SaveToFile.Click += new System.EventHandler(this.SaveToFile_Click);
+            // 
+            // LoadFromFile
+            // 
+            this.LoadFromFile.Location = new System.Drawing.Point(1143, 0);
+            this.LoadFromFile.Name = "LoadFromFile";
+            this.LoadFromFile.Size = new System.Drawing.Size(99, 41);
+            this.LoadFromFile.TabIndex = 11;
+            this.LoadFromFile.Text = "Load from File";
+            this.LoadFromFile.UseVisualStyleBackColor = true;
+            this.LoadFromFile.Click += new System.EventHandler(this.LoadFromFile_Click);
+            // 
             // DrawingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1344, 630);
+            this.Controls.Add(this.LoadFromFile);
+            this.Controls.Add(this.SaveToFile);
             this.Controls.Add(this.actionList);
             this.Controls.Add(this.Redo_Btn);
             this.Controls.Add(this.Undo_Btn);
@@ -110,6 +134,8 @@
         private System.Windows.Forms.Button Undo_Btn;
         private System.Windows.Forms.Button Redo_Btn;
         private System.Windows.Forms.ListBox actionList;
+        private System.Windows.Forms.Button SaveToFile;
+        private System.Windows.Forms.Button LoadFromFile;
     }
 }
 

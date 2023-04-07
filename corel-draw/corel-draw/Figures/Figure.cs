@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace corel_draw.Figures
 {
-    internal abstract class Figure
+    internal class Figure
     {
         private Point _location;
         private int _width;
@@ -35,8 +35,8 @@ namespace corel_draw.Figures
             Color = Color.Black; 
         }
 
-        public abstract void Draw(Graphics g);
-        public abstract double CalcArea();
+        public virtual void Draw(Graphics g) { }
+        public virtual double CalcArea() { return 0; }
         public virtual bool Contains(Point point) => _location.X <= point.X && point.X <= _location.X + _width && _location.Y <= point.Y && point.Y <= _location.Y + _height;
         
     }
