@@ -44,7 +44,6 @@ namespace corel_draw
             if (PolygonType)
             {
                 polygonSides.ShowDialog();
-                //actionList.Items.Add($"The area of the Polygon is: {currentFigure.CalcArea():F2}");
                 return;
             }
             CalculationForm calculationForm = new CalculationForm(figureType);
@@ -61,7 +60,7 @@ namespace corel_draw
                 actionList.Items.Add($"The area of the {figure.GetType().Name} is: {figure.CalcArea():F2}");
                 figure.Name = figure.GetType().Name;
                 drawnFigures.Add(figure);
-                string json = JsonConvert.SerializeObject(new {  drawnFigures });
+                string json = JsonConvert.SerializeObject(new { drawnFigures });
                 string path = "../../JsonFiles/DataFigures.json";
                 File.WriteAllText(path, json);
                 DrawingBox.Invalidate();
@@ -229,7 +228,11 @@ namespace corel_draw
                     g.DrawLine(pen, clickedPoints[clickedPoints.Count - 2], clickedPoints[clickedPoints.Count - 1]);
                 }
 
-                drawnFigures.Add(new Polygon(clickedPoints.ToList()));
+                currentFigure = new Polygon(clickedPoints.ToList());
+                drawnFigures.Add(currentFigure);
+
+                actionList.Items.Add($"The area of the {currentFigure.GetType().Name} is: {currentFigure.CalcArea():F2}");
+
                 clickedPoints.Clear();
                 polygonSides.isDrawing = false;
             }
