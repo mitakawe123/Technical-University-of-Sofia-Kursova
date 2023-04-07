@@ -1,1 +1,18 @@
-{"Color":"Black","Location":"100, 100","Width":100,"Height":100}
+{
+  "drawnFigures": [
+    {
+      "Color": "Black",
+      "Name": "Circle",
+      "Location": "100, 100",
+      "Width": 100,
+      "Height": 100
+    },
+    {
+      "Color": "Black",
+      "Name": "Rectangle",
+      "Location": "100, 100",
+      "Width": 100,
+      "Height": 100
+    }
+  ]
+}

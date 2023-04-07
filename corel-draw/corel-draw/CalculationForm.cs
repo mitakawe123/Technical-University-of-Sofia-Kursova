@@ -27,7 +27,7 @@ namespace corel_draw
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(X_Input.Text))    
+            if (string.IsNullOrWhiteSpace(X_Input.Text)) 
             {
                 MessageBox.Show("Please enter a value for X axis.");
                 return;

@@ -59,10 +59,11 @@ namespace corel_draw
                         calculationForm.Height_Value,
                 });
                 actionList.Items.Add($"The area of the {figure.GetType().Name} is: {figure.CalcArea():F2}");
-                string json = JsonConvert.SerializeObject(figure);
-                string path = "C:\\Users\\dimitar.kyuchukov\\Desktop\\kursova-rabota-main\\corel-draw\\corel-draw\\JsonFiles\\DataFigures.json";
-                File.WriteAllText(path, json);
+                figure.Name = figure.GetType().Name;
                 drawnFigures.Add(figure);
+                string json = JsonConvert.SerializeObject(new {  drawnFigures });
+                string path = "../../JsonFiles/DataFigures.json";
+                File.WriteAllText(path, json);
                 DrawingBox.Invalidate();
             }
         }

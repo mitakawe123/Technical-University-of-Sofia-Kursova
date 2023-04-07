@@ -9,6 +9,7 @@ namespace corel_draw.Figures
         private int _width;
         private int _height;
         public Color Color { get; set; }
+        public string Name { get; set; }
 
         public Point Location
         {
