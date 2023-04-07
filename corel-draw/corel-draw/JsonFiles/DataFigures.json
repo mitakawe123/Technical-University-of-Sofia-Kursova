@@ -1,18 +1,1 @@
-{
-  "DrawnFigures": [
-    {
-      "Color": "Black",
-      "Name": "Circle",
-      "Location": "100, 200",
-      "Width": 100,
-      "Height": 100
-    },
-    {
-      "Color": "Black",
-      "Name": "Rectangle",
-      "Location": "200, 100",
-      "Width": 40,
-      "Height": 100
-    }
-  ]
-}
+{"DrawnFigures":[{"Color":"Black","Name":"Circle","Location":"100, 100","Width":100,"Height":100},{"Color":"Black","Name":"Polygon","Points":["482, 180","479, 184","613, 260"],"Location":"0, 0","Width":0,"Height":0}]}

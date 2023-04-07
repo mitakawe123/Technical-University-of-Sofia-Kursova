@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace corel_draw.Figures
@@ -8,9 +9,16 @@ namespace corel_draw.Figures
         private Point _location;
         private int _width;
         private int _height;
+        private List<Point> _points;
+
         public Color Color { get; set; }
         public string Name { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public List<Point> Points {
+            get { return _points; } 
+            private set { _points = value; } 
+        }
         public Point Location
         {
             get { return _location; }
@@ -27,13 +35,21 @@ namespace corel_draw.Figures
             set { _height = value; }
         }
 
+        public Figure() { }
+
         public Figure(int x, int y, int width, int height)
         {
             _location = new Point(x, y);
             _width = width;
             _height = height;
-            Color = Color.Black; 
+            Color = Color.Black;
         }
+        public Figure(List<Point> coordinates) 
+        {
+            _points = coordinates;
+            Color = Color.Black;
+        }
+    
 
         public virtual void Draw(Graphics g) { }
         public virtual double CalcArea() { return 0; }

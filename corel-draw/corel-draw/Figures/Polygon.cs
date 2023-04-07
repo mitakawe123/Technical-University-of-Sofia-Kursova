@@ -12,43 +12,33 @@ namespace corel_draw.Figures
 {
     internal class Polygon : Figure
     {
-        private readonly List<Point> _points;
-
-        public Polygon(List<Point> coordinates) : base(0, 0, 0, 0)
+        public Polygon(List<Point> coordinates) : base(coordinates)
         {
-            _points = coordinates;
         }
 
         public void Move(Point newPoint)
         {
-            for (int i = 0; i < _points.Count; i++)
+            for (int i = 0; i < Points.Count; i++)
             {
-                _points[i] = new Point(_points[i].X + newPoint.X, _points[i].Y + newPoint.Y);
+                Points[i] = new Point(Points[i].X + newPoint.X, Points[i].Y + newPoint.Y);
             }
         }
 
         public override void Draw(Graphics g)
         {
-            Point[] points = _points.ToArray();
-            g.DrawPolygon(new Pen(Color, 5), points);
-        }
-
-        public void editPolygon(List<Point> newCoordinates)
-        {
-            _points.Clear();
-            _points.AddRange(newCoordinates);
+            g.DrawPolygon(new Pen(Color, 5), Points.ToArray());
         }
 
         //Jordan Curve Theorem
         public override bool Contains(Point point)
         {
             bool inside = false;
-            int count = _points.Count;
+            int count = Points.Count;
 
             for (int i = 0, j = count - 1; i < count; j = i++)
             {
-                if (((_points[i].Y > point.Y) != (_points[j].Y > point.Y)) &&
-                    (point.X < (_points[j].X - _points[i].X) * (point.Y - _points[i].Y) / (_points[j].Y - _points[i].Y) + _points[i].X))
+                if (((Points[i].Y > point.Y) != (Points[j].Y > point.Y)) &&
+                    (point.X < (Points[j].X - Points[i].X) * (point.Y - Points[i].Y) / (Points[j].Y - Points[i].Y) + Points[i].X))
                 {
                     inside = !inside;
                 }
@@ -62,10 +52,10 @@ namespace corel_draw.Figures
             double area = 0;
 
             //Shoelace formula
-            int j = _points.Count - 1;
-            for (int i = 0; i < _points.Count; i++)
+            int j = Points.Count - 1;
+            for (int i = 0; i < Points.Count; i++)
             {
-                area += (_points[j].X + _points[i].X) * (_points[j].Y - _points[i].Y);
+                area += (Points[j].X + Points[i].X) * (Points[j].Y - Points[i].Y);
                 j = i;
             }
 

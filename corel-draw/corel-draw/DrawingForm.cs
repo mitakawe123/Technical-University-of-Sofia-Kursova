@@ -22,7 +22,7 @@ namespace corel_draw
 {
     public partial class DrawingForm : Form
     {
-        private List<Figure> drawnFigures = new List<Figure>();
+        private readonly List<Figure> drawnFigures = new List<Figure>();
         private readonly Stack<Figure> undoFigures = new Stack<Figure>();
         private readonly Stack<Figure> redoFigures = new Stack<Figure>();
         private readonly List<Point> clickedPoints = new List<Point>();
@@ -350,14 +350,17 @@ namespace corel_draw
                             figure = new Figures.Rectangle(figureData.Location.X, figureData.Location.Y, figureData.Width, figureData.Height);
                             break;
                         case "Square":
+                            MessageBox.Show(figureData.GetType().Name);
                             figure = new Square(figureData.Location.X, figureData.Location.Y, figureData.Width, figureData.Width);
+                            break;
+                        case "Polygon":
+                            figure = new Polygon(figureData.Points);
                             break;
                         default:
                             throw new ArgumentException($"Invalid figure name: {figureData.Name}");
                     }
                     figure.Color = figureData.Color;
                     drawnFigures.Add(figure);
-
                 }
 
                 DrawingBox.Invalidate();
