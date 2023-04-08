@@ -12,10 +12,9 @@ namespace corel_draw.Components
 {
     internal class CommandManager
     {
-        private List<ICommand> commandHistory = new List<ICommand>(); 
+        private readonly List<ICommand> commandHistory = new List<ICommand>(); 
         private int commandIndex = -1;
-        private ListBox actionList;
-
+        private readonly ListBox actionList;
         public CommandManager(ListBox actionList)
         {
             this.actionList = actionList;

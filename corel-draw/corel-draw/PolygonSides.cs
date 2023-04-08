@@ -13,14 +13,14 @@ namespace corel_draw
     public partial class PolygonSides : Form
     {
         public int Sides { get; private set; }
-        public bool isDrawing { get; set; }
+        public bool IsDrawing { get; set; }
 
         public PolygonSides()
         {
             InitializeComponent(); 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void DrawPolygon_Click(object sender, EventArgs e)
         {
             if (int.TryParse(Polygon_Sides.Text, out int number))
             {
@@ -30,7 +30,7 @@ namespace corel_draw
                     return;
                 }
                 Sides = number;
-                isDrawing = true;
+                IsDrawing = true;
                 DialogResult = DialogResult.OK;
                 Close();
             }

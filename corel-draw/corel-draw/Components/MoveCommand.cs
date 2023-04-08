@@ -12,24 +12,22 @@ namespace corel_draw.Components
     internal class MoveCommand:ICommand
     {
         private readonly Figure _figure;
-        private readonly Point _oldPosition;
-        private readonly Point _newPosition;
+        private readonly Point _delta;
 
-        public MoveCommand(Figure figure, Point oldPosition, Point newPosition)
+        public MoveCommand(Figure figure, Point delta)
         {
             _figure = figure;
-            _oldPosition = oldPosition;
-            _newPosition = newPosition;
+            _delta = delta;
         }
 
         public void Do()
         {
-            _figure.Move(_newPosition);
+            _figure.Move(_delta);
         }
 
         public void Undo()
         {
-            _figure.Move(_oldPosition);
+            _figure.Move(new Point(-_delta.X, -_delta.Y));
         }
     }
 }
