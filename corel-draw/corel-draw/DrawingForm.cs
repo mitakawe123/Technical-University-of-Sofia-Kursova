@@ -24,7 +24,6 @@ namespace corel_draw
         private readonly Bitmap bitmap;
         private Figure currentFigure;
         private bool isDragging = false;
-        private Point offset;
         private Point? lastPoint = null;
 
         private PolygonSides polygonSides = new PolygonSides();
@@ -58,7 +57,7 @@ namespace corel_draw
                 actionList.Items.Add($"The area of the {figure.GetType().Name} is: {figure.CalcArea():F2}");
                 figure.Name = figure.GetType().Name;
 
-                ICommand addCommand = new AddFigure(figure, drawnFigures);
+                ICommand addCommand = new AddCommand(figure, drawnFigures);
                 commandManager.AddCommand(addCommand);
 
                 DrawingBox.Invalidate();
@@ -127,7 +126,8 @@ namespace corel_draw
                     DrawingBox.Invalidate();
                 }
             }
-        }        
+        }
+
 
         private void EditToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -135,43 +135,47 @@ namespace corel_draw
             {
                 polygonSides = new PolygonSides();
                 DialogResult result = polygonSides.ShowDialog();
-                if(result == DialogResult.OK)
+                if (result == DialogResult.OK)
                 {
                     drawnFigures.Remove(currentFigure);
                 }
-            } else
+            }
+            else
             {
+                Figure oldState = currentFigure;
                 CalculationForm calculationForm = new CalculationForm(currentFigure.GetType());
                 DialogResult result = calculationForm.ShowDialog();
-                if(result == DialogResult.OK)
+                if (result == DialogResult.OK)
                 {
-                    currentFigure.Location = new Point(calculationForm.X, calculationForm.Y);
-                    currentFigure.Width = calculationForm.Width_Value;
-                    currentFigure.Height = calculationForm.Height_Value;
+                    Figure newState = new Figure();
+                    newState.Location = new Point(calculationForm.X, calculationForm.Y);
+                    newState.Width = calculationForm.Width_Value;
+                    newState.Height = calculationForm.Height_Value;
+
+                    ICommand command = new EditCommand(oldState, newState);
+                    commandManager.AddCommand(command);
+
+                    currentFigure = newState;
                     actionList.Items.Add($"The area of the {currentFigure.GetType().Name} is: {currentFigure.CalcArea():F2}");
                     DrawingBox.Invalidate();
                 }
             }
         }
 
+
+        Point initialPosition;
         private void DrawingBox_MouseDown(object sender, MouseEventArgs e)
         {
             if (!polygonSides.isDrawing)
             {
                 foreach (Figure figure in drawnFigures)
                 {
-                    if (figure is Polygon polygon && polygon.Contains(e.Location))
+                    if (figure.Contains(e.Location))
                     {
                         currentFigure = figure;
                         isDragging = true;
                         lastPoint = e.Location;
-                        break;
-                    }
-                    else if (figure.Contains(e.Location))
-                    {
-                        currentFigure = figure;
-                        isDragging = true;
-                        offset = new Point(e.X - figure.Location.X, e.Y - figure.Location.Y);
+                        initialPosition = currentFigure.Location;
                         break;
                     }
                 }
@@ -237,7 +241,7 @@ namespace corel_draw
                 currentFigure.Name = currentFigure.GetType().Name;
                 actionList.Items.Add($"The area of the {currentFigure.GetType().Name} is: {currentFigure.CalcArea():F2}");
 
-                ICommand addCommand = new AddFigure(currentFigure, drawnFigures);
+                ICommand addCommand = new AddCommand(currentFigure, drawnFigures);
                 commandManager.AddCommand(addCommand);
 
                 clickedPoints.Clear();
@@ -250,12 +254,20 @@ namespace corel_draw
             {
                 Point delta = new Point(e.X - lastPoint.Value.X, e.Y - lastPoint.Value.Y);
                 lastPoint = e.Location;
-                polygon.Move(delta);
+                
+                ICommand moveCommand = new MoveCommand(polygon, currentFigure.Location, delta);
+                commandManager.AddCommand(moveCommand);
+                
                 DrawingBox.Invalidate();
             }
             else if (isDragging)
             {
-                currentFigure.Location = new Point(e.X - offset.X, e.Y - offset.Y);
+                Point delta = new Point(e.X - lastPoint.Value.X, e.Y - lastPoint.Value.Y);
+                lastPoint = e.Location;
+
+                ICommand moveCommand = new MoveCommand(currentFigure, initialPosition, delta);
+                commandManager.AddCommand(moveCommand);
+
                 DrawingBox.Invalidate();
             }
         }
@@ -302,7 +314,6 @@ namespace corel_draw
             if (commandManager.CanRedo())
             {
                 commandManager.Redo();
-                MessageBox.Show(commandManager.GetType().Name);
                 DrawingBox.Invalidate();
             }
         }

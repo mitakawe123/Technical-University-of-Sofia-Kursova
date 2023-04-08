@@ -9,12 +9,12 @@ using System.Windows.Forms;
 
 namespace corel_draw.Components
 {
-    internal class AddFigure: ICommand
+    internal class AddCommand: ICommand
     {
         private readonly Figure _figure;
         private readonly List<Figure> _figures;
 
-        public AddFigure(Figure figure, List<Figure> figures)
+        public AddCommand(Figure figure, List<Figure> figures)
         {
             _figure = figure;
             _figures = figures;

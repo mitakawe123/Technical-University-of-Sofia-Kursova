@@ -55,11 +55,13 @@
     <Compile Include="CalculationForm.Designer.cs">
       <DependentUpon>CalculationForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Components\AddFigure.cs" />
+    <Compile Include="Components\AddCommand.cs" />
     <Compile Include="Components\ColorCommand.cs" />
     <Compile Include="Components\CommandManager.cs" />
     <Compile Include="Components\DeleteCommand.cs" />
     <Compile Include="Components\DrawingData.cs" />
+    <Compile Include="Components\EditCommand.cs" />
+    <Compile Include="Components\MoveCommand.cs" />
     <Compile Include="DrawingForm.cs">
       <SubType>Form</SubType>
     </Compile>

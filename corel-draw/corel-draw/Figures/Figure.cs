@@ -15,7 +15,8 @@ namespace corel_draw.Figures
         public string Name { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public List<Point> Points {
+        public List<Point> Points 
+        {
             get { return _points; } 
             private set { _points = value; } 
         }
@@ -51,11 +52,18 @@ namespace corel_draw.Figures
             _points = coordinates;
             Color = Color.Black;
         }
-    
 
+
+        public virtual void Move(Point delta)
+        {
+            _location = new Point(_location.X + delta.X, _location.Y + delta.Y);
+        }
+        public virtual Figure Clone() 
+        {
+            return new Figure(_location.X,_location.Y, _width, _height);
+        }
         public virtual void Draw(Graphics g) { }
         public virtual double CalcArea() { return 0; }
         public virtual bool Contains(Point point) => _location.X <= point.X && point.X <= _location.X + _width && _location.Y <= point.Y && point.Y <= _location.Y + _height;
-        
     }
 }

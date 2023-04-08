@@ -16,7 +16,7 @@ namespace corel_draw.Figures
         {
         }
 
-        public void Move(Point newPoint)
+        public override void Move(Point newPoint)
         {
             for (int i = 0; i < Points.Count; i++)
             {
