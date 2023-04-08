@@ -19,8 +19,7 @@ namespace corel_draw
     {
         private readonly List<Figure> drawnFigures = new List<Figure>();
         private readonly List<Point> clickedPoints = new List<Point>();
-        List<ICommand> commandHistory = new List<ICommand>();
-        int commandIndex = -1; // current position in history
+        CommandManager commandManager;
 
         private readonly Bitmap bitmap;
         private Figure currentFigure;
@@ -35,6 +34,7 @@ namespace corel_draw
         {
             InitializeComponent(); 
             bitmap = new Bitmap(DrawingBox.Width, DrawingBox.Height);
+            commandManager = new CommandManager(actionList);
         }
 
         private void CreateFigure(Type figureType, bool PolygonType)
@@ -58,10 +58,8 @@ namespace corel_draw
                 actionList.Items.Add($"The area of the {figure.GetType().Name} is: {figure.CalcArea():F2}");
                 figure.Name = figure.GetType().Name;
 
-                ICommand command = new AddFigure(figure, drawnFigures);
-                command.Do();
-                commandHistory.Add(command);
-                commandIndex = commandHistory.Count - 1;
+                ICommand addCommand = new AddFigure(figure, drawnFigures);
+                commandManager.AddCommand(addCommand);
 
                 DrawingBox.Invalidate();
             }
@@ -103,10 +101,8 @@ namespace corel_draw
         {
             if (currentFigure != null)
             {
-                ICommand command = new DeleteCommand(currentFigure, drawnFigures);
-                command.Do();
-                commandHistory.Add(command);
-                commandIndex = commandHistory.Count - 1;
+                ICommand removeCommand = new DeleteCommand(currentFigure, drawnFigures);
+                commandManager.AddCommand(removeCommand);
                 actionList.Items.Add($"Delete {currentFigure.GetType().Name}");
                 currentFigure = null;
                 DrawingBox.Invalidate();
@@ -120,8 +116,14 @@ namespace corel_draw
             {
                 if (currentFigure != null)
                 {
-                    currentFigure.Color = colorDialog.Color;
-                    actionList.Items.Add($"Change Color to {colorDialog.Color.Name}");
+                    Color oldColor = currentFigure.Color;
+                    Color newColor = colorDialog.Color;
+
+                    ICommand colorCommand = new ColorCommand(currentFigure, oldColor, newColor);
+                    commandManager.AddCommand(colorCommand);
+
+                    currentFigure.Color = newColor;
+                    actionList.Items.Add($"Change Color to {newColor.Name}");
                     DrawingBox.Invalidate();
                 }
             }
@@ -232,14 +234,11 @@ namespace corel_draw
                 }
 
                 currentFigure = new Polygon(clickedPoints.ToList());
-                drawnFigures.Add(currentFigure);
                 currentFigure.Name = currentFigure.GetType().Name;
                 actionList.Items.Add($"The area of the {currentFigure.GetType().Name} is: {currentFigure.CalcArea():F2}");
 
-                ICommand command = new AddFigure(currentFigure, drawnFigures);
-                command.Do();
-                commandHistory.Add(command);
-                commandIndex = commandHistory.Count - 1;
+                ICommand addCommand = new AddFigure(currentFigure, drawnFigures);
+                commandManager.AddCommand(addCommand);
 
                 clickedPoints.Clear();
                 polygonSides.isDrawing = false;
@@ -300,22 +299,19 @@ namespace corel_draw
 
         private void Redo_Btn_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(commandHistory.Count.ToString());
-            if (commandIndex < commandHistory.Count - 1)
+            if (commandManager.CanRedo())
             {
-                commandIndex++;
-                commandHistory[commandIndex].Do();
+                commandManager.Redo();
+                MessageBox.Show(commandManager.GetType().Name);
                 DrawingBox.Invalidate();
             }
         }
 
         private void Undo_Btn_Click(object sender, EventArgs e)
         {
-            if (commandIndex >= 0)
+            if (commandManager.CanUndo())
             {
-                commandHistory[commandIndex].Undo(); 
-                commandHistory.RemoveAt(commandIndex);
-                commandIndex--;
+                commandManager.Undo();
                 DrawingBox.Invalidate();
             }
         }

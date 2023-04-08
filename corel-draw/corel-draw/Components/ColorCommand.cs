@@ -11,24 +11,25 @@ namespace corel_draw.Components
 {
     internal class ColorCommand:ICommand
     {
-        private readonly Figure figure;
-        private readonly List<Figure> _figures;
-        private readonly Color _color;
-        public ColorCommand(Figure figure, List<Figure> figures,Color color)
+        private readonly Figure _figure;
+        private readonly Color _oldColor;
+        private readonly Color _newColor;
+
+        public ColorCommand(Figure figure, Color oldColor, Color newColor)
         {
-            this.figure = figure;
-            _figures = figures;
-            this._color = color;
+            _figure = figure;
+            _oldColor = oldColor;
+            _newColor = newColor;
         }
 
         public void Do()
         {
-            
+            _figure.Color = _newColor;
         }
 
         public void Undo()
         {
-            
+            _figure.Color = _oldColor;
         }
     }
 }

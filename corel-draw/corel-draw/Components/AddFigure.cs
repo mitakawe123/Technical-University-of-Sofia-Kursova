@@ -11,23 +11,23 @@ namespace corel_draw.Components
 {
     internal class AddFigure: ICommand
     {
-        private readonly Figure figure;
+        private readonly Figure _figure;
         private readonly List<Figure> _figures;
 
         public AddFigure(Figure figure, List<Figure> figures)
         {
-            this.figure = figure;
+            _figure = figure;
             _figures = figures;
         }
 
         public void Do()
         {
-            _figures.Add(figure);
+            _figures.Add(_figure);
         }
 
         public void Undo()
         {
-            _figures.Remove(figure);
+            _figures.Remove(_figure);
         }
     }
 }

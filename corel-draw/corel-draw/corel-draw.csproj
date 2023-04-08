@@ -57,6 +57,7 @@
     </Compile>
     <Compile Include="Components\AddFigure.cs" />
     <Compile Include="Components\ColorCommand.cs" />
+    <Compile Include="Components\CommandManager.cs" />
     <Compile Include="Components\DeleteCommand.cs" />
     <Compile Include="Components\DrawingData.cs" />
     <Compile Include="DrawingForm.cs">
