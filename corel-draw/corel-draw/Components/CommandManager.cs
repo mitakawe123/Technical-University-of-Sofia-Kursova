@@ -13,8 +13,6 @@ namespace corel_draw.Components
     internal class CommandManager
     {
         private List<ICommand> commandHistory = new List<ICommand>(); 
-        private readonly List<ColorCommand> _colorCommandHistory = new List<ColorCommand>(); 
-        private readonly List<MoveCommand> moveCommandHistory = new List<MoveCommand>();
         private int commandIndex = -1;
         private ListBox actionList;
 
@@ -29,27 +27,6 @@ namespace corel_draw.Components
             commandHistory.Add(command);
             command.Do();
             commandIndex = commandHistory.Count - 1;
-        }
-
-        public void AddColorCommand(ColorCommand command)
-        {
-            _colorCommandHistory.RemoveRange(commandIndex + 1, _colorCommandHistory.Count - commandIndex - 1);
-            _colorCommandHistory.Add(command);
-            command.Do();
-            commandIndex = _colorCommandHistory.Count - 1;
-        }
-
-        public void AddMoveCommand(MoveCommand command)
-        {
-            moveCommandHistory.RemoveRange(commandIndex + 1, moveCommandHistory.Count - commandIndex - 1);
-            moveCommandHistory.Add(command);
-            command.Do();
-            commandIndex = moveCommandHistory.Count - 1;
-        }
-
-        public void EditCommand(EditCommand command)
-        {
-
         }
 
         public void Undo()

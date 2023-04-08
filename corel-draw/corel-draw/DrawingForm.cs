@@ -25,6 +25,10 @@ namespace corel_draw
         private Figure currentFigure;
         private bool isDragging = false;
         private Point? lastPoint = null;
+        Point initialPosition;
+
+        private Polygon _editingPolygon;
+        private bool _isEditing = false;
 
         private PolygonSides polygonSides = new PolygonSides();
         private readonly string path = "../../JsonFiles/DataFigures.json";
@@ -41,6 +45,7 @@ namespace corel_draw
             if (PolygonType)
             {
                 polygonSides.ShowDialog();
+                _isEditing = false;
                 return;
             }
             CalculationForm calculationForm = new CalculationForm(figureType);
@@ -127,18 +132,13 @@ namespace corel_draw
                 }
             }
         }
-
-
         private void EditToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (currentFigure is Polygon)
+            if (currentFigure is Polygon polygon)
             {
                 polygonSides = new PolygonSides();
-                DialogResult result = polygonSides.ShowDialog();
-                if (result == DialogResult.OK)
-                {
-                    drawnFigures.Remove(currentFigure);
-                }
+                DialogResult dialogResult =  polygonSides.ShowDialog();
+                if (dialogResult == DialogResult.OK) _isEditing = true;
             }
             else
             {
@@ -162,8 +162,6 @@ namespace corel_draw
             }
         }
 
-
-        Point initialPosition;
         private void DrawingBox_MouseDown(object sender, MouseEventArgs e)
         {
             if (!polygonSides.isDrawing)
@@ -213,39 +211,53 @@ namespace corel_draw
                         }
                     }
                 }
-                return;
             }
-
-            clickedPoints.Add(e.Location);
-
-            if (clickedPoints.Count > 1)
+            else if (polygonSides.isDrawing)
             {
-                using (Graphics g = Graphics.FromImage(bitmap))
-                {
-                    Pen pen = new Pen(Color.Black, 2f);
-                    g.DrawLine(pen, clickedPoints[clickedPoints.Count - 2], clickedPoints[clickedPoints.Count - 1]);
-                }
-            }
+                clickedPoints.Add(e.Location);
 
-            DrawingBox.Invalidate();
-
-            if (clickedPoints.Count == polygonSides.Sides)
-            {
-                using (Graphics g = Graphics.FromImage(bitmap))
+                if (clickedPoints.Count > 1)
                 {
-                    Pen pen = new Pen(Color.Black, 2f);
-                    g.DrawLine(pen, clickedPoints[clickedPoints.Count - 2], clickedPoints[clickedPoints.Count - 1]);
+                    using (Graphics g = Graphics.FromImage(bitmap))
+                    {
+                        Pen pen = new Pen(Color.Black, 2f);
+                        g.DrawLine(pen, clickedPoints[clickedPoints.Count - 2], clickedPoints[clickedPoints.Count - 1]);
+                    }
                 }
 
-                currentFigure = new Polygon(clickedPoints.ToList());
-                currentFigure.Name = currentFigure.GetType().Name;
-                actionList.Items.Add($"The area of the {currentFigure.GetType().Name} is: {currentFigure.CalcArea():F2}");
+                DrawingBox.Invalidate();
 
-                ICommand addCommand = new AddCommand(currentFigure, drawnFigures);
-                commandManager.AddCommand(addCommand);
+                if (clickedPoints.Count == polygonSides.Sides)
+                {
+                    Figure oldState = currentFigure;
+                    using (Graphics g = Graphics.FromImage(bitmap))
+                    {
+                        Pen pen = new Pen(Color.Black, 2f);
+                        g.DrawLine(pen, clickedPoints[clickedPoints.Count - 2], clickedPoints[clickedPoints.Count - 1]);
+                    }
 
-                clickedPoints.Clear();
-                polygonSides.isDrawing = false;
+                    Figure newState = new Figure();
+                    currentFigure = new Polygon(clickedPoints.ToList());
+                    currentFigure.Name = currentFigure.GetType().Name;
+                    actionList.Items.Add($"The area of the {currentFigure.GetType().Name} is: {currentFigure.CalcArea():F2}");
+
+                    newState = currentFigure;
+
+                    if (!_isEditing)
+                    {
+                        ICommand addCommand = new AddCommand(currentFigure, drawnFigures);
+                        commandManager.AddCommand(addCommand);
+                    }
+                    else if(_isEditing)
+                    {
+                        ICommand command = new EditCommand(oldState,newState);
+                        commandManager.AddCommand(command);
+                        currentFigure = newState;
+                    }
+
+                    clickedPoints.Clear();
+                    polygonSides.isDrawing = false;
+                }
             }
         }
         private void DrawingBox_MouseMove(object sender, MouseEventArgs e)

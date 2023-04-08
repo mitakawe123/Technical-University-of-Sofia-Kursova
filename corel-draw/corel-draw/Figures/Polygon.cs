@@ -12,6 +12,7 @@ namespace corel_draw.Figures
 {
     internal class Polygon : Figure
     {
+        public Polygon() { }
         public Polygon(List<Point> coordinates) : base(coordinates)
         {
         }

@@ -2,6 +2,7 @@
 using corel_draw.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,23 +24,30 @@ namespace corel_draw.Components
 
         public void Do()
         {
-            _initialState.Location = _oldState.Location;
-            _initialState.Width = _oldState.Width;
-            _initialState.Height = _oldState.Height;
-
-            _oldState.Location = _newState.Location;
-            _oldState.Width = _newState.Width;
-            _oldState.Height = _newState.Height;
-
+            if (_oldState is Polygon oldPolygon && _newState is Polygon newPolygon)
+            {
+                oldPolygon.Points = new List<Point>(newPolygon.Points);
+            }
+            else
+            {
+                _oldState.Location = _newState.Location;
+                _oldState.Width = _newState.Width;
+                _oldState.Height = _newState.Height;
+            }
         }
 
         public void Undo()
         {
-            _oldState.Location = _initialState.Location;
-            _oldState.Width = _initialState.Width;
-            _oldState.Height = _initialState.Height;
-
+            if (_oldState is Polygon oldPolygon && _initialState is Polygon initialPolygon)
+            {
+                oldPolygon.Points = new List<Point>(initialPolygon.Points);
+            }
+            else
+            {
+                _oldState.Location = _initialState.Location;
+                _oldState.Width = _initialState.Width;
+                _oldState.Height = _initialState.Height;
+            }
         }
     }
-
 }

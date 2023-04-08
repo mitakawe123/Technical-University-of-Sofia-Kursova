@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace corel_draw.Figures
 {
@@ -18,7 +19,7 @@ namespace corel_draw.Figures
         public List<Point> Points 
         {
             get { return _points; } 
-            private set { _points = value; } 
+            set { _points = value; } 
         }
         public Point Location
         {
@@ -58,10 +59,14 @@ namespace corel_draw.Figures
         {
             _location = new Point(_location.X + delta.X, _location.Y + delta.Y);
         }
-        public virtual Figure Clone() 
+        public Figure Clone()
         {
-            return new Figure(_location.X,_location.Y, _width, _height);
+            if (this is Polygon)
+                return new Polygon(_points.ToList());
+            else
+                return new Figure(_location.X, _location.Y, _width, _height);
         }
+
         public virtual void Draw(Graphics g) { }
         public virtual double CalcArea() { return 0; }
         public virtual bool Contains(Point point) => _location.X <= point.X && point.X <= _location.X + _width && _location.Y <= point.Y && point.Y <= _location.Y + _height;
