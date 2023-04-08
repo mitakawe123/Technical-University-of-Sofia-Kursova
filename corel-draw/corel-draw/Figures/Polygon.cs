@@ -18,9 +18,20 @@ namespace corel_draw.Figures
 
         public override void Move(Point newPoint)
         {
-            for (int i = 0; i < Points.Count; i++)
+            Location = new Point(Location.X + newPoint.X, Location.Y + newPoint.Y);
+        }
+
+        public override Point Location
+        {
+            get => base.Location;
+            set
             {
-                Points[i] = new Point(Points[i].X + newPoint.X, Points[i].Y + newPoint.Y);
+                Point delta = new Point(value.X - base.Location.X, value.Y - base.Location.Y);
+                for (int i = 0; i < Points.Count; i++)
+                {
+                    Points[i] = new Point(Points[i].X + delta.X, Points[i].Y + delta.Y);
+                }
+                base.Location = value;
             }
         }
 
