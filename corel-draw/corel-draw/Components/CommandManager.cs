@@ -28,6 +28,8 @@ namespace corel_draw.Components
             commandIndex = commandHistory.Count - 1;
         }
 
+        public void Do() { }
+
         public void Undo()
         {
             if (commandIndex >= 0)
@@ -44,7 +46,7 @@ namespace corel_draw.Components
             {
                 commandIndex++;
                 ICommand command = commandHistory[commandIndex];
-                command.Do();
+                command.Redo();
             }
         }
 

@@ -49,5 +49,20 @@ namespace corel_draw.Components
                 _oldState.Height = _initialState.Height;
             }
         }
+
+        public void Redo()
+        {
+            if (_oldState is Polygon oldPolygon && _newState is Polygon newPolygon)
+            {
+                oldPolygon.Points = new List<Point>(newPolygon.Points);
+            }
+            else
+            {
+                _oldState.Location = _newState.Location;
+                _oldState.Width = _newState.Width;
+                _oldState.Height = _newState.Height;
+            }
+        }
     }
+
 }

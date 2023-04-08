@@ -19,13 +19,12 @@ namespace corel_draw
     {
         private readonly List<Figure> drawnFigures = new List<Figure>();
         private readonly List<Point> clickedPoints = new List<Point>();
-        readonly CommandManager commandManager;
+        private readonly CommandManager commandManager;
 
         private readonly Bitmap bitmap;
         private Figure currentFigure;
         private bool isDragging = false;
         private Point? lastPoint = null;
-        Point initialPosition;
 
         private bool _isEditing = false;
 
@@ -163,6 +162,7 @@ namespace corel_draw
             }
         }
 
+        private Point? initialPosition = null;
         private void DrawingBox_MouseDown(object sender, MouseEventArgs e)
         {
             if (!polygonSides.IsDrawing)
@@ -174,7 +174,7 @@ namespace corel_draw
                         currentFigure = figure;
                         isDragging = true;
                         lastPoint = e.Location;
-                        initialPosition = currentFigure.Location;
+                        initialPosition = figure.Location;
                         break;
                     }
                 }
@@ -262,6 +262,7 @@ namespace corel_draw
                 }
             }
         }
+        
 
         private void DrawingBox_MouseMove(object sender, MouseEventArgs e)
         {
@@ -269,8 +270,8 @@ namespace corel_draw
             {
                 Point delta = new Point(e.X - lastPoint.Value.X, e.Y - lastPoint.Value.Y);
                 lastPoint = e.Location;
-                
-                ICommand moveCommand = new MoveCommand(currentFigure.GetType() == typeof(Polygon) ? (Polygon)currentFigure : currentFigure, delta);
+
+                ICommand moveCommand = new MoveCommand(currentFigure, delta,initialPosition.Value);
                 commandManager.AddCommand(moveCommand);
                 
                 DrawingBox.Invalidate();

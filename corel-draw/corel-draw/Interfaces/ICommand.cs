@@ -10,5 +10,6 @@ namespace corel_draw.Interfaces
     {
         void Do();
         void Undo();
+        void Redo();
     }
 }
