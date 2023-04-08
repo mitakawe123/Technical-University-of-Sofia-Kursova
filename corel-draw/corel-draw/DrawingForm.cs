@@ -271,7 +271,7 @@ namespace corel_draw
                 Point delta = new Point(e.X - lastPoint.Value.X, e.Y - lastPoint.Value.Y);
                 lastPoint = e.Location;
 
-                ICommand moveCommand = new MoveCommand(currentFigure, delta,initialPosition.Value);
+                ICommand moveCommand = new MoveCommand(currentFigure, delta, initialPosition.Value);
                 commandManager.AddCommand(moveCommand);
                 
                 DrawingBox.Invalidate();
