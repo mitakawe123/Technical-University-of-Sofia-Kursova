@@ -1,1 +1,42 @@
-{"DrawnFigures":[{"Location":"197, -91","Color":"Black","Name":"Polygon","Points":["540, 57","436, 188","781, 190"],"Width":0,"Height":0},{"Color":"Black","Name":"Circle","Location":"352, 27","Width":100,"Height":100},{"Location":"0, 0","Color":"Black","Name":"Polygon","Points":["343, 148","239, 279","584, 281"],"Width":0,"Height":0},{"Color":"Black","Name":"Circle","Location":"100, 100","Width":100,"Height":100}]}
+{
+  "DrawnFigures": [
+    {
+      "Location": "197, -91",
+      "Color": "Black",
+      "Name": "Polygon",
+      "Points": [
+        "540, 57",
+        "436, 188",
+        "781, 190"
+      ],
+      "Width": 0,
+      "Height": 0
+    },
+    {
+      "Color": "Black",
+      "Name": "Circle",
+      "Location": "352, 27",
+      "Width": 100,
+      "Height": 100
+    },
+    {
+      "Location": "0, 0",
+      "Color": "Black",
+      "Name": "Polygon",
+      "Points": [
+        "343, 148",
+        "239, 279",
+        "584, 281"
+      ],
+      "Width": 0,
+      "Height": 0
+    },
+    {
+      "Color": "Black",
+      "Name": "Circle",
+      "Location": "100, 100",
+      "Width": 100,
+      "Height": 100
+    }
+  ]
+}
