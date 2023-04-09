@@ -298,6 +298,7 @@ namespace corel_draw
                 string json = JsonConvert.SerializeObject(drawingData);
                 File.WriteAllText(path, json);
                 MessageBox.Show("File saved successfully.");
+                actionList.Items.Add("Save figures to file");
             }
             catch (Exception ex)
             {
@@ -310,9 +311,11 @@ namespace corel_draw
             try
             {
                 string json = File.ReadAllText(path);
-                var drawingData = JsonConvert.DeserializeObject<DrawingData>(json);
+                DrawingData drawingData = JsonConvert.DeserializeObject<DrawingData>(json);
 
-                foreach (var figureData in drawingData.DrawnFigures)
+                List<Figure> loadedFigures = new List<Figure>();
+
+                foreach (Figure figureData in drawingData.DrawnFigures)
                 {
                     Figure figure;
                     switch (figureData.Name)
@@ -333,8 +336,11 @@ namespace corel_draw
                             throw new ArgumentException($"Invalid figure name: {figureData.Name}");
                     }
                     figure.Color = figureData.Color;
-                    drawnFigures.Add(figure);
+                    loadedFigures.Add(figure);
                 }
+
+                ICommand loadCommand = new LoadCommand(drawnFigures, loadedFigures); 
+                commandManager.AddCommand(loadCommand); 
 
                 DrawingBox.Invalidate();
                 MessageBox.Show("File loaded successfully.");

@@ -11,10 +11,9 @@ namespace corel_draw.Figures
         private int _height;
         private List<Point> _points;
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public Color Color { get; set; }
         public string Name { get; set; }
-
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public List<Point> Points 
         {
             get { return _points; } 
@@ -72,8 +71,6 @@ namespace corel_draw.Figures
                 Height = figure.Height;
             }
         }
-
-
         public virtual void Draw(Graphics g) { }
         public virtual double CalcArea() { return 0; }
         public virtual bool Contains(Point point)
@@ -83,6 +80,5 @@ namespace corel_draw.Figures
 
             return isInsideX && isInsideY;
         }
-
     }
 }
