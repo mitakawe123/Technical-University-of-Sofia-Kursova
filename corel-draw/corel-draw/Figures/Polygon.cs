@@ -9,7 +9,7 @@ namespace corel_draw.Figures
     {
         private List<Point> _points;
 
-        public List<Point> Points
+        public override List<Point> Points
         {
             get { return _points; }
             set { _points = value; }
