@@ -2,10 +2,6 @@
 using corel_draw.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace corel_draw.Components
 {
@@ -33,6 +29,11 @@ namespace corel_draw.Components
         public void Redo()
         {
             _figures.Add(_figure);
+        }
+
+        public string GetDescription()
+        {
+            return $"Added {_figure.GetType().Name} with area {_figure.CalcArea():F2}";
         }
     }
 }

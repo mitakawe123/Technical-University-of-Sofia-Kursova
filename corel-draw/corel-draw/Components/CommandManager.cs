@@ -1,20 +1,16 @@
-﻿using corel_draw.Figures;
-using corel_draw.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using corel_draw.Interfaces;
 
 namespace corel_draw.Components
 {
     internal class CommandManager
     {
-        private readonly List<ICommand> commandHistory = new List<ICommand>(); 
+        private readonly List<ICommand> commandHistory = new List<ICommand>();
         private int commandIndex = -1;
         private readonly ListBox actionList;
+
         public CommandManager(ListBox actionList)
         {
             this.actionList = actionList;
@@ -26,9 +22,8 @@ namespace corel_draw.Components
             commandHistory.Add(command);
             command.Do();
             commandIndex = commandHistory.Count - 1;
+            actionList.Items.Add(GetCommandDescription(command));
         }
-
-        public void Do() { }
 
         public void Undo()
         {
@@ -36,7 +31,8 @@ namespace corel_draw.Components
             {
                 ICommand command = commandHistory[commandIndex];
                 command.Undo();
-                commandIndex--; 
+                commandIndex--;
+                actionList.Items.RemoveAt(actionList.Items.Count - 1);
             }
         }
 
@@ -47,6 +43,7 @@ namespace corel_draw.Components
                 commandIndex++;
                 ICommand command = commandHistory[commandIndex];
                 command.Redo();
+                actionList.Items.Add(GetCommandDescription(command));
             }
         }
 
@@ -58,6 +55,25 @@ namespace corel_draw.Components
         public bool CanRedo()
         {
             return commandIndex < commandHistory.Count - 1;
+        }
+
+        private string GetCommandDescription(ICommand command)
+        {
+            switch (command)
+            {
+                case MoveCommand moveCommand:
+                    return moveCommand.GetDescription();
+                case AddCommand addCommand:
+                    return addCommand.GetDescription();
+                case DeleteCommand deleteCommand:
+                    return deleteCommand.GetDescription();
+                case EditCommand editCommand:
+                    return editCommand.GetDescription();
+                case ColorCommand colorCommand:
+                    return colorCommand.GetDescription();
+                default:
+                    return "";
+            }
         }
     }
 }

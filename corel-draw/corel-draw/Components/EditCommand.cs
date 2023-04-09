@@ -63,6 +63,10 @@ namespace corel_draw.Components
                 _oldState.Height = _newState.Height;
             }
         }
-    }
 
+        public string GetDescription()
+        {
+            return $"Edit {_oldState.GetType().Name}";
+        }
+    }
 }

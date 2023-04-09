@@ -25,6 +25,7 @@ namespace corel_draw
         private Figure currentFigure;
         private bool isDragging = false;
         private Point? lastPoint = null;
+        private Point? initialPosition = null;
 
         private bool _isEditing = false;
 
@@ -57,7 +58,7 @@ namespace corel_draw
                         calculationForm.Width_Value,
                         calculationForm.Height_Value,
                 });
-                actionList.Items.Add($"The area of the {figure.GetType().Name} is: {figure.CalcArea():F2}");
+
                 figure.Name = figure.GetType().Name;
 
                 ICommand addCommand = new AddCommand(figure, drawnFigures);
@@ -105,7 +106,6 @@ namespace corel_draw
             {
                 ICommand removeCommand = new DeleteCommand(currentFigure, drawnFigures);
                 commandManager.AddCommand(removeCommand);
-                actionList.Items.Add($"Delete {currentFigure.GetType().Name}");
                 currentFigure = null;
                 DrawingBox.Invalidate();
             }
@@ -125,7 +125,6 @@ namespace corel_draw
                     commandManager.AddCommand(colorCommand);
 
                     currentFigure.Color = newColor;
-                    actionList.Items.Add($"Change Color to {newColor.Name}");
                     DrawingBox.Invalidate();
                 }
             }
@@ -156,26 +155,27 @@ namespace corel_draw
                     commandManager.AddCommand(command);
 
                     currentFigure = newState;
-                    actionList.Items.Add($"Edit {currentFigure.GetType().Name} with new area of: {currentFigure.CalcArea():F2}");
                     DrawingBox.Invalidate();
                 }
             }
         }
 
-        private Point? initialPosition = null;
         private void DrawingBox_MouseDown(object sender, MouseEventArgs e)
         {
             if (!polygonSides.IsDrawing)
             {
-                foreach (Figure figure in drawnFigures)
+                if (e.Button == MouseButtons.Left)
                 {
-                    if (figure.Contains(e.Location))
+                    foreach (Figure figure in drawnFigures)
                     {
-                        currentFigure = figure;
-                        isDragging = true;
-                        lastPoint = e.Location;
-                        initialPosition = figure.Location;
-                        break;
+                        if (figure.Contains(e.Location))
+                        {
+                            currentFigure = figure;
+                            isDragging = true;
+                            lastPoint = e.Location;
+                            initialPosition = figure.Location;
+                            break;
+                        }
                     }
                 }
 
@@ -247,14 +247,12 @@ namespace corel_draw
                     {
                         ICommand addCommand = new AddCommand(currentFigure, drawnFigures);
                         commandManager.AddCommand(addCommand);
-                        actionList.Items.Add($"The area of the {currentFigure.GetType().Name} is: {currentFigure.CalcArea():F2}");
                     }
                     else if(_isEditing)
                     {
                         ICommand command = new EditCommand(oldState,newState);
                         commandManager.AddCommand(command);
                         currentFigure = newState;
-                        actionList.Items.Add($"Edit {currentFigure.GetType().Name} with new area of: {currentFigure.CalcArea():F2}");
                     }
 
                     clickedPoints.Clear();
@@ -263,25 +261,27 @@ namespace corel_draw
             }
         }
         
-
         private void DrawingBox_MouseMove(object sender, MouseEventArgs e)
         {
             if (isDragging)
             {
                 Point delta = new Point(e.X - lastPoint.Value.X, e.Y - lastPoint.Value.Y);
                 lastPoint = e.Location;
-
-                ICommand moveCommand = new MoveCommand(currentFigure, delta, initialPosition.Value);
-                commandManager.AddCommand(moveCommand);
-                
+                currentFigure.Move(delta);
                 DrawingBox.Invalidate();
             }
         }
 
         private void DrawingBox_MouseUp(object sender, MouseEventArgs e)
         {
-            isDragging = false; 
-            lastPoint = null;
+            if(isDragging)
+            {
+                Point delta = new Point(e.X - lastPoint.Value.X, e.Y - lastPoint.Value.Y);
+                ICommand moveCommand = new MoveCommand(currentFigure, delta, initialPosition.Value);
+                commandManager.AddCommand(moveCommand);
+                isDragging = false;
+                lastPoint = null;
+            }
         }
 
         private void DrawingBox_Paint(object sender, PaintEventArgs e)

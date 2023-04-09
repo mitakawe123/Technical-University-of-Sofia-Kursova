@@ -36,5 +36,10 @@ namespace corel_draw.Components
         {
             _figure.Color = _newColor;
         }
+
+        public string GetDescription()
+        {
+            return $"Change {_figure.GetType().Name} Color with {_figure.Color.Name})";
+        }
     }
 }

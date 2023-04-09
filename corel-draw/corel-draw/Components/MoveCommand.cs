@@ -39,6 +39,10 @@ namespace corel_draw.Components
         {
              _figure.Location = _finalPosition;
         }
-    }
 
+        public string GetDescription()
+        {
+            return $"Move {_figure.GetType().Name}";
+        }
+    }
 }

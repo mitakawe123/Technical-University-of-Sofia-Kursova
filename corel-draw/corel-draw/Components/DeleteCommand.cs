@@ -33,5 +33,10 @@ namespace corel_draw.Components
         {
             _figures.Remove(_figure);
         }
+
+        public string GetDescription()
+        {
+            return $"Delete {_figure.GetType().Name}";
+        }
     }
 }

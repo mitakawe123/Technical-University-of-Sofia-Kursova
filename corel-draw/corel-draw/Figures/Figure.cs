@@ -16,7 +16,7 @@ namespace corel_draw.Figures
         public string Name { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public virtual List<Point> Points 
+        public List<Point> Points 
         {
             get { return _points; } 
             set { _points = value; } 
