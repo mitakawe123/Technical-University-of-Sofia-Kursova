@@ -138,12 +138,7 @@ namespace corel_draw
                 DialogResult result = calculationForm.ShowDialog();
                 if (result == DialogResult.OK)
                 {
-                    Figure newState = new Figure
-                    {
-                        Location = new Point(calculationForm.X, calculationForm.Y),
-                        Width = calculationForm.Width_Value,
-                        Height = calculationForm.Height_Value
-                    };
+                    Figure newState = new Figure(new Point(calculationForm.X, calculationForm.Y), calculationForm.Width_Value, calculationForm.Height_Value);
 
                     ICommand command = new EditCommand(oldState, newState);
                     commandManager.AddCommand(command);
@@ -294,9 +289,15 @@ namespace corel_draw
         {
             try
             {
+                List<string> serializedFigures = new List<string>();
+                foreach (Figure figure in drawnFigures)
+                {
+                    string json = figure.ToJson();
+                    serializedFigures.Add(json);
+                }
                 DrawingData drawingData = new DrawingData { DrawnFigures = drawnFigures };
-                string json = JsonConvert.SerializeObject(drawingData);
-                File.WriteAllText(path, json);
+                string jsonResult = JsonConvert.SerializeObject(drawingData);
+                File.WriteAllText(path, jsonResult);
                 MessageBox.Show("File saved successfully.");
                 actionList.Items.Add("Save figures to file");
             }
@@ -315,7 +316,7 @@ namespace corel_draw
 
                 List<Figure> loadedFigures = new List<Figure>();
 
-                foreach (Figure figureData in drawingData.DrawnFigures)
+                foreach (var figureData in drawingData.DrawnFigures)
                 {
                     Figure figure;
                     switch (figureData.Name)

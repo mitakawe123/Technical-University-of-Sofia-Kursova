@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -10,45 +12,40 @@ namespace corel_draw.Figures
         private Point _location;
         private int _width;
         private int _height;
-        private List<Point> _points;
 
         public Color Color { get; set; }
         public string Name { get; set; }
+        public virtual List<Point> Points { get; private set; }
+        public virtual Point Location { get => _location; set => _location = value; }
+        public int Width { get => _width; set => _width = value; }
 
-        public List<Point> Points 
-        {
-            get { return _points; } 
-            set { _points = value; } 
-        }
-        public virtual Point Location
-        {
-            get { return _location; }
-            set { _location = value; }
-        }
-        public int Width 
-        {
-            get { return _width; }
-            set { _width = value; }
-        }
-        public int Height
-        {
-            get { return _height; }
-            set { _height = value; }
-        }
-        public Figure() 
+        public int Height { get => _height; set => _height = value; }
+
+        public Figure()
         {
             //need empty constructor for deserialize the data in the json file
         }
 
-        public Figure(List<Point> coordinates)
+        public virtual string ToJson()
         {
-            _points = coordinates;
-            Color = Color.Black;
+            return JsonConvert.SerializeObject(new
+            {
+                Name,
+                Location,
+                Width,
+                Height,
+                Color,
+            });
         }
-
-        public Figure(int x, int y, int width, int height)
+       //working on it
+        public static Figure FromJson(string json)
         {
-            _location = new Point(x, y);
+            return JsonConvert.DeserializeObject<Figure>(json);
+        }
+        
+        public Figure(Point location, int width, int height)
+        {
+            _location = location;
             _width = width;
             _height = height;
             Color = Color.Black;
@@ -59,26 +56,18 @@ namespace corel_draw.Figures
             _location = new Point(_location.X + delta.X, _location.Y + delta.Y);
         }
 
-        public Figure Clone()
+        public virtual Figure Clone()
         {
-            if (this is Polygon)
-                return new Polygon(_points);
-            else
-                return new Figure(_location.X, _location.Y, _width, _height);
+            return new Figure(_location, _width, _height) { Color = Color, Name = Name };
         }
 
-        public void CopyState(Figure figure)
+        public virtual void CopyState(Figure figure)
         {
-            if (figure is Polygon && this is Polygon)
-            {
-                Points = new List<Point>(figure.Points);
-            }
-            else
-            {
-                Location = figure.Location;
-                Width = figure.Width;
-                Height = figure.Height;
-            }
+            Location = figure.Location;
+            Width = figure.Width;
+            Height = figure.Height;
+            Color = figure.Color;
+            Name = figure.Name;
         }
 
         public virtual void Draw(Graphics g) { }

@@ -4,7 +4,7 @@ namespace corel_draw.Figures
 {
     internal class Rectangle : Figure
     {
-        public Rectangle(int x, int y, int width, int height) : base(x, y, width, height)
+        public Rectangle(int x, int y, int width, int height) : base(new Point(x, y), width, height)
         {
         }
         public override double CalcArea() {
