@@ -144,7 +144,6 @@
             this.Controls.Add(this.X_Input);
             this.Name = "CalculationForm";
             this.Text = "CalculationForm";
-            this.Load += new System.EventHandler(this.CalculationForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

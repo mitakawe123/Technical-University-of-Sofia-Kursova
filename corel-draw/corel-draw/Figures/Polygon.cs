@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace corel_draw.Figures
 {
     internal class Polygon : Figure
     {
-        public Polygon(List<Point> coordinates) : base(coordinates)
+        public Polygon(List<Point> coordinates)
         {
+            Points = coordinates;
+            Color = Color.Black;
         }
         public override void Move(Point newPoint)
         {
@@ -27,9 +23,8 @@ namespace corel_draw.Figures
             {
                 Point delta = new Point(value.X - base.Location.X, value.Y - base.Location.Y);
                 for (int i = 0; i < Points.Count; i++)
-                {
                     Points[i] = new Point(Points[i].X + delta.X, Points[i].Y + delta.Y);
-                }
+                
                 base.Location = value;
             }
         }

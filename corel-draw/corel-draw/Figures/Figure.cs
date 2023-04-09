@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 
 namespace corel_draw.Figures
 {
@@ -48,12 +47,6 @@ namespace corel_draw.Figures
             _height = height;
             Color = Color.Black;
         }
-        public Figure(List<Point> coordinates) 
-        {
-            _points = coordinates;
-            Color = Color.Black;
-        }
-
 
         public virtual void Move(Point delta)
         {
@@ -62,13 +55,34 @@ namespace corel_draw.Figures
         public Figure Clone()
         {
             if (this is Polygon)
-                return new Polygon(_points.ToList());
+                return new Polygon(_points);
             else
                 return new Figure(_location.X, _location.Y, _width, _height);
         }
+        public void CopyState(Figure figure)
+        {
+            if (figure is Polygon && this is Polygon)
+            {
+                Points = new List<Point>(figure.Points);
+            }
+            else
+            {
+                Location = figure.Location;
+                Width = figure.Width;
+                Height = figure.Height;
+            }
+        }
+
 
         public virtual void Draw(Graphics g) { }
         public virtual double CalcArea() { return 0; }
-        public virtual bool Contains(Point point) => _location.X <= point.X && point.X <= _location.X + _width && _location.Y <= point.Y && point.Y <= _location.Y + _height;
+        public virtual bool Contains(Point point)
+        {
+            bool isInsideX = _location.X <= point.X && point.X <= _location.X + _width;
+            bool isInsideY = _location.Y <= point.Y && point.Y <= _location.Y + _height;
+
+            return isInsideX && isInsideY;
+        }
+
     }
 }

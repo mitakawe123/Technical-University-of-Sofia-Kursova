@@ -24,49 +24,22 @@ namespace corel_draw.Components
 
         public void Do()
         {
-            if (_oldState is Polygon oldPolygon && _newState is Polygon newPolygon)
-            {
-                oldPolygon.Points = new List<Point>(newPolygon.Points);
-            }
-            else
-            {
-                _oldState.Location = _newState.Location;
-                _oldState.Width = _newState.Width;
-                _oldState.Height = _newState.Height;
-            }
+            _oldState.CopyState(_newState);
         }
 
         public void Undo()
         {
-            if (_oldState is Polygon oldPolygon && _initialState is Polygon initialPolygon)
-            {
-                oldPolygon.Points = new List<Point>(initialPolygon.Points);
-            }
-            else
-            {
-                _oldState.Location = _initialState.Location;
-                _oldState.Width = _initialState.Width;
-                _oldState.Height = _initialState.Height;
-            }
+            _oldState.CopyState(_initialState);
         }
 
         public void Redo()
         {
-            if (_oldState is Polygon oldPolygon && _newState is Polygon newPolygon)
-            {
-                oldPolygon.Points = new List<Point>(newPolygon.Points);
-            }
-            else
-            {
-                _oldState.Location = _newState.Location;
-                _oldState.Width = _newState.Width;
-                _oldState.Height = _newState.Height;
-            }
+            _oldState.CopyState(_newState);
         }
 
         public string GetDescription()
         {
-            return $"Edit {_oldState.GetType().Name}";
+            return $"Edit {_oldState.GetType().Name} with new area of {_newState.CalcArea():F2}";
         }
     }
 }

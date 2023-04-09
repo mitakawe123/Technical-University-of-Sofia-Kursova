@@ -49,9 +49,11 @@
             // 
             // DrawingBox
             // 
+            this.DrawingBox.BackColor = System.Drawing.Color.White;
             this.DrawingBox.Location = new System.Drawing.Point(32, 93);
             this.DrawingBox.Name = "DrawingBox";
             this.DrawingBox.Size = new System.Drawing.Size(1012, 411);
+            this.DrawingBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.DrawingBox.TabIndex = 6;
             this.DrawingBox.TabStop = false;
             this.DrawingBox.Paint += new System.Windows.Forms.PaintEventHandler(this.DrawingBox_Paint);

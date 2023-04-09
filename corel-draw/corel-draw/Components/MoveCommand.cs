@@ -1,11 +1,6 @@
 ﻿using corel_draw.Figures;
 using corel_draw.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace corel_draw.Components
 {
@@ -21,7 +16,6 @@ namespace corel_draw.Components
             _figure = figure;
             _delta = delta;
             _initialPosition = initialLocation;
-            
         }
 
         public void Do()

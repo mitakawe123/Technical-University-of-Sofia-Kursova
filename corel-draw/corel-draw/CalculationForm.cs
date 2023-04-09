@@ -1,14 +1,6 @@
 ﻿using corel_draw.Figures;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace corel_draw
 {
@@ -50,6 +42,7 @@ namespace corel_draw
             X = int.Parse(X_Input.Text);
             Y = int.Parse(Y_Input.Text);
             Width_Value = int.Parse(Width_Input.Text);
+
             if (Height_Input.Visible)
                 Height_Value = int.Parse(Height_Input.Text);
             else
@@ -57,10 +50,6 @@ namespace corel_draw
 
             DialogResult = DialogResult.OK;
             Close();
-        }
-
-        private void CalculationForm_Load(object sender, EventArgs e)
-        {
         }
 
         public void Toggle_Height_Input_Visibility(bool visible)
