@@ -15,7 +15,7 @@ namespace corel_draw.Figures
 
         public Color Color { get; set; }
         public string Name { get; set; }
-        public virtual List<Point> Points { get; private set; }
+        public virtual List<Point> Points { get; set; }
         public virtual Point Location { get => _location; set => _location = value; }
         public int Width { get => _width; set => _width = value; }
 
