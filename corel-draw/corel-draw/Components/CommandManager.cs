@@ -71,6 +71,8 @@ namespace corel_draw.Components
                     return editCommand.GetDescription();
                 case ColorCommand colorCommand:
                     return colorCommand.GetDescription();
+                case LoadCommand loadCommand:
+                    return loadCommand.GetDescription();
                 default:
                     return "";
             }

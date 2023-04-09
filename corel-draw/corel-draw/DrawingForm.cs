@@ -322,15 +322,19 @@ namespace corel_draw
                     {
                         case "Circle":
                             figure = new Circle(figureData.Location.X, figureData.Location.Y, figureData.Width, figureData.Height);
+                            figure.Name = figure.GetType().Name; 
                             break;
                         case "Rectangle":
                             figure = new Figures.Rectangle(figureData.Location.X, figureData.Location.Y, figureData.Width, figureData.Height);
+                            figure.Name = figure.GetType().Name; 
                             break;
                         case "Square":
                             figure = new Square(figureData.Location.X, figureData.Location.Y, figureData.Width, figureData.Width);
+                            figure.Name = figure.GetType().Name; 
                             break;
                         case "Polygon":
                             figure = new Polygon(figureData.Points);
+                            figure.Name = figure.GetType().Name;    
                             break;
                         default:
                             throw new ArgumentException($"Invalid figure name: {figureData.Name}");

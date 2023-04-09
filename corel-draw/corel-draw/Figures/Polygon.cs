@@ -6,11 +6,10 @@ namespace corel_draw.Figures
 {
     internal class Polygon : Figure
     {
-        public Polygon(List<Point> coordinates)
-        {
-            Points = coordinates;
-            Color = Color.Black;
+        public Polygon(List<Point> coordinates):base(coordinates)
+        {            
         }
+
         public override void Move(Point newPoint)
         {
             Location = new Point(Location.X + newPoint.X, Location.Y + newPoint.Y);

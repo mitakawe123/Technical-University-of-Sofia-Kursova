@@ -4,6 +4,7 @@ using System.Drawing;
 
 namespace corel_draw.Figures
 {
+    [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
     internal class Figure
     {
         private Point _location;
@@ -11,9 +12,9 @@ namespace corel_draw.Figures
         private int _height;
         private List<Point> _points;
 
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public Color Color { get; set; }
         public string Name { get; set; }
+
         public List<Point> Points 
         {
             get { return _points; } 
@@ -39,6 +40,12 @@ namespace corel_draw.Figures
             //need empty constructor for deserialize the data in the json file
         }
 
+        public Figure(List<Point> coordinates)
+        {
+            _points = coordinates;
+            Color = Color.Black;
+        }
+
         public Figure(int x, int y, int width, int height)
         {
             _location = new Point(x, y);
@@ -51,6 +58,7 @@ namespace corel_draw.Figures
         {
             _location = new Point(_location.X + delta.X, _location.Y + delta.Y);
         }
+
         public Figure Clone()
         {
             if (this is Polygon)
@@ -58,6 +66,7 @@ namespace corel_draw.Figures
             else
                 return new Figure(_location.X, _location.Y, _width, _height);
         }
+
         public void CopyState(Figure figure)
         {
             if (figure is Polygon && this is Polygon)
@@ -71,8 +80,11 @@ namespace corel_draw.Figures
                 Height = figure.Height;
             }
         }
+
         public virtual void Draw(Graphics g) { }
+
         public virtual double CalcArea() { return 0; }
+
         public virtual bool Contains(Point point)
         {
             bool isInsideX = _location.X <= point.X && point.X <= _location.X + _width;
