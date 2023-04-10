@@ -14,5 +14,9 @@ namespace corel_draw.Figures
         {            
             g.DrawRectangle(new Pen(Color, 5), Location.X, Location.Y, Width, Height);
         }
+        public override Figure Clone()
+        {
+            return new Rectangle(Location.X, Location.Y, Width, Height) { Color = Color, Name = Name };
+        }
     }
 }

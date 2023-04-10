@@ -2,34 +2,15 @@
   "DrawnFigures": [
     {
       "Points": [
-        "599, 109",
-        "344, 324",
-        "620, 311"
+        "494, 132",
+        "361, 247",
+        "672, 258"
       ],
       "Location": "0, 0",
       "Color": "Black",
       "Name": "Polygon",
       "Width": 0,
       "Height": 0
-    },
-    {
-      "Points": [
-        "525, 106",
-        "271, 236",
-        "711, 237"
-      ],
-      "Location": "0, 0",
-      "Color": "Black",
-      "Name": "Polygon",
-      "Width": 0,
-      "Height": 0
-    },
-    {
-      "Color": "Black",
-      "Name": "Circle",
-      "Location": "100, 100",
-      "Width": 100,
-      "Height": 100
     }
   ]
 }

@@ -7,7 +7,7 @@ using System.Drawing;
 namespace corel_draw.Figures
 {
     [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
-    internal class Figure
+    abstract class Figure
     {
         private Point _location;
         private int _width;
@@ -24,11 +24,6 @@ namespace corel_draw.Figures
         {
             //need empty constructor for deserialize the data in the json file
         }
-
-        public static Figure FromJson(string json)
-        {
-            return JsonConvert.DeserializeObject<Figure>(json);
-        }
         
         public Figure(Point location, int width, int height)
         {
@@ -43,10 +38,7 @@ namespace corel_draw.Figures
             _location = new Point(_location.X + delta.X, _location.Y + delta.Y);
         }
 
-        public virtual Figure Clone()
-        {
-            return new Figure(_location, _width, _height) { Color = Color, Name = Name };
-        }
+        public abstract Figure Clone();
 
         public virtual void CopyState(Figure figure)
         {
@@ -57,9 +49,9 @@ namespace corel_draw.Figures
             Name = figure.Name;
         }
 
-        public virtual void Draw(Graphics g) { }
+        public abstract void Draw(Graphics g);
 
-        public virtual double CalcArea() { return 0; }
+        public abstract double CalcArea();
 
         public virtual bool Contains(Point point)
         {

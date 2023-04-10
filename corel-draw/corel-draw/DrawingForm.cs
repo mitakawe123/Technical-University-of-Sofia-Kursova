@@ -139,7 +139,8 @@ namespace corel_draw
                 DialogResult result = calculationForm.ShowDialog();
                 if (result == DialogResult.OK)
                 {
-                    Figure newState = new Figure(new Point(calculationForm.X, calculationForm.Y), calculationForm.Width_Value, calculationForm.Height_Value);
+                    Type figureType = currentFigure.GetType();
+                    Figure newState = (Figure)Activator.CreateInstance(figureType, new Point(calculationForm.X, calculationForm.Y), calculationForm.Width_Value, calculationForm.Height_Value);
 
                     ICommand command = new EditCommand(oldState, newState);
                     commandManager.AddCommand(command);

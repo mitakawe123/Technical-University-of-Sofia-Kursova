@@ -15,5 +15,9 @@ namespace corel_draw.Figures
         {
             return Width * Width;
         }
+        public override Figure Clone()
+        {
+            return new Square(Location.X, Location.Y, Width, Height) { Color = Color, Name = Name };
+        }
     }
 }
