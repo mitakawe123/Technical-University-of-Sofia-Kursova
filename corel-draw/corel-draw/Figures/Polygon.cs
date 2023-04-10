@@ -16,16 +16,6 @@ namespace corel_draw.Figures
             get { return _points; }
         }
 
-        public override string ToJson()
-        {
-            return JsonConvert.SerializeObject(new
-            {
-                Name,
-                Points = _points,
-                Color,
-            });
-        }
-
         public Polygon(List<Point> coordinates)
         {
             _points = coordinates;
