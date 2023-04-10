@@ -290,19 +290,11 @@ namespace corel_draw
         {
             try
             {
-                DrawingData drawingData = new DrawingData();
-                drawingData.DrawnFigures = drawnFigures.ToList();
-
-                JsonSerializerSettings settings = new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.Auto,
-                    Converters = new List<JsonConverter> { new FigureConverter() }
-                };
-
-                string json = JsonConvert.SerializeObject(drawingData, settings);
+                DrawingData drawingData = new DrawingData { DrawnFigures = drawnFigures.ToList() };
+                string json = JsonConvert.SerializeObject(drawingData, Formatting.Indented);
                 File.WriteAllText(path, json);
-
                 MessageBox.Show("File saved successfully.");
+                actionList.Items.Add("Save figures to file");
             }
             catch (Exception ex)
             {
@@ -316,6 +308,8 @@ namespace corel_draw
             try
             {
                 string json = File.ReadAllText(path);
+                List<Figure> loadedFigures = new List<Figure>();
+
                 JsonSerializerSettings settings = new JsonSerializerSettings
                 {
                     TypeNameHandling = TypeNameHandling.Auto,
@@ -331,8 +325,11 @@ namespace corel_draw
                         typeof(Figure),
                         null,
                         JsonSerializer.CreateDefault());
-                    drawnFigures.Add(figure);
+                    loadedFigures.Add(figure);
                 }
+
+                ICommand loadCommand = new LoadCommand(drawnFigures, loadedFigures);
+                commandManager.AddCommand(loadCommand);
 
                 DrawingBox.Invalidate();
                 MessageBox.Show("File loaded successfully.");

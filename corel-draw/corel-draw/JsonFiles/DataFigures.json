@@ -1,11 +1,10 @@
 {
   "DrawnFigures": [
     {
-      "$type": "corel_draw.Figures.Polygon, corel-draw",
       "Points": [
-        "535, 106",
-        "365, 217",
-        "746, 223"
+        "599, 109",
+        "344, 324",
+        "620, 311"
       ],
       "Location": "0, 0",
       "Color": "Black",
@@ -14,17 +13,23 @@
       "Height": 0
     },
     {
-      "$type": "corel_draw.Figures.Polygon, corel-draw",
       "Points": [
-        "535, 106",
-        "365, 217",
-        "746, 223"
+        "525, 106",
+        "271, 236",
+        "711, 237"
       ],
       "Location": "0, 0",
       "Color": "Black",
       "Name": "Polygon",
       "Width": 0,
       "Height": 0
+    },
+    {
+      "Color": "Black",
+      "Name": "Circle",
+      "Location": "100, 100",
+      "Width": 100,
+      "Height": 100
     }
   ]
 }
