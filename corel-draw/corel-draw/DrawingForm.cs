@@ -2,6 +2,7 @@
 using corel_draw.Figures;
 using corel_draw.Interfaces;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -289,17 +290,19 @@ namespace corel_draw
         {
             try
             {
-                List<string> serializedFigures = new List<string>();
-                foreach (Figure figure in drawnFigures)
+                DrawingData drawingData = new DrawingData();
+                drawingData.DrawnFigures = drawnFigures.ToList();
+
+                JsonSerializerSettings settings = new JsonSerializerSettings
                 {
-                    string json = figure.ToJson();
-                    serializedFigures.Add(json);
-                }
-                DrawingData drawingData = new DrawingData { DrawnFigures = drawnFigures };
-                string jsonResult = JsonConvert.SerializeObject(drawingData);
-                File.WriteAllText(path, jsonResult);
+                    TypeNameHandling = TypeNameHandling.Auto,
+                    Converters = new List<JsonConverter> { new FigureConverter() }
+                };
+
+                string json = JsonConvert.SerializeObject(drawingData, settings);
+                File.WriteAllText(path, json);
+
                 MessageBox.Show("File saved successfully.");
-                actionList.Items.Add("Save figures to file");
             }
             catch (Exception ex)
             {
@@ -307,45 +310,29 @@ namespace corel_draw
             }
         }
 
+
         private void LoadFromFile_Click(object sender, EventArgs e)
         {
             try
             {
                 string json = File.ReadAllText(path);
-                DrawingData drawingData = JsonConvert.DeserializeObject<DrawingData>(json);
-
-                List<Figure> loadedFigures = new List<Figure>();
-
-                foreach (var figureData in drawingData.DrawnFigures)
+                JsonSerializerSettings settings = new JsonSerializerSettings
                 {
-                    Figure figure;
-                    switch (figureData.Name)
-                    {
-                        case "Circle":
-                            figure = new Circle(figureData.Location.X, figureData.Location.Y, figureData.Width, figureData.Height);
-                            figure.Name = figure.GetType().Name; 
-                            break;
-                        case "Rectangle":
-                            figure = new Figures.Rectangle(figureData.Location.X, figureData.Location.Y, figureData.Width, figureData.Height);
-                            figure.Name = figure.GetType().Name; 
-                            break;
-                        case "Square":
-                            figure = new Square(figureData.Location.X, figureData.Location.Y, figureData.Width, figureData.Width);
-                            figure.Name = figure.GetType().Name; 
-                            break;
-                        case "Polygon":
-                            figure = new Polygon(figureData.Points);
-                            figure.Name = figure.GetType().Name;    
-                            break;
-                        default:
-                            throw new ArgumentException($"Invalid figure name: {figureData.Name}");
-                    }
-                    figure.Color = figureData.Color;
-                    loadedFigures.Add(figure);
+                    TypeNameHandling = TypeNameHandling.Auto,
+                    Converters = new List<JsonConverter> { new FigureConverter() }
+                };
+                JObject jObject = JObject.Parse(json);
+                JArray drawnFiguresArray = (JArray)jObject["DrawnFigures"];
+                foreach (JObject figureObject in drawnFiguresArray)
+                {
+                    FigureConverter figureConverter = new FigureConverter();
+                    Figure figure = (Figure)figureConverter.ReadJson(
+                        new JTokenReader(figureObject),
+                        typeof(Figure),
+                        null,
+                        JsonSerializer.CreateDefault());
+                    drawnFigures.Add(figure);
                 }
-
-                ICommand loadCommand = new LoadCommand(drawnFigures, loadedFigures); 
-                commandManager.AddCommand(loadCommand); 
 
                 DrawingBox.Invalidate();
                 MessageBox.Show("File loaded successfully.");

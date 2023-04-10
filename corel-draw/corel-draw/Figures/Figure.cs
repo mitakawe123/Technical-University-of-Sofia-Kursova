@@ -15,7 +15,7 @@ namespace corel_draw.Figures
 
         public Color Color { get; set; }
         public string Name { get; set; }
-        public virtual List<Point> Points { get; set; }
+       // public virtual List<Point> Points { get; set; }
         public virtual Point Location { get => _location; set => _location = value; }
         public int Width { get => _width; set => _width = value; }
 
@@ -37,7 +37,7 @@ namespace corel_draw.Figures
                 Color,
             });
         }
-       //working on it
+
         public static Figure FromJson(string json)
         {
             return JsonConvert.DeserializeObject<Figure>(json);

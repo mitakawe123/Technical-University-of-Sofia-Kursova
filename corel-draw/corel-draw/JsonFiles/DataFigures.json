@@ -1,1 +1,30 @@
-{"DrawnFigures":[{"Points":["575, 131","406, 244","692, 198"],"Location":"0, 0","Color":"Black","Name":"Polygon","Width":0,"Height":0}]}
+{
+  "DrawnFigures": [
+    {
+      "$type": "corel_draw.Figures.Polygon, corel-draw",
+      "Points": [
+        "535, 106",
+        "365, 217",
+        "746, 223"
+      ],
+      "Location": "0, 0",
+      "Color": "Black",
+      "Name": "Polygon",
+      "Width": 0,
+      "Height": 0
+    },
+    {
+      "$type": "corel_draw.Figures.Polygon, corel-draw",
+      "Points": [
+        "535, 106",
+        "365, 217",
+        "746, 223"
+      ],
+      "Location": "0, 0",
+      "Color": "Black",
+      "Name": "Polygon",
+      "Width": 0,
+      "Height": 0
+    }
+  ]
+}

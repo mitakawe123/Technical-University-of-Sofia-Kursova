@@ -1,7 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using corel_draw.Interfaces;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Reflection;
 
 namespace corel_draw.Figures
 {
@@ -9,10 +11,9 @@ namespace corel_draw.Figures
     {
         private List<Point> _points;
 
-        public override List<Point> Points
+        public List<Point> Points
         {
             get { return _points; }
-            set { _points = value; }
         }
 
         public override string ToJson()
@@ -25,10 +26,15 @@ namespace corel_draw.Figures
             });
         }
 
-        public Polygon(List<Point> coordinates) : base()
+        public Polygon(List<Point> coordinates)
         {
             _points = coordinates;
             Color = Color.Black;
+        }
+
+        public void AddPoint(Point point)
+        {
+            _points.Add(point);
         }
 
         public override Point Location
