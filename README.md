@@ -1,6 +1,6 @@
 # CorelDraw-like Graphics Editor in C# Forms
 
-This project was developed by [Your Name] for the Technical University of Sofia. It is a project for the first year and showcases a graphics editor that is similar to CorelDraw, built using C# Forms.
+This project was developed for the Technical University of Sofia. It is a project for the first year and showcases a graphics editor that is similar to CorelDraw, built using C# Forms.
 
 ## Project Overview
 
