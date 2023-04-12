@@ -20,7 +20,7 @@ namespace corel_draw.Figures
 
         public int Height { get => _height; set => _height = value; }
 
-        protected Figure()
+        private Figure()
         {
             //need empty constructor for deserialize the data in the json file
         }

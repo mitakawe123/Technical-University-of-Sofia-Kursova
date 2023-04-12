@@ -19,10 +19,10 @@ namespace corel_draw.Components
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             JObject jsonObject = JObject.Load(reader);
-            Figure figure;
             string figureName = jsonObject["Name"].Value<string>();
             Type figureType = Type.GetType($"corel_draw.Figures.{figureName}");
 
+            Figure figure;
             if (figureType == typeof(Polygon))
             {
                 JArray pointsArray = (JArray)jsonObject["Points"];
@@ -51,40 +51,6 @@ namespace corel_draw.Components
             return figure;
         }
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            Figure figure = (Figure)value;
-            if (figure is Polygon polygon)
-            {
-                writer.WritePropertyName("Points");
-                writer.WriteStartArray();
-                MessageBox.Show(polygon.Points.Count.ToString());
-                foreach (var point in polygon.Points)
-                {
-                    writer.WriteValue($"{point.X},{point.Y}");
-                }
-                writer.WriteEndArray();
-            }
-            else
-            {
-                writer.WriteStartObject();
-                writer.WritePropertyName("Name");
-                writer.WriteValue(figure.GetType().Name);
-                writer.WritePropertyName("Location");
-                writer.WriteStartObject();
-                writer.WritePropertyName("X");
-                writer.WriteValue(figure.Location.X);
-                writer.WritePropertyName("Y");
-                writer.WriteValue(figure.Location.Y);
-                writer.WriteEndObject();
-                writer.WritePropertyName("Width");
-                writer.WriteValue(figure.Width);
-                writer.WritePropertyName("Height");
-                writer.WriteValue(figure.Height);
-                writer.WritePropertyName("Color");
-                serializer.Serialize(writer, figure.Color);
-                writer.WriteEndObject();
-            }
-        }
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer){}
     }
 }

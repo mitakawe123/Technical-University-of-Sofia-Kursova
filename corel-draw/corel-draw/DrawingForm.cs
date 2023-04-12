@@ -214,7 +214,6 @@ namespace corel_draw
             }
         }
 
-
         private void DrawingBox_MouseMove(object sender, MouseEventArgs e)
         {
             if (isDragging)
@@ -313,22 +312,20 @@ namespace corel_draw
 
                 JsonSerializerSettings settings = new JsonSerializerSettings
                 {
-                    TypeNameHandling = TypeNameHandling.Auto,
+                    Formatting = Formatting.Indented,
+                    TypeNameHandling = TypeNameHandling.All,
                     Converters = new List<JsonConverter> { new FigureConverter() }
                 };
                 JObject jObject = JObject.Parse(json);
                 JArray drawnFiguresArray = (JArray)jObject["DrawnFigures"];
-                foreach (JObject figureObject in drawnFiguresArray)
-                {
-                    FigureConverter figureConverter = new FigureConverter();
-                    Figure figure = (Figure)figureConverter.ReadJson(
-                        new JTokenReader(figureObject),
-                        typeof(Figure),
-                        null,
-                        JsonSerializer.CreateDefault());
-                    loadedFigures.Add(figure);
-                }
-
+                loadedFigures.AddRange(from JObject figureObject in drawnFiguresArray
+                                       let figureConverter = new FigureConverter()
+                                       let figure = (Figure)figureConverter.ReadJson(
+                    new JTokenReader(figureObject),
+                    typeof(Figure),
+                    null,
+                    JsonSerializer.CreateDefault())
+                                       select figure);
                 ICommand loadCommand = new LoadCommand(drawnFigures, loadedFigures);
                 commandManager.AddCommand(loadCommand);
 

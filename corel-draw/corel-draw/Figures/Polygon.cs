@@ -16,15 +16,28 @@ namespace corel_draw.Figures
             get { return _points; }
         }
 
-        public Polygon(List<Point> coordinates)
+        public Polygon(List<Point> coordinates):base(GetLocationAndSize(coordinates,out int width,out int height),width, height)
         {
             _points = coordinates;
             Color = Color.Black;
         }
 
-        public void AddPoint(Point point)
+        private static Point GetLocationAndSize(List<Point> points, out int width,out int height)
         {
-            _points.Add(point);
+            int minX = points[0].X;
+            int maxX = points[0].X;
+            int minY = points[0].Y;
+            int maxY = points[0].Y;
+            for (int i = 1; i < points.Count; i++)
+            {
+                if (points[i].X < minX) minX = points[i].X;
+                if (points[i].X > maxX) maxX = points[i].X;
+                if (points[i].Y < minY) minY = points[i].Y;
+                if (points[i].Y > maxY) maxY = points[i].Y;
+            }
+            width = maxX - minX;
+            height = maxY - minY;
+            return new Point(minX, minY);
         }
 
         public override Point Location
