@@ -14,11 +14,12 @@ namespace corel_draw.Figures
         public List<Point> Points
         {
             get { return _points; }
+            set { _points = value; }
         }
 
-        public Polygon(List<Point> coordinates):base(GetLocationAndSize(coordinates,out int width,out int height),width, height)
+        public Polygon(List<Point> points) :base(GetLocationAndSize(points, out int width,out int height),width, height)
         {
-            _points = coordinates;
+            _points = points;
             Color = Color.Black;
         }
 

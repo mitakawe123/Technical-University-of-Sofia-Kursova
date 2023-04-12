@@ -310,28 +310,8 @@ namespace corel_draw
             try
             {
                 string json = File.ReadAllText(path);
-                List<Figure> loadedFigures = new List<Figure>();
-
-                JsonSerializerSettings settings = new JsonSerializerSettings
-                {
-                    Formatting = Formatting.Indented,
-                    TypeNameHandling = TypeNameHandling.All,
-                    Converters = new List<JsonConverter> { new FigureConverter() }
-                };
-                JObject jObject = JObject.Parse(json);
-                JArray drawnFiguresArray = (JArray)jObject["DrawnFigures"];
-
-                loadedFigures.AddRange(from JObject figureObject in drawnFiguresArray
-                                       let figureConverter = new FigureConverter()
-                                       let figure = (Figure)figureConverter.ReadJson(
-                    new JTokenReader(figureObject),
-                    typeof(Figure),
-                    null,
-                    JsonSerializer.CreateDefault())
-                                       select figure);
-
-                ICommand loadCommand = new LoadCommand(drawnFigures, loadedFigures);
-                commandManager.AddCommand(loadCommand);
+                DrawingData drawingData = JsonConvert.DeserializeObject<DrawingData>(json, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+                drawnFigures.AddRange(drawingData.DrawnFigures);
 
                 DrawingBox.Invalidate();
                 MessageBox.Show("File loaded successfully.");
