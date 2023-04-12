@@ -14,3 +14,5 @@ C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-d
 C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\corel-draw\obj\Debug\corel-draw.csproj.CopyComplete
 C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\corel-draw\obj\Debug\corel-draw.exe
 C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\corel-draw\obj\Debug\corel-draw.pdb
+C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\corel-draw\bin\Debug\CorelLibary.dll
+C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\corel-draw\bin\Debug\CorelLibary.pdb

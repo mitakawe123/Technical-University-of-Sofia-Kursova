@@ -11,6 +11,7 @@ using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using CorelLibary;
 using Button = System.Windows.Forms.Button;
 
 namespace corel_draw
@@ -41,6 +42,9 @@ namespace corel_draw
 
         private void CreateFigure(Type figureType, bool PolygonType)
         {
+            /*CorelLibary.Figure1 figureLibary = new CorelLibary.Figure1("Test");
+            MessageBox.Show(figureLibary.CallMain());*/
+
             if (PolygonType)
             {
                 polygonSides.ShowDialog();
@@ -178,7 +182,6 @@ namespace corel_draw
                     else
                         commandManager.AddCommand(new EditCommand(oldState, currentFigure));
                     
-
                     clickedPoints.Clear();
                     polygonSides.IsDrawing = false;
                 }
@@ -207,7 +210,6 @@ namespace corel_draw
 
                             contextMenuStrip.Show(DrawingBox, e.Location);
                         }
-
                         break;
                     }
                 }
@@ -318,6 +320,7 @@ namespace corel_draw
                 };
                 JObject jObject = JObject.Parse(json);
                 JArray drawnFiguresArray = (JArray)jObject["DrawnFigures"];
+
                 loadedFigures.AddRange(from JObject figureObject in drawnFiguresArray
                                        let figureConverter = new FigureConverter()
                                        let figure = (Figure)figureConverter.ReadJson(
@@ -326,6 +329,7 @@ namespace corel_draw
                     null,
                     JsonSerializer.CreateDefault())
                                        select figure);
+
                 ICommand loadCommand = new LoadCommand(drawnFigures, loadedFigures);
                 commandManager.AddCommand(loadCommand);
 

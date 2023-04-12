@@ -118,7 +118,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\CorelLibary\CorelLibary.csproj">
+      <Project>{f922b38c-3c13-4101-913f-3a82ab8174c6}</Project>
+      <Name>CorelLibary</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>

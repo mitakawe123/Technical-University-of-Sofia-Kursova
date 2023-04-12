@@ -10,6 +10,6 @@ namespace corel_draw.Components
     [Serializable]
     internal class DrawingData
     {
-        public List<Figure> DrawnFigures { get; private set; }
+        public List<Figure> DrawnFigures { get; set; }
     }
 }
