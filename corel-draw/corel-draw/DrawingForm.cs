@@ -1,8 +1,7 @@
 ﻿using corel_draw.Components;
 using corel_draw.Figures;
-using corel_draw.Interfaces;
+using CorelLibary;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,7 +10,6 @@ using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using CorelLibary;
 using Button = System.Windows.Forms.Button;
 
 namespace corel_draw
@@ -37,14 +35,12 @@ namespace corel_draw
         {
             InitializeComponent(); 
             bitmap = new Bitmap(DrawingBox.Width, DrawingBox.Height);
-            commandManager = new CommandManager(actionList);
+            commandManager = new CommandManager();
+            //Undo_Btn.Enabled = Redo_Btn.Enabled = false;
         }
 
         private void CreateFigure(Type figureType, bool PolygonType)
         {
-            /*CorelLibary.Figure1 figureLibary = new CorelLibary.Figure1("Test");
-            MessageBox.Show(figureLibary.CallMain());*/
-
             if (PolygonType)
             {
                 polygonSides.ShowDialog();
@@ -67,7 +63,7 @@ namespace corel_draw
 
                 ICommand addCommand = new AddCommand(figure, drawnFigures);
                 commandManager.AddCommand(addCommand);
-
+                actionList.Items.Add($"Added {figure.GetType().Name} with area {figure.CalcArea():F2}");
                 DrawingBox.Invalidate();
             }
         }
@@ -105,6 +101,7 @@ namespace corel_draw
             {
                 ICommand removeCommand = new DeleteCommand(currentFigure, drawnFigures);
                 commandManager.AddCommand(removeCommand);
+                actionList.Items.Add($"Delete {currentFigure.GetType().Name}");
                 currentFigure = null;
                 DrawingBox.Invalidate();
             }
@@ -122,7 +119,7 @@ namespace corel_draw
 
                     ICommand colorCommand = new ColorCommand(currentFigure, oldColor, newColor);
                     commandManager.AddCommand(colorCommand);
-
+                    actionList.Items.Add($"Change {currentFigure.GetType().Name} Color with {currentFigure.Color.Name})");
                     currentFigure.Color = newColor;
                     DrawingBox.Invalidate();
                 }
@@ -148,7 +145,7 @@ namespace corel_draw
 
                     ICommand command = new EditCommand(oldState, newState);
                     commandManager.AddCommand(command);
-
+                    actionList.Items.Add($"Edit {oldState.GetType().Name} with new area of {newState.CalcArea():F2}");
                     currentFigure = newState;
                     DrawingBox.Invalidate();
                 }
@@ -178,10 +175,15 @@ namespace corel_draw
                     currentFigure.Name = currentFigure.GetType().Name;
 
                     if (!_isEditing)
+                    {
                         commandManager.AddCommand(new AddCommand(currentFigure, drawnFigures));
+                        actionList.Items.Add($"Added {currentFigure.GetType().Name} with area {currentFigure.CalcArea():F2}");
+                    }
                     else
+                    {
                         commandManager.AddCommand(new EditCommand(oldState, currentFigure));
-                    
+                        actionList.Items.Add($"Edit {oldState.GetType().Name} with new area of {currentFigure.CalcArea():F2}");
+                    }
                     clickedPoints.Clear();
                     polygonSides.IsDrawing = false;
                 }
@@ -234,6 +236,7 @@ namespace corel_draw
                 Point delta = new Point(e.X - lastPoint.Value.X, e.Y - lastPoint.Value.Y);
                 ICommand moveCommand = new MoveCommand(currentFigure, delta, initialPosition.Value);
                 commandManager.AddCommand(moveCommand);
+                actionList.Items.Add($"Move {currentFigure.GetType().Name}");
                 isDragging = false;
                 lastPoint = null;
             }
@@ -276,7 +279,8 @@ namespace corel_draw
             {
                 commandManager.Redo();
                 DrawingBox.Invalidate();
-            }
+            } 
+            //else Redo_Btn.Enabled = false;
         }
 
         private void Undo_Btn_Click(object sender, EventArgs e)
@@ -286,6 +290,7 @@ namespace corel_draw
                 commandManager.Undo();
                 DrawingBox.Invalidate();
             }
+            //else Undo_Btn.Enabled = false;
         }
 
         private void SaveToFile_Click(object sender, EventArgs e)
@@ -293,7 +298,11 @@ namespace corel_draw
             try
             {
                 DrawingData drawingData = new DrawingData { DrawnFigures = drawnFigures.ToList() };
-                string json = JsonConvert.SerializeObject(drawingData, Formatting.Indented);
+                JsonSerializerSettings settings = new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.Auto
+                };
+                string json = JsonConvert.SerializeObject(drawingData, Formatting.Indented, settings);
                 File.WriteAllText(path, json);
                 MessageBox.Show("File saved successfully.");
                 actionList.Items.Add("Save figures to file");
@@ -315,6 +324,7 @@ namespace corel_draw
 
                 DrawingBox.Invalidate();
                 MessageBox.Show("File loaded successfully.");
+                actionList.Items.Add("Load figures from file");
             }
             catch (Exception ex)
             {

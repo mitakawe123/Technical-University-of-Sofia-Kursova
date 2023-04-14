@@ -1,5 +1,5 @@
 ﻿using corel_draw.Figures;
-using corel_draw.Interfaces;
+using CorelLibary;
 
 namespace corel_draw.Components
 {
@@ -29,11 +29,6 @@ namespace corel_draw.Components
         public void Redo()
         {
             _oldState.CopyState(_newState);
-        }
-
-        public string GetDescription()
-        {
-            return $"Edit {_oldState.GetType().Name} with new area of {_newState.CalcArea():F2}";
         }
     }
 }

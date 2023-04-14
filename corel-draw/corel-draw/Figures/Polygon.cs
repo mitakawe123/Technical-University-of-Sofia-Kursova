@@ -1,9 +1,6 @@
-﻿using corel_draw.Interfaces;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Reflection;
 
 namespace corel_draw.Figures
 {

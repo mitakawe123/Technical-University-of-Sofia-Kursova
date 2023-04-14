@@ -1,13 +1,10 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 
 namespace corel_draw.Figures
 {
     [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
-    abstract class Figure
+    public abstract class Figure
     {
         private Point _location;
         private int _width;
@@ -19,11 +16,6 @@ namespace corel_draw.Figures
         public int Width { get => _width; set => _width = value; }
 
         public int Height { get => _height; set => _height = value; }
-
-        private Figure()
-        {
-            //need empty constructor for deserialize the data in the json file
-        }
         
         public Figure(Point location, int width, int height)
         {

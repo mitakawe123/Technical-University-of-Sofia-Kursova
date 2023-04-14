@@ -1,15 +1,9 @@
 ﻿using corel_draw.Figures;
-using corel_draw.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using CorelLibary;
 namespace corel_draw.Components
 {
-    internal class ColorCommand:ICommand
+    internal class ColorCommand : ICommand
     {
         private readonly Figure _figure;
         private readonly Color _oldColor;
@@ -35,11 +29,6 @@ namespace corel_draw.Components
         public void Redo()
         {
             _figure.Color = _newColor;
-        }
-
-        public string GetDescription()
-        {
-            return $"Change {_figure.GetType().Name} Color with {_figure.Color.Name})";
         }
     }
 }

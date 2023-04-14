@@ -1,10 +1,10 @@
 ﻿using corel_draw.Figures;
-using corel_draw.Interfaces;
 using System.Drawing;
+using CorelLibary;
 
 namespace corel_draw.Components
 {
-    internal class MoveCommand : ICommand
+    public class MoveCommand : ICommand
     {
         private readonly Figure _figure;
         private readonly Point _delta;
@@ -32,11 +32,6 @@ namespace corel_draw.Components
         public void Redo()
         {
              _figure.Location = _finalPosition;
-        }
-
-        public string GetDescription()
-        {
-            return $"Move {_figure.GetType().Name}";
         }
     }
 }

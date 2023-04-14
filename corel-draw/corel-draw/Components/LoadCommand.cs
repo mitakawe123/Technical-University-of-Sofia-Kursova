@@ -1,10 +1,6 @@
 ﻿using corel_draw.Figures;
-using corel_draw.Interfaces;
-using Newtonsoft.Json;
-using System;
+using CorelLibary;
 using System.Collections.Generic;
-using System.IO;
-using System.Windows.Forms;
 
 namespace corel_draw.Components
 {
@@ -35,11 +31,6 @@ namespace corel_draw.Components
         public void Redo()
         {
             _oldFigures.AddRange(_newFigures);
-        }
-
-        public string GetDescription()
-        {
-            return "Load figures from file";
         }
     }
 }

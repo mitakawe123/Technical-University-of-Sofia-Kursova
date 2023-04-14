@@ -1,10 +1,6 @@
 ﻿using corel_draw.Figures;
-using corel_draw.Interfaces;
-using System;
+using CorelLibary;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace corel_draw.Components
 {
@@ -32,11 +28,6 @@ namespace corel_draw.Components
         public void Redo()
         {
             _figures.Remove(_figure);
-        }
-
-        public string GetDescription()
-        {
-            return $"Delete {_figure.GetType().Name}";
         }
     }
 }

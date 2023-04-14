@@ -57,7 +57,6 @@
     </Compile>
     <Compile Include="Components\AddCommand.cs" />
     <Compile Include="Components\ColorCommand.cs" />
-    <Compile Include="Components\CommandManager.cs" />
     <Compile Include="Components\DeleteCommand.cs" />
     <Compile Include="Components\DrawingData.cs" />
     <Compile Include="Components\EditCommand.cs" />
@@ -74,7 +73,6 @@
     <Compile Include="Figures\Polygon.cs" />
     <Compile Include="Figures\Rectangle.cs" />
     <Compile Include="Figures\Square.cs" />
-    <Compile Include="Interfaces\ICommand.cs" />
     <Compile Include="PolygonSides.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,6 +120,9 @@
       <Project>{f922b38c-3c13-4101-913f-3a82ab8174c6}</Project>
       <Name>CorelLibary</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
