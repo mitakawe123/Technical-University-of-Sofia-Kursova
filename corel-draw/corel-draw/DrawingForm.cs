@@ -320,7 +320,12 @@ namespace corel_draw
             {
                 string json = File.ReadAllText(path);
                 DrawingData drawingData = JsonConvert.DeserializeObject<DrawingData>(json, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
-                drawnFigures.AddRange(drawingData.DrawnFigures);
+
+                List<Figure> loadedFigures = new List<Figure>();
+                loadedFigures.AddRange(drawingData.DrawnFigures);
+
+                ICommand loadCommand = new LoadCommand(drawnFigures, loadedFigures);
+                commandManager.AddCommand(loadCommand);
 
                 DrawingBox.Invalidate();
                 MessageBox.Show("File loaded successfully.");

@@ -3,28 +3,28 @@
     {
       "$type": "corel_draw.Figures.Polygon, corel-draw",
       "Points": [
-        "518, 73",
-        "353, 283",
-        "802, 172"
+        "223, 68",
+        "116, 229",
+        "366, 235"
       ],
-      "Location": "353, 73",
+      "Location": "116, 68",
       "Color": "Black",
       "Name": "Polygon",
-      "Width": 449,
-      "Height": 210
+      "Width": 250,
+      "Height": 167
     },
     {
       "$type": "corel_draw.Figures.Polygon, corel-draw",
       "Points": [
-        "72, 199",
-        "192, 310",
-        "287, 96"
+        "386, 65",
+        "299, 240",
+        "529, 188"
       ],
-      "Location": "72, 96",
+      "Location": "299, 65",
       "Color": "Black",
       "Name": "Polygon",
-      "Width": 215,
-      "Height": 214
+      "Width": 230,
+      "Height": 175
     }
   ]
 }
