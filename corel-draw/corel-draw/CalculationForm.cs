@@ -57,5 +57,10 @@ namespace corel_draw
             Height_Input.Visible = visible;
             Height_Label.Visible = visible;
         }
+
+        private void CalculationForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

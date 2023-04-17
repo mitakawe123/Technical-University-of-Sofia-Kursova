@@ -14,7 +14,6 @@ namespace CorelLibary
 
         public void AddCommand(ICommand command)
         {
-            // If we're not at the end of the command history, clear the redo stack
             if (commandIndex < commandHistory.Count - 1)
             {
                 redoStack.Clear();

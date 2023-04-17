@@ -145,10 +145,17 @@ namespace corel_draw
                 if (result == DialogResult.OK)
                 {
                     Type figureType = currentFigure.GetType();
-                    Figure newState = (Figure)Activator.CreateInstance(figureType, new Point(calculationForm.X, calculationForm.Y), calculationForm.Width_Value, calculationForm.Height_Value);
+                    Figure newState = (Figure)Activator.CreateInstance(
+                            figureType, 
+                            calculationForm.X, 
+                            calculationForm.Y, 
+                            calculationForm.Width_Value, 
+                            calculationForm.Height_Value
+                        );
 
                     ICommand command = new EditCommand(oldState, newState);
                     commandManager.AddCommand(command);
+
                     actionList.Items.Add($"Edit {oldState.GetType().Name} with new area of {newState.CalcArea():F2}");
                     currentFigure = newState;
                     DrawingBox.Invalidate();
