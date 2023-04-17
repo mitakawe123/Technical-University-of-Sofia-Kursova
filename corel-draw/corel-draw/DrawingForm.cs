@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using Button = System.Windows.Forms.Button;
 
@@ -22,11 +23,12 @@ namespace corel_draw
 
         private readonly Bitmap bitmap;
         private Figure currentFigure;
-        private bool isDragging = false;
         private Point? lastPoint = null;
         private Point? initialPosition = null;
 
         private bool _isEditing = false;
+        private bool isDragging = false;
+        private bool isFilling = false;
 
         private PolygonSides polygonSides = new PolygonSides();
         private readonly string path = "../../JsonFiles/DataFigures.json";
@@ -39,9 +41,10 @@ namespace corel_draw
             //Undo_Btn.Enabled = Redo_Btn.Enabled = false;
         }
 
-        private void CreateFigure(Type figureType, bool PolygonType)
+        private void CreateFigure(Type figureType)
         {
-            if (PolygonType)
+            ConstructorInfo constructor = figureType.GetConstructor(new Type[] { typeof(List<Point>) });
+            if (constructor != null)
             {
                 polygonSides.ShowDialog();
                 _isEditing = false;
@@ -75,7 +78,6 @@ namespace corel_draw
             for (int i = 0; i < figureTypes.Length; i++)
             {
                 Type figureType = figureTypes[i];
-                bool isPolygonType = figureType == typeof(Polygon);
                 int index = i;
                 Button button = new Button
                 {
@@ -89,7 +91,8 @@ namespace corel_draw
 
                 button.Click += (object sender1, EventArgs e1) =>
                 {
-                    CreateFigure(figureTypes[index], isPolygonType);
+                    CreateFigure(figureTypes[index]);
+                    isFilling = false;
                 };
                 Controls.Add(button);
             }
@@ -119,7 +122,8 @@ namespace corel_draw
 
                     ICommand colorCommand = new ColorCommand(currentFigure, oldColor, newColor);
                     commandManager.AddCommand(colorCommand);
-                    actionList.Items.Add($"Change {currentFigure.GetType().Name} Color with {currentFigure.Color.Name})");
+
+                    actionList.Items.Add($"Change {currentFigure.GetType().Name} Color with {currentFigure.Color.Name}");
                     currentFigure.Color = newColor;
                     DrawingBox.Invalidate();
                 }
@@ -206,7 +210,8 @@ namespace corel_draw
                             ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
 
                             contextMenuStrip.Items.Add("Delete").Click += DeleteMenuItem_Click;
-                            contextMenuStrip.Items.Add("Change Color").Click += ColorMenuItem_Click;
+                            contextMenuStrip.Items.Add("Change Border Color").Click += ColorMenuItem_Click;
+                            contextMenuStrip.Items.Add("Fill Figure").Click += FillMenuItem_Click;
                             contextMenuStrip.Items.Add("Edit").Click += EditToolStripMenuItem_Click;
                             contextMenuStrip.Items[2].Tag = currentFigure;
 
@@ -268,10 +273,36 @@ namespace corel_draw
                     foreach (Figure figure in drawnFigures)
                     {
                         figure.Draw(e.Graphics);
+                        if(isFilling)
+                        {
+                            figure.Fill(e.Graphics);
+                        }
                     }
                 }
             }
         }
+
+        private void FillMenuItem_Click(object sender, EventArgs e)
+        {
+            ColorDialog colorDialog = new ColorDialog();
+            if (colorDialog.ShowDialog() == DialogResult.OK)
+            {
+                if (currentFigure != null)
+                {
+                    Color oldFilling = currentFigure.FillColor;
+                    Color newFilling = colorDialog.Color;
+                    isFilling = true;
+
+                    ICommand command = new FillCommand(currentFigure, oldFilling, newFilling);
+                    commandManager.AddCommand(command);
+
+                    actionList.Items.Add($"Change {currentFigure.GetType().Name} Fill Color with {currentFigure.FillColor.Name}");
+                    currentFigure.FillColor = newFilling;
+                    DrawingBox.Invalidate();
+                }
+            }
+        }
+
 
         private void Redo_Btn_Click(object sender, EventArgs e)
         {

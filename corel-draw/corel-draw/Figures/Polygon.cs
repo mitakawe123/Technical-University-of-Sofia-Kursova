@@ -18,6 +18,7 @@ namespace corel_draw.Figures
         {
             _points = points;
             Color = Color.Black;
+            FillColor = Color.White;
         }
 
         private static Point GetLocationAndSize(List<Point> points, out int width,out int height)
@@ -73,6 +74,10 @@ namespace corel_draw.Figures
         public override void Draw(Graphics g)
         {
             g.DrawPolygon(new Pen(Color, 5), _points.ToArray());
+        }
+        public override void Fill(Graphics g)
+        {
+            g.FillPolygon(new SolidBrush(FillColor), _points.ToArray());
         }
 
         //Jordan Curve Theorem

@@ -17,9 +17,13 @@ namespace corel_draw.Figures
         { 
            g.DrawEllipse(new Pen(Color, 5), Location.X, Location.Y, Width, Height);
         }
+        public override void Fill(Graphics g)
+        {
+            g.FillEllipse(new SolidBrush(FillColor),Location.X,Location.Y,Width,Height); 
+        }
         public override Figure Clone()
         {
-            return new Circle(Location.X, Location.Y, Width, Height) { Color = Color, Name = Name };
+            return new Circle(Location.X, Location.Y, Width, Height) { Color = Color, Name = Name, FillColor = FillColor };
         }
     }
 }

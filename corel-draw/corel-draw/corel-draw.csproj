@@ -60,6 +60,7 @@
     <Compile Include="Components\DeleteCommand.cs" />
     <Compile Include="Components\DrawingData.cs" />
     <Compile Include="Components\EditCommand.cs" />
+    <Compile Include="Components\FillCommand.cs" />
     <Compile Include="Components\LoadCommand.cs" />
     <Compile Include="Components\MoveCommand.cs" />
     <Compile Include="DrawingForm.cs">

@@ -11,6 +11,8 @@ namespace corel_draw.Figures
         private int _height;
 
         public Color Color { get; set; }
+        public Color FillColor { get; set; }
+
         public string Name { get; set; }
         public virtual Point Location { get => _location; set => _location = value; }
         public int Width { get => _width; set => _width = value; }
@@ -23,6 +25,7 @@ namespace corel_draw.Figures
             _width = width;
             _height = height;
             Color = Color.Black;
+            FillColor = Color.White;
         }
 
         public virtual void Move(Point delta)
@@ -38,11 +41,13 @@ namespace corel_draw.Figures
             Width = figure.Width;
             Height = figure.Height;
             Color = figure.Color;
+            FillColor = figure.FillColor;
             Name = figure.Name;
         }
 
         public abstract void Draw(Graphics g);
 
+        public abstract void Fill(Graphics g);
         public abstract double CalcArea();
 
         public virtual bool Contains(Point point)
