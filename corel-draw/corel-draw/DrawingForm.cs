@@ -1,4 +1,5 @@
 ﻿using corel_draw.Components;
+using corel_draw.FactoryComponents;
 using corel_draw.Figures;
 using CorelLibary;
 using Newtonsoft.Json;
@@ -17,8 +18,11 @@ namespace corel_draw
 {
     public partial class DrawingForm : Form
     {
-        private readonly List<Figure> drawnFigures = new List<Figure>();
+        private readonly List<Figure> drawnFigures;
         private readonly List<Point> clickedPoints = new List<Point>();
+        private readonly IReadOnlyList<FigureFactory> _figureFactories;
+        private FigureFactory _figureFactory;
+        private Figure newStateFigure;
         private readonly CommandManager commandManager;
 
         private readonly Bitmap bitmap;
@@ -33,49 +37,27 @@ namespace corel_draw
         private PolygonSides polygonSides = new PolygonSides();
         private readonly string path = "../../JsonFiles/DataFigures.json";
 
-        public DrawingForm()
+        public DrawingForm(IReadOnlyList<FigureFactory> figureFactories)
         {
             InitializeComponent(); 
             bitmap = new Bitmap(DrawingBox.Width, DrawingBox.Height);
             commandManager = new CommandManager();
+            drawnFigures = new List<Figure>();
+            _figureFactories = figureFactories;
             //Undo_Btn.Enabled = Redo_Btn.Enabled = false;
         }
 
-        private void CreateFigure(Type figureType)
+        private void OpenPolygonForm()
         {
-            ConstructorInfo constructor = figureType.GetConstructor(new Type[] { typeof(List<Point>) });
-            if (constructor != null)
-            {
-                polygonSides.ShowDialog();
-                _isEditing = false;
-                return;
-            }
-            CalculationForm calculationForm = new CalculationForm(figureType);
-            DialogResult result = calculationForm.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                Figure figure = (Figure)Activator.CreateInstance(figureType, new object[]
-                {
-                        calculationForm.X,
-                        calculationForm.Y,
-                        calculationForm.Width_Value,
-                        calculationForm.Height_Value,
-                });
-
-                figure.Name = figure.GetType().Name;
-
-                ICommand addCommand = new AddCommand(figure, drawnFigures);
-                commandManager.AddCommand(addCommand);
-                actionList.Items.Add($"Added {figure.GetType().Name} with area {figure.CalcArea():F2}");
-                DrawingBox.Invalidate();
-            }
+            polygonSides.ShowDialog();
+            _isEditing = false;
         }
 
         private void DrawingForm_Load(object sender, EventArgs e)
         {
             Type[] figureTypes = typeof(Figure).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(Figure))).ToArray();
             int buttonWidth = (Width - 150) / figureTypes.Length;
-            for (int i = 0; i < figureTypes.Length; i++)
+            for (int i = 0; i < _figureFactories.Count; i++)
             {
                 Type figureType = figureTypes[i];
                 int index = i;
@@ -91,10 +73,23 @@ namespace corel_draw
 
                 button.Click += (object sender1, EventArgs e1) =>
                 {
-                    CreateFigure(figureTypes[index]);
+                    if (figureType == typeof(Polygon))
+                        OpenPolygonForm();
+                    else
+                    {
+                        _figureFactory = _figureFactories[index];
+                        _figureFactory.BeginCreateFigure();
+                    }
                     isFilling = false;
                 };
                 Controls.Add(button);
+                _figureFactories[index].Finished += (figure) =>
+                {
+                    ICommand addCommand = new AddCommand(figure, drawnFigures);
+                    commandManager.AddCommand(addCommand);
+                    _figureFactory = null;
+                    DrawingBox.Invalidate();
+                };
             }
         }
 
@@ -129,6 +124,11 @@ namespace corel_draw
                 }
             }
         }
+
+        enum Figures { 
+            Circle,Polygon,Rectangle,Square
+        }
+
         private void EditToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (currentFigure is Polygon)
@@ -140,26 +140,31 @@ namespace corel_draw
             else
             {
                 Figure oldState = currentFigure;
-                CalculationForm calculationForm = new CalculationForm(currentFigure.GetType());
-                DialogResult result = calculationForm.ShowDialog();
-                if (result == DialogResult.OK)
+
+                currentFigure.GetType();
+                int matchingIndex = -1;
+                Figures[] figures = (Figures[])Enum.GetValues(typeof(Figures));
+                for (int i = 0; i < figures.Length; i++)
                 {
-                    Type figureType = currentFigure.GetType();
-                    Figure newState = (Figure)Activator.CreateInstance(
-                            figureType, 
-                            calculationForm.X, 
-                            calculationForm.Y, 
-                            calculationForm.Width_Value, 
-                            calculationForm.Height_Value
-                        );
-
-                    ICommand command = new EditCommand(oldState, newState);
-                    commandManager.AddCommand(command);
-
-                    actionList.Items.Add($"Edit {oldState.GetType().Name} with new area of {newState.CalcArea():F2}");
-                    currentFigure = newState;
-                    DrawingBox.Invalidate();
+                    if (currentFigure.GetType().Name == figures[i].ToString())
+                    {
+                        matchingIndex = i;
+                        break;
+                    }
                 }
+                _figureFactory = _figureFactories[matchingIndex];
+                _figureFactory.BeginCreateFigure();
+
+                _figureFactories[matchingIndex].Finished -= _figureFactories[matchingIndex].Finished;
+                _figureFactories[matchingIndex].Finished += (figure) =>
+                {
+                    ICommand command = new EditCommand(oldState, figure);
+                    commandManager.AddCommand(command);
+                    _figureFactory = null;
+                    currentFigure = figure;
+                    actionList.Items.Add($"Edit {oldState.GetType().Name} with new area of {figure.CalcArea():F2}");
+                    DrawingBox.Invalidate();
+                };
             }
         }
 
@@ -203,7 +208,12 @@ namespace corel_draw
             {
                 foreach (Figure figure in drawnFigures)
                 {
-                    if (figure.Contains(e.Location))
+                    if (_figureFactory != null)
+                    {
+                        _figureFactory.MouseDown(e);
+                        DrawingBox.Invalidate();
+                    }
+                    else if (figure.Contains(e.Location))
                     {
                         currentFigure = figure;
                         if (e.Button == MouseButtons.Left)
@@ -239,6 +249,14 @@ namespace corel_draw
                 currentFigure.Move(delta);
                 DrawingBox.Invalidate();
             }
+            else if(!isDragging)
+            {
+                if (_figureFactory != null)
+                {
+                    _figureFactory.MouseMove(e);
+                    DrawingBox.Invalidate();
+                }
+            }
         }
 
         private void DrawingBox_MouseUp(object sender, MouseEventArgs e)
@@ -251,6 +269,14 @@ namespace corel_draw
                 actionList.Items.Add($"Move {currentFigure.GetType().Name}");
                 isDragging = false;
                 lastPoint = null;
+            } 
+            else if (!isDragging) 
+            {
+                if (_figureFactory != null)
+                {
+                    _figureFactory.MouseUp(e);
+                    DrawingBox.Invalidate();
+                }
             }
         }
 

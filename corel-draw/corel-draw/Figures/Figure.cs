@@ -19,6 +19,7 @@ namespace corel_draw.Figures
 
         public int Height { get => _height; set => _height = value; }
         
+        public Figure() { }
         public Figure(Point location, int width, int height)
         {
             _location = location;

@@ -14,6 +14,8 @@ namespace corel_draw.Figures
             set { _points = value; }
         }
 
+        public Polygon() { }
+
         public Polygon(List<Point> points) :base(GetLocationAndSize(points, out int width,out int height),width, height)
         {
             _points = points;

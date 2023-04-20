@@ -1,30 +1,20 @@
 {
   "DrawnFigures": [
     {
-      "$type": "corel_draw.Figures.Polygon, corel-draw",
-      "Points": [
-        "223, 68",
-        "116, 229",
-        "366, 235"
-      ],
-      "Location": "116, 68",
+      "$type": "corel_draw.Figures.Rectangle, corel-draw",
       "Color": "Black",
-      "Name": "Polygon",
-      "Width": 250,
-      "Height": 167
+      "FillColor": "",
+      "Location": "165, 61",
+      "Width": 606,
+      "Height": 201
     },
     {
-      "$type": "corel_draw.Figures.Polygon, corel-draw",
-      "Points": [
-        "386, 65",
-        "299, 240",
-        "529, 188"
-      ],
-      "Location": "299, 65",
+      "$type": "corel_draw.Figures.Square, corel-draw",
       "Color": "Black",
-      "Name": "Polygon",
-      "Width": 230,
-      "Height": 175
+      "FillColor": "",
+      "Location": "833, 158",
+      "Width": 62,
+      "Height": 62
     }
   ]
 }

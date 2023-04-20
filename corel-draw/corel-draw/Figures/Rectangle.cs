@@ -4,6 +4,7 @@ namespace corel_draw.Figures
 {
     internal class Rectangle : Figure
     {
+        public Rectangle() { }
         public Rectangle(int x, int y, int width, int height) : base(new Point(x, y), width, height)
         {
         }

@@ -1,6 +1,8 @@
-﻿using System;
+﻿using corel_draw.FactoryComponents;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -16,7 +18,19 @@ namespace corel_draw
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new DrawingForm());
+
+            Type[] figureFactoryTypes = Assembly.GetExecutingAssembly().GetTypes()
+                .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(FigureFactory)))
+                .ToArray();
+
+            var figureFactories = new List<FigureFactory>();
+            foreach (var figureFactoryType in figureFactoryTypes)
+            {
+                var figureFactory = (FigureFactory)Activator.CreateInstance(figureFactoryType);
+                figureFactories.Add(figureFactory);
+            }
+
+            Application.Run(new DrawingForm(figureFactories));
         }
     }
 }

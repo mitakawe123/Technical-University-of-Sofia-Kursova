@@ -69,6 +69,11 @@
     <Compile Include="DrawingForm.Designer.cs">
       <DependentUpon>DrawingForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="FactoryComponents\CircleFactory.cs" />
+    <Compile Include="FactoryComponents\FigureFactory.cs" />
+    <Compile Include="FactoryComponents\PolygonFactory.cs" />
+    <Compile Include="FactoryComponents\RectangleFactory.cs" />
+    <Compile Include="FactoryComponents\SquareFactory.cs" />
     <Compile Include="Figures\Circle.cs" />
     <Compile Include="Figures\Figure.cs" />
     <Compile Include="Figures\Polygon.cs" />
