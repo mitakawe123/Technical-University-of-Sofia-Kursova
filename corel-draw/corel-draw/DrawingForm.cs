@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
@@ -19,21 +20,17 @@ namespace corel_draw
     public partial class DrawingForm : Form
     {
         private readonly List<Figure> drawnFigures;
-        private readonly List<Point> clickedPoints = new List<Point>();
         private readonly IReadOnlyList<FigureFactory> _figureFactories;
         private FigureFactory _figureFactory;
         private readonly CommandManager commandManager;
 
-        private readonly Bitmap bitmap;
         private Figure currentFigure;
         private Point? lastPoint = null;
         private Point? initialPosition = null;
 
-        private bool _isEditing = false;
         private bool isDragging = false;
         private bool isFilling = false;
 
-        private PolygonSides polygonSides = new PolygonSides();
         private readonly string path = "../../JsonFiles/DataFigures.json";
 
         enum Figures
@@ -47,7 +44,6 @@ namespace corel_draw
         public DrawingForm(IReadOnlyList<FigureFactory> figureFactories)
         {
             InitializeComponent(); 
-            bitmap = new Bitmap(DrawingBox.Width, DrawingBox.Height);
             commandManager = new CommandManager();
             drawnFigures = new List<Figure>();
             _figureFactories = figureFactories;
@@ -73,16 +69,8 @@ namespace corel_draw
 
                 button.Click += (object sender1, EventArgs e1) =>
                 {
-                    if (figureType == typeof(Polygon))
-                    {
-                        polygonSides.ShowDialog();
-                        _isEditing = false;
-                    }
-                    else
-                    {
-                        _figureFactory = _figureFactories[index];
-                        _figureFactory.BeginCreateFigure();
-                    }
+                    _figureFactory = _figureFactories[index];
+                    _figureFactory.BeginCreateFigure();
                     isFilling = false;
                 };
                 Controls.Add(button);
@@ -130,108 +118,64 @@ namespace corel_draw
 
         private void EditToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (currentFigure is Polygon)
+            Figure oldState = currentFigure;
+            int matchingIndex = -1;
+            Figures[] figures = (Figures[])Enum.GetValues(typeof(Figures));
+            for (int i = 0; i < figures.Length; i++)
             {
-                polygonSides = new PolygonSides();
-                DialogResult dialogResult =  polygonSides.ShowDialog();
-                if (dialogResult == DialogResult.OK) _isEditing = true;
-            }
-            else
-            {
-                Figure oldState = currentFigure;
-                int matchingIndex = -1;
-                Figures[] figures = (Figures[])Enum.GetValues(typeof(Figures));
-                for (int i = 0; i < figures.Length; i++)
+                if (currentFigure.GetType().Name == figures[i].ToString())
                 {
-                    if (currentFigure.GetType().Name == figures[i].ToString())
-                    {
-                        matchingIndex = i;
-                        break;
-                    }
+                    matchingIndex = i;
+                    break;
                 }
-                _figureFactory = _figureFactories[matchingIndex];
-                _figureFactory.BeginCreateFigure();
-
-                _figureFactories[matchingIndex].Finished -= _figureFactories[matchingIndex].Finished;
-                _figureFactories[matchingIndex].Finished += (figure) =>
-                {
-                    ICommand command = new EditCommand(oldState, figure);
-                    commandManager.AddCommand(command);
-                    _figureFactory = null;
-                    currentFigure = figure;
-                    actionList.Items.Add($"Edit {oldState.GetType().Name} with new area of {figure.CalcArea():F2}");
-                    DrawingBox.Invalidate();
-                };
             }
+            _figureFactory = _figureFactories[matchingIndex];
+            _figureFactory.BeginCreateFigure();
+
+            _figureFactories[matchingIndex].Finished -= _figureFactories[matchingIndex].Finished;
+            _figureFactories[matchingIndex].Finished += (figure) =>
+            {
+                ICommand command = new EditCommand(oldState, figure);
+                commandManager.AddCommand(command);
+                _figureFactory = null;
+                currentFigure = figure;
+                actionList.Items.Add($"Edit {oldState.GetType().Name} with new area of {figure.CalcArea():F2}");
+                DrawingBox.Invalidate();
+            };
         }
 
         private void DrawingBox_MouseDown(object sender, MouseEventArgs e)
         {
-            if (polygonSides.IsDrawing)
+            if (_figureFactory != null)
             {
-                clickedPoints.Add(e.Location);
-
-                if (clickedPoints.Count > 1)
-                {
-                    using (Graphics g = Graphics.FromImage(bitmap))
-                    {
-                        g.DrawLine(new Pen(Color.Black, 2f), clickedPoints[clickedPoints.Count - 2], clickedPoints[clickedPoints.Count - 1]);
-                    }
-                }
-
+                _figureFactory.MouseDown(e);
                 DrawingBox.Invalidate();
-
-                if (clickedPoints.Count == polygonSides.Sides)
-                {
-                    Figure oldState = currentFigure;
-                    currentFigure = new Polygon(clickedPoints.ToList());
-                    currentFigure.Name = currentFigure.GetType().Name;
-
-                    if (!_isEditing)
-                    {
-                        commandManager.AddCommand(new AddCommand(currentFigure, drawnFigures));
-                        actionList.Items.Add($"Added {currentFigure.GetType().Name} with area {currentFigure.CalcArea():F2}");
-                    }
-                    else
-                    {
-                        commandManager.AddCommand(new EditCommand(oldState, currentFigure));
-                        actionList.Items.Add($"Edit {oldState.GetType().Name} with new area of {currentFigure.CalcArea():F2}");
-                    }
-                    clickedPoints.Clear();
-                    polygonSides.IsDrawing = false;
-                }
+                return;
             }
-            else
+            foreach (Figure figure in drawnFigures)
             {
-                foreach (Figure figure in drawnFigures)
+                if (figure.Contains(e.Location))
                 {
-                    if (_figureFactory != null)
+                    currentFigure = figure;
+                    if (e.Button == MouseButtons.Left)
                     {
-                        _figureFactory.MouseDown(e);
+                        isDragging = true;
+                        lastPoint = e.Location;
+                        initialPosition = figure.Location;
                     }
-                    else if (figure.Contains(e.Location))
+                    else if (e.Button == MouseButtons.Right)
                     {
-                        currentFigure = figure;
-                        if (e.Button == MouseButtons.Left)
-                        {
-                            isDragging = true;
-                            lastPoint = e.Location;
-                            initialPosition = figure.Location;
-                        }
-                        else if (e.Button == MouseButtons.Right)
-                        {
-                            ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
+                        ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
 
-                            contextMenuStrip.Items.Add("Delete").Click += DeleteMenuItem_Click;
-                            contextMenuStrip.Items.Add("Change Border Color").Click += ColorMenuItem_Click;
-                            contextMenuStrip.Items.Add("Fill Figure").Click += FillMenuItem_Click;
-                            contextMenuStrip.Items.Add("Edit").Click += EditToolStripMenuItem_Click;
-                            contextMenuStrip.Items[2].Tag = currentFigure;
+                        contextMenuStrip.Items.Add("Delete").Click += DeleteMenuItem_Click;
+                        contextMenuStrip.Items.Add("Change Border Color").Click += ColorMenuItem_Click;
+                        contextMenuStrip.Items.Add("Fill Figure").Click += FillMenuItem_Click;
+                        contextMenuStrip.Items.Add("Edit").Click += EditToolStripMenuItem_Click;
+                        contextMenuStrip.Items[2].Tag = currentFigure;
 
-                            contextMenuStrip.Show(DrawingBox, e.Location);
-                        }
-                        break;
+                        contextMenuStrip.Show(DrawingBox, e.Location);
                     }
+                    break;
                 }
             }
         }
@@ -272,35 +216,13 @@ namespace corel_draw
 
         private void DrawingBox_Paint(object sender, PaintEventArgs e)
         {
-            if (polygonSides.IsDrawing)
+            _figureFactory?.Draw(e.Graphics);
+            foreach (Figure figure in drawnFigures)
             {
-                using (Pen pen = new Pen(Color.Black, 2f))
+                figure.Draw(e.Graphics);
+                if(isFilling)
                 {
-                    if (clickedPoints.Count > 1)
-                    {
-                        e.Graphics.DrawLines(pen, clickedPoints.ToArray());
-                        e.Graphics.DrawLine(pen, clickedPoints[clickedPoints.Count - 1], clickedPoints[0]);
-                    }
-                }
-
-                using (GraphicsPath path = new GraphicsPath())
-                {
-                    foreach (Point p in clickedPoints)
-                    {
-                        path.AddEllipse(p.X - 3, p.Y - 3, 6, 6);
-                    }
-                    e.Graphics.FillPath(Brushes.Black, path);
-                }
-            }
-            else
-            {
-                foreach (Figure figure in drawnFigures)
-                {
-                    figure.Draw(e.Graphics);
-                    if(isFilling)
-                    {
-                        figure.Fill(e.Graphics);
-                    }
+                    figure.Fill(e.Graphics);
                 }
             }
         }
@@ -325,7 +247,6 @@ namespace corel_draw
                 }
             }
         }
-
 
         private void Redo_Btn_Click(object sender, EventArgs e)
         {

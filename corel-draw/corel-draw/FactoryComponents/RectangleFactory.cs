@@ -13,7 +13,6 @@ namespace corel_draw.FactoryComponents
         private Point _startPoint;
         private Point _endPoint;
         private Figures.Rectangle _rectangle;
-
         public override void BeginCreateFigure()
         {
             _rectangle = new Figures.Rectangle();
@@ -36,7 +35,6 @@ namespace corel_draw.FactoryComponents
             int width = Math.Abs(_startPoint.X - _endPoint.X);
             int height = Math.Abs(_startPoint.Y - _endPoint.Y);
             _rectangle.Location = new Point(x, y);
-            _rectangle.Color = Color.Black;
             _rectangle.Width = width;
             _rectangle.Height = height;
             Finished?.Invoke(_rectangle);

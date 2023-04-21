@@ -6,8 +6,6 @@ namespace corel_draw
     public partial class PolygonSides : Form
     {
         public int Sides { get; private set; }
-        public bool IsDrawing { get; set; }
-
         public PolygonSides()
         {
             InitializeComponent(); 
@@ -23,7 +21,6 @@ namespace corel_draw
                     return;
                 }
                 Sides = number;
-                IsDrawing = true;
                 DialogResult = DialogResult.OK;
                 Close();
             }

@@ -1,5 +1,6 @@
 ﻿using corel_draw.Figures;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -19,7 +20,7 @@ namespace corel_draw.FactoryComponents
         {
             startPoint = e.Location;
         }
-
+        [DebuggerStepThrough]
         public override void MouseMove(MouseEventArgs e)
         {
             endPoint = e.Location;
@@ -30,7 +31,10 @@ namespace corel_draw.FactoryComponents
             int x = (startPoint.X + endPoint.X) / 2;
             int y = (startPoint.Y + endPoint.Y) / 2;
             int radius = (int)Math.Sqrt(Math.Pow(startPoint.X - x, 2) + Math.Pow(startPoint.Y - y, 2));
-            _circle = new Circle(x - radius, y - radius, radius);
+            int diameter = radius * 2;
+            _circle.Location = new Point(x - radius, y - radius);
+            _circle.Width = diameter;
+            _circle.Height = diameter;
             Finished?.Invoke(_circle);
         }
     }

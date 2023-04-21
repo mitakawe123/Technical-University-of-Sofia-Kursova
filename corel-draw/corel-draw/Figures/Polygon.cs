@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace corel_draw.Figures
 {
@@ -14,7 +15,9 @@ namespace corel_draw.Figures
             set { _points = value; }
         }
 
-        public Polygon() { }
+        public Polygon() 
+        {
+        }
 
         public Polygon(List<Point> points) :base(GetLocationAndSize(points, out int width,out int height),width, height)
         {

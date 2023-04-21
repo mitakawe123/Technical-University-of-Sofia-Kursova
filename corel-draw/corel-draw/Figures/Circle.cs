@@ -5,7 +5,9 @@ namespace corel_draw.Figures
 {
     internal class Circle:Figure
     {
-        public Circle() { }
+        public Circle() 
+        {
+        }
         public Circle(int x, int y, int radius) : base(new Point(x, y), radius * 2, radius * 2)
         {
         }

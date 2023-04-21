@@ -32,7 +32,9 @@ namespace corel_draw.FactoryComponents
             int y = Math.Min(_startPoint.Y, _endPoint.Y);
             int width = Math.Abs(_endPoint.X - _startPoint.X);
             int height = width;
-            _square = new Square(x, y, width, height);
+            _square.Location = new Point(x, y);
+            _square.Width = width;
+            _square.Height = height;
             Finished?.Invoke(_square);
         }
     }
