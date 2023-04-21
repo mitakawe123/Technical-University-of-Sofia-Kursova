@@ -31,10 +31,9 @@ namespace corel_draw.FactoryComponents
             int x = (startPoint.X + endPoint.X) / 2;
             int y = (startPoint.Y + endPoint.Y) / 2;
             int radius = (int)Math.Sqrt(Math.Pow(startPoint.X - x, 2) + Math.Pow(startPoint.Y - y, 2));
-            int diameter = radius * 2;
             _circle.Location = new Point(x - radius, y - radius);
-            _circle.Width = diameter;
-            _circle.Height = diameter;
+            _circle.Width = radius * 2;
+            _circle.Height = radius * 2;
             Finished?.Invoke(_circle);
         }
     }

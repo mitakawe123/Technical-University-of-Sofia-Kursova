@@ -22,6 +22,7 @@ namespace corel_draw
         private readonly List<Figure> drawnFigures;
         private readonly IReadOnlyList<FigureFactory> _figureFactories;
         private FigureFactory _figureFactory;
+        private readonly AdditionalInfo additionalInfo;
         private readonly CommandManager commandManager;
 
         private Figure currentFigure;
@@ -33,18 +34,21 @@ namespace corel_draw
 
         private readonly string path = "../../JsonFiles/DataFigures.json";
 
-        enum Figures
+        enum SpecialTags
         {
-            Circle,
-            Polygon,
-            Rectangle,
-            Square
+            BiggestFigure,
+            LargestFigure,
+            MostSidesForPolygon,
+            FirstFigure,
+            LastFigure,
+            EditedFigure
         }
 
         public DrawingForm(IReadOnlyList<FigureFactory> figureFactories)
         {
             InitializeComponent(); 
             commandManager = new CommandManager();
+            additionalInfo = new AdditionalInfo();
             drawnFigures = new List<Figure>();
             _figureFactories = figureFactories;
         }
@@ -120,10 +124,11 @@ namespace corel_draw
         {
             Figure oldState = currentFigure;
             int matchingIndex = -1;
-            Figures[] figures = (Figures[])Enum.GetValues(typeof(Figures));
-            for (int i = 0; i < figures.Length; i++)
+            Type[] figureTypes = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsSubclassOf(typeof(Figure))).ToArray();
+
+            for (int i = 0; i < figureTypes.Length; i++)
             {
-                if (currentFigure.GetType().Name == figures[i].ToString())
+                if (currentFigure.GetType().Name == figureTypes[i].Name)
                 {
                     matchingIndex = i;
                     break;
@@ -144,6 +149,13 @@ namespace corel_draw
             };
         }
 
+        private bool checkInfo;
+        private void AdditionalInfoMenuItem_Click(object sender, EventArgs e)
+        {
+            checkInfo = true;
+            additionalInfo.ShowDialog();
+        }
+
         private void DrawingBox_MouseDown(object sender, MouseEventArgs e)
         {
             if (_figureFactory != null)
@@ -157,6 +169,17 @@ namespace corel_draw
                 if (figure.Contains(e.Location))
                 {
                     currentFigure = figure;
+                    /*if(checkInfo)
+                    {
+                        Figure biggest = null;
+                        foreach (Figure figureTag in drawnFigures)
+                        {
+                            if (biggest == null || figure.CalcArea() > biggest.CalcArea())
+                            {
+                                biggest.Name = additionalInfo.BiggestFigure;
+                            }
+                        }
+                    }*/
                     if (e.Button == MouseButtons.Left)
                     {
                         isDragging = true;
@@ -171,6 +194,7 @@ namespace corel_draw
                         contextMenuStrip.Items.Add("Change Border Color").Click += ColorMenuItem_Click;
                         contextMenuStrip.Items.Add("Fill Figure").Click += FillMenuItem_Click;
                         contextMenuStrip.Items.Add("Edit").Click += EditToolStripMenuItem_Click;
+                        contextMenuStrip.Items.Add("Info").Click += AdditionalInfoMenuItem_Click;
                         contextMenuStrip.Items[2].Tag = currentFigure;
 
                         contextMenuStrip.Show(DrawingBox, e.Location);

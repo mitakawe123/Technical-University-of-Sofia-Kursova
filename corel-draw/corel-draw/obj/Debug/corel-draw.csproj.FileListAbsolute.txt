@@ -5,7 +5,6 @@ C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-d
 C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\corel-draw\bin\Debug\Newtonsoft.Json.xml
 C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\corel-draw\obj\Debug\corel-draw.csproj.AssemblyReference.cache
 C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\corel-draw\obj\Debug\corel-draw.csproj.SuggestedBindingRedirects.cache
-C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\corel-draw\obj\Debug\corel_draw.CalculationForm.resources
 C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\corel-draw\obj\Debug\corel_draw.DrawingForm.resources
 C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\corel-draw\obj\Debug\corel_draw.PolygonSides.resources
 C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\corel-draw\obj\Debug\corel_draw.Properties.Resources.resources
@@ -16,3 +15,4 @@ C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-d
 C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\corel-draw\obj\Debug\corel-draw.pdb
 C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\corel-draw\bin\Debug\CorelLibary.dll
 C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\corel-draw\bin\Debug\CorelLibary.pdb
+C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\corel-draw\obj\Debug\corel_draw.AdditionalInfo.resources
