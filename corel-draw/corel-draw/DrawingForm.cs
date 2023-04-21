@@ -22,7 +22,6 @@ namespace corel_draw
         private readonly List<Point> clickedPoints = new List<Point>();
         private readonly IReadOnlyList<FigureFactory> _figureFactories;
         private FigureFactory _figureFactory;
-        private Figure newStateFigure;
         private readonly CommandManager commandManager;
 
         private readonly Bitmap bitmap;
@@ -37,6 +36,14 @@ namespace corel_draw
         private PolygonSides polygonSides = new PolygonSides();
         private readonly string path = "../../JsonFiles/DataFigures.json";
 
+        enum Figures
+        {
+            Circle,
+            Polygon,
+            Rectangle,
+            Square
+        }
+
         public DrawingForm(IReadOnlyList<FigureFactory> figureFactories)
         {
             InitializeComponent(); 
@@ -44,13 +51,6 @@ namespace corel_draw
             commandManager = new CommandManager();
             drawnFigures = new List<Figure>();
             _figureFactories = figureFactories;
-            //Undo_Btn.Enabled = Redo_Btn.Enabled = false;
-        }
-
-        private void OpenPolygonForm()
-        {
-            polygonSides.ShowDialog();
-            _isEditing = false;
         }
 
         private void DrawingForm_Load(object sender, EventArgs e)
@@ -74,7 +74,10 @@ namespace corel_draw
                 button.Click += (object sender1, EventArgs e1) =>
                 {
                     if (figureType == typeof(Polygon))
-                        OpenPolygonForm();
+                    {
+                        polygonSides.ShowDialog();
+                        _isEditing = false;
+                    }
                     else
                     {
                         _figureFactory = _figureFactories[index];
@@ -125,10 +128,6 @@ namespace corel_draw
             }
         }
 
-        enum Figures { 
-            Circle,Polygon,Rectangle,Square
-        }
-
         private void EditToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (currentFigure is Polygon)
@@ -140,8 +139,6 @@ namespace corel_draw
             else
             {
                 Figure oldState = currentFigure;
-
-                currentFigure.GetType();
                 int matchingIndex = -1;
                 Figures[] figures = (Figures[])Enum.GetValues(typeof(Figures));
                 for (int i = 0; i < figures.Length; i++)
@@ -211,7 +208,6 @@ namespace corel_draw
                     if (_figureFactory != null)
                     {
                         _figureFactory.MouseDown(e);
-                        DrawingBox.Invalidate();
                     }
                     else if (figure.Contains(e.Location))
                     {
@@ -249,13 +245,10 @@ namespace corel_draw
                 currentFigure.Move(delta);
                 DrawingBox.Invalidate();
             }
-            else if(!isDragging)
+            else if(!isDragging && _figureFactory != null)
             {
-                if (_figureFactory != null)
-                {
-                    _figureFactory.MouseMove(e);
-                    DrawingBox.Invalidate();
-                }
+                _figureFactory.MouseMove(e);
+                DrawingBox.Invalidate();   
             }
         }
 
@@ -270,46 +263,43 @@ namespace corel_draw
                 isDragging = false;
                 lastPoint = null;
             } 
-            else if (!isDragging) 
+            else if (!isDragging && _figureFactory != null) 
             {
-                if (_figureFactory != null)
-                {
-                    _figureFactory.MouseUp(e);
-                    DrawingBox.Invalidate();
-                }
+                _figureFactory.MouseUp(e);
+                DrawingBox.Invalidate();
             }
         }
 
         private void DrawingBox_Paint(object sender, PaintEventArgs e)
         {
-            using (Pen pen = new Pen(Color.Black, 2f))
+            if (polygonSides.IsDrawing)
             {
-                if (polygonSides.IsDrawing)
+                using (Pen pen = new Pen(Color.Black, 2f))
                 {
                     if (clickedPoints.Count > 1)
                     {
                         e.Graphics.DrawLines(pen, clickedPoints.ToArray());
                         e.Graphics.DrawLine(pen, clickedPoints[clickedPoints.Count - 1], clickedPoints[0]);
                     }
-
-                    using (GraphicsPath path = new GraphicsPath())
-                    {
-                        foreach (Point p in clickedPoints)
-                        {
-                            path.AddEllipse(p.X - 3, p.Y - 3, 6, 6);
-                        }
-                        e.Graphics.FillPath(Brushes.Black, path);
-                    }
                 }
-                else
+
+                using (GraphicsPath path = new GraphicsPath())
                 {
-                    foreach (Figure figure in drawnFigures)
+                    foreach (Point p in clickedPoints)
                     {
-                        figure.Draw(e.Graphics);
-                        if(isFilling)
-                        {
-                            figure.Fill(e.Graphics);
-                        }
+                        path.AddEllipse(p.X - 3, p.Y - 3, 6, 6);
+                    }
+                    e.Graphics.FillPath(Brushes.Black, path);
+                }
+            }
+            else
+            {
+                foreach (Figure figure in drawnFigures)
+                {
+                    figure.Draw(e.Graphics);
+                    if(isFilling)
+                    {
+                        figure.Fill(e.Graphics);
                     }
                 }
             }
@@ -343,8 +333,7 @@ namespace corel_draw
             {
                 commandManager.Redo();
                 DrawingBox.Invalidate();
-            } 
-            //else Redo_Btn.Enabled = false;
+            }
         }
 
         private void Undo_Btn_Click(object sender, EventArgs e)
@@ -354,7 +343,6 @@ namespace corel_draw
                 commandManager.Undo();
                 DrawingBox.Invalidate();
             }
-            //else Undo_Btn.Enabled = false;
         }
 
         private void SaveToFile_Click(object sender, EventArgs e)
