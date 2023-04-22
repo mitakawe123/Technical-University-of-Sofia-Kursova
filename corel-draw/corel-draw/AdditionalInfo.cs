@@ -25,7 +25,6 @@ namespace corel_draw
 
         private void AdditionalInfo_Load(object sender, EventArgs e)
         {
-            MessageBox.Show(BiggestFigure);
             additional_info.Text = BiggestFigure;
         }
     }

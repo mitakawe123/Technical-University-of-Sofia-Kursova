@@ -83,6 +83,7 @@ namespace corel_draw
                     ICommand addCommand = new AddCommand(figure, drawnFigures);
                     commandManager.AddCommand(addCommand);
                     _figureFactory = null;
+                    actionList.Items.Add($"Added {figure.GetType().Name} with area of {figure.CalcArea():F2}");
                     DrawingBox.Invalidate();
                 };
             }
@@ -124,11 +125,11 @@ namespace corel_draw
         {
             Figure oldState = currentFigure;
             int matchingIndex = -1;
-            Type[] figureTypes = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsSubclassOf(typeof(Figure))).ToArray();
+            Type[] figureTypes = typeof(Figure).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(Figure))).ToArray();
 
             for (int i = 0; i < figureTypes.Length; i++)
             {
-                if (currentFigure.GetType().Name == figureTypes[i].Name)
+                if (currentFigure.GetType() == figureTypes[i])
                 {
                     matchingIndex = i;
                     break;
@@ -149,10 +150,18 @@ namespace corel_draw
             };
         }
 
-        private bool checkInfo;
         private void AdditionalInfoMenuItem_Click(object sender, EventArgs e)
         {
-            checkInfo = true;
+            double maxArea = 0;
+            foreach (Figure figure in drawnFigures)
+            {
+                double area = figure.CalcArea();
+                if (area > maxArea)
+                {
+                    maxArea = area;
+                }
+            }
+            additionalInfo.BiggestFigure = currentFigure.Name;
             additionalInfo.ShowDialog();
         }
 
@@ -169,17 +178,6 @@ namespace corel_draw
                 if (figure.Contains(e.Location))
                 {
                     currentFigure = figure;
-                    /*if(checkInfo)
-                    {
-                        Figure biggest = null;
-                        foreach (Figure figureTag in drawnFigures)
-                        {
-                            if (biggest == null || figure.CalcArea() > biggest.CalcArea())
-                            {
-                                biggest.Name = additionalInfo.BiggestFigure;
-                            }
-                        }
-                    }*/
                     if (e.Button == MouseButtons.Left)
                     {
                         isDragging = true;
