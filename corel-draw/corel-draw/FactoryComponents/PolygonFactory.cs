@@ -13,12 +13,13 @@ namespace corel_draw.FactoryComponents
         private Polygon _polygon;
         private PolygonSides _sidesForm;
         private int _sides;
-
+        private Pen pen;
         public override void BeginCreateFigure()
         {
             _polygon = new Polygon();
             _clickedPoints = new List<Point>();
             _sidesForm = new PolygonSides();
+            pen = new Pen(Color.Black, 2f);
             DialogResult result = _sidesForm.ShowDialog();
             if(result == DialogResult.OK) 
             {
@@ -32,6 +33,10 @@ namespace corel_draw.FactoryComponents
         }
         public override void MouseMove(MouseEventArgs e)
         {
+            if (_clickedPoints.Count > 0)
+            {
+                _clickedPoints[_clickedPoints.Count - 1] = e.Location;
+            }
         }
 
         public override void MouseUp(MouseEventArgs e)
@@ -46,13 +51,10 @@ namespace corel_draw.FactoryComponents
         {
             if (_clickedPoints.Count == _sides)
             {
-                using (Pen pen = new Pen(Color.Black, 2f))
+                if (_clickedPoints.Count > 1)
                 {
-                    if (_clickedPoints.Count > 1)
-                    {
-                        g.DrawLines(pen, _clickedPoints.ToArray());
-                        g.DrawLine(pen, _clickedPoints[_clickedPoints.Count - 1], _clickedPoints[0]);
-                    }
+                    g.DrawLines(pen, _clickedPoints.ToArray());
+                    g.DrawLine(pen, _clickedPoints[_clickedPoints.Count - 1], _clickedPoints[0]);
                 }
 
                 using (GraphicsPath path = new GraphicsPath())
@@ -65,7 +67,7 @@ namespace corel_draw.FactoryComponents
                 }
 
                 _polygon.Points = _clickedPoints.ToList();
-                Finished?.Invoke(_polygon);
+                OnFinished(_polygon);
                 _clickedPoints.Clear();
             }
             else if (_clickedPoints.Count != _sides && _clickedPoints.Count > 1)

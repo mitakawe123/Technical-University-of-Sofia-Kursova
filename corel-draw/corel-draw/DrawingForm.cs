@@ -24,6 +24,7 @@ namespace corel_draw
         private FigureFactory _figureFactory;
         private readonly AdditionalInfo additionalInfo;
         private readonly CommandManager commandManager;
+        private Action<Figure> figureFinishedHandler;
 
         private Figure currentFigure;
         private Point? lastPoint = null;
@@ -37,7 +38,6 @@ namespace corel_draw
         enum SpecialTags
         {
             BiggestFigure,
-            LargestFigure,
             MostSidesForPolygon,
             FirstFigure,
             LastFigure,
@@ -78,14 +78,15 @@ namespace corel_draw
                     isFilling = false;
                 };
                 Controls.Add(button);
-                _figureFactories[index].Finished += (figure) =>
+                figureFinishedHandler = (figure) =>
                 {
                     ICommand addCommand = new AddCommand(figure, drawnFigures);
                     commandManager.AddCommand(addCommand);
                     _figureFactory = null;
                     actionList.Items.Add($"Added {figure.GetType().Name} with area of {figure.CalcArea():F2}");
                     DrawingBox.Invalidate();
-                };
+                }; 
+                _figureFactories[index].Finished += figureFinishedHandler;
             }
         }
 
@@ -138,7 +139,7 @@ namespace corel_draw
             _figureFactory = _figureFactories[matchingIndex];
             _figureFactory.BeginCreateFigure();
 
-            _figureFactories[matchingIndex].Finished -= _figureFactories[matchingIndex].Finished;
+            _figureFactories[matchingIndex].Finished -= figureFinishedHandler;
             _figureFactories[matchingIndex].Finished += (figure) =>
             {
                 ICommand command = new EditCommand(oldState, figure);
@@ -152,16 +153,9 @@ namespace corel_draw
 
         private void AdditionalInfoMenuItem_Click(object sender, EventArgs e)
         {
-            double maxArea = 0;
-            foreach (Figure figure in drawnFigures)
-            {
-                double area = figure.CalcArea();
-                if (area > maxArea)
-                {
-                    maxArea = area;
-                }
-            }
-            additionalInfo.BiggestFigure = currentFigure.Name;
+            Figure largestFigure = drawnFigures.OrderByDescending(f => f.CalcArea()).First();
+            Figure smallestFigure = drawnFigures.OrderBy(f => f.CalcArea()).First();
+            
             additionalInfo.ShowDialog();
         }
 

@@ -37,7 +37,7 @@ namespace corel_draw.FactoryComponents
             _rectangle.Location = new Point(x, y);
             _rectangle.Width = width;
             _rectangle.Height = height;
-            Finished?.Invoke(_rectangle);
+            OnFinished(_rectangle);
         }
     }
 }

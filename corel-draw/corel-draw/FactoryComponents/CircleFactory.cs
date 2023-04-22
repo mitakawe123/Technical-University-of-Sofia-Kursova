@@ -11,6 +11,7 @@ namespace corel_draw.FactoryComponents
         private Point startPoint;
         private Point endPoint;
         private Circle _circle;
+
         public override void BeginCreateFigure()
         {
             _circle = new Circle();
@@ -34,7 +35,7 @@ namespace corel_draw.FactoryComponents
             _circle.Location = new Point(x - radius, y - radius);
             _circle.Width = radius * 2;
             _circle.Height = radius * 2;
-            Finished?.Invoke(_circle);
+            OnFinished(_circle);
         }
     }
 }

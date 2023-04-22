@@ -35,7 +35,7 @@ namespace corel_draw.FactoryComponents
             _square.Location = new Point(x, y);
             _square.Width = width;
             _square.Height = height;
-            Finished?.Invoke(_square);
+            OnFinished(_square);
         }
     }
 }
