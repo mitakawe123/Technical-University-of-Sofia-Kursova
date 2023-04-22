@@ -1,4 +1,5 @@
 ﻿using corel_draw.Figures;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -15,16 +16,21 @@ namespace corel_draw.FactoryComponents
        
         private bool _isPolygonFinishedDrawing = false;
         private bool _isDrawing;
+        private bool _isDragging;
 
         private Point _startPoint;
         private Point _endPoint;
+        private Point _lastPoint;
 
+        private int _selectedPointIndex;
         public override void BeginCreateFigure()
         {
             _polygon = new Polygon();
             _isPolygonFinishedDrawing = false;
             _clickedPoints.Clear();
             _isDrawing = false;
+            _isDragging = false;
+            _selectedPointIndex = -1;
         }
         public override void MouseDown(MouseEventArgs e)
         {
@@ -42,11 +48,32 @@ namespace corel_draw.FactoryComponents
         public override void MouseMove(MouseEventArgs e)
         {
             _endPoint = e.Location;
+            if (Control.ModifierKeys == Keys.Control && e.Button == MouseButtons.Left)
+            {
+                for (int i = 0; i < _clickedPoints.Count; i++)
+                {
+                    if (Math.Abs(_clickedPoints[i].X - e.X) <= 10 && Math.Abs(_clickedPoints[i].Y - e.Y) <= 10)
+                    {
+                        _selectedPointIndex = i;
+                        _isDragging = true; 
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                _isDragging = false;
+            }
         }
 
         public override void MouseUp(MouseEventArgs e)
         {
-            _startPoint = e.Location;
+            //_startPoint = e.Location;
+            if (_isDragging && _selectedPointIndex < _clickedPoints.Count)
+            {
+                _clickedPoints[_selectedPointIndex] = e.Location;
+            }
+            _isDragging = false;
         }
 
         public override void Draw(Graphics g)
@@ -69,7 +96,14 @@ namespace corel_draw.FactoryComponents
                         {
                             g.DrawLine(_penDashed, _clickedPoints[i], _clickedPoints[0]);
                         }
-                        path.AddEllipse(_clickedPoints[i].X - 3, _clickedPoints[i].Y - 3, 6, 6);
+                        if (_isDragging && i == _selectedPointIndex)
+                        {
+                            g.FillEllipse(Brushes.Red, _clickedPoints[i].X - 8, _clickedPoints[i].Y - 8, 16, 16);
+                        }
+                        else
+                        {
+                            g.FillEllipse(Brushes.Black, _clickedPoints[i].X - 4, _clickedPoints[i].Y - 4, 8, 8);
+                        }
                     }
                     g.FillPath(Brushes.Black, path);
                 }
@@ -82,7 +116,6 @@ namespace corel_draw.FactoryComponents
                 _polygon.Points = _clickedPoints.ToList();
                 OnFinished(_polygon);
                 _clickedPoints.Clear();
-                 _startPoint = _endPoint;
             }
         }
     }
