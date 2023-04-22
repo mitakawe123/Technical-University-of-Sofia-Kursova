@@ -14,6 +14,7 @@ namespace corel_draw.FactoryComponents
         public override void BeginCreateFigure()
         {
             _circle = new Circle();
+            _isDrawing = false;
         }
 
         public override void MouseDown(MouseEventArgs e)

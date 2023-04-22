@@ -16,8 +16,9 @@ namespace corel_draw.FactoryComponents
         private Figures.Rectangle _rectangle;
         private bool _isDrawing;
         public override void BeginCreateFigure()
-        {
+        {            
             _rectangle = new Figures.Rectangle();
+            _isDrawing = false;
         }
         public override void MouseDown(MouseEventArgs e)
         {

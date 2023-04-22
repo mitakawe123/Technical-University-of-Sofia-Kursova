@@ -1,5 +1,4 @@
 ﻿using corel_draw.Figures;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -15,7 +14,7 @@ namespace corel_draw.FactoryComponents
         private readonly Pen _penDashed = new Pen(Color.Black, 5) { DashStyle = DashStyle.Dash };
        
         private bool _isPolygonFinishedDrawing = false;
-        private bool _isDrawing = false;
+        private bool _isDrawing;
 
         private Point _startPoint;
         private Point _endPoint;
@@ -23,12 +22,14 @@ namespace corel_draw.FactoryComponents
         public override void BeginCreateFigure()
         {
             _polygon = new Polygon();
+            _isPolygonFinishedDrawing = false;
+            _clickedPoints.Clear();
+            _isDrawing = false;
         }
         public override void MouseDown(MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
-            {
-                
+            { 
                 _startPoint = e.Location;
                 _isDrawing = true;
                 _clickedPoints.Add(e.Location);
@@ -41,46 +42,11 @@ namespace corel_draw.FactoryComponents
         public override void MouseMove(MouseEventArgs e)
         {
             _endPoint = e.Location;
-            if (Control.ModifierKeys == Keys.Shift)
-            {
-                if (_clickedPoints.Count >= 2)
-                {
-                    List<double> distances = new List<double>();
-                    foreach (Point point in _clickedPoints)
-                    {
-                        double distance = Math.Sqrt(Math.Pow(point.X - _endPoint.X, 2) + Math.Pow(point.Y - _endPoint.Y, 2));
-                        distances.Add(distance);
-                    }
-
-                    int index1 = 0, index2 = 0;
-                    double shortestDistance1 = double.MaxValue, shortestDistance2 = double.MaxValue;
-                    for (int i = 0; i < distances.Count; i++)
-                    {
-                        if (distances[i] < shortestDistance1)
-                        {
-                            index2 = index1;
-                            shortestDistance2 = shortestDistance1;
-                            index1 = i;
-                            shortestDistance1 = distances[i];
-                        }
-                        else if (distances[i] < shortestDistance2)
-                        {
-                            index2 = i;
-                            shortestDistance2 = distances[i];
-                        }
-                    }
-
-
-                    Point selectedPoint1 = _clickedPoints[index1];
-                    Point selectedPoint2 = _clickedPoints[index2];
-                    Point midpoint = new Point((selectedPoint1.X + selectedPoint2.X) / 2, (selectedPoint1.Y + selectedPoint2.Y) / 2);
-                    _clickedPoints.Insert(index2, midpoint);
-                }
-            }
         }
 
         public override void MouseUp(MouseEventArgs e)
         {
+            _startPoint = e.Location;
         }
 
         public override void Draw(Graphics g)
@@ -116,6 +82,7 @@ namespace corel_draw.FactoryComponents
                 _polygon.Points = _clickedPoints.ToList();
                 OnFinished(_polygon);
                 _clickedPoints.Clear();
+                 _startPoint = _endPoint;
             }
         }
     }

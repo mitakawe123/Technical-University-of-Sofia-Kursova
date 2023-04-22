@@ -233,7 +233,7 @@ namespace corel_draw
 
         private void DrawingBox_Paint(object sender, PaintEventArgs e)
         {
-            _figureFactory?.Draw(e.Graphics);
+            _figureFactory?.Draw(e.Graphics); 
             foreach (Figure figure in drawnFigures)
             {
                 figure.Draw(e.Graphics);
@@ -345,6 +345,11 @@ namespace corel_draw
                     commandManager.Redo();
                     DrawingBox.Invalidate();
                 }
+            }
+            if (e.KeyCode == Keys.Escape)
+            {
+                _figureFactory = null;
+                DrawingBox.Refresh();
             }
         }
     }
