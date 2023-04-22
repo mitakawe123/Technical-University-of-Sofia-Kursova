@@ -1,4 +1,5 @@
-﻿using System;
+﻿using corel_draw.Figures;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace corel_draw.FactoryComponents
         private Point _startPoint;
         private Point _endPoint;
         private Figures.Rectangle _rectangle;
+        private bool _isDrawing;
         public override void BeginCreateFigure()
         {
             _rectangle = new Figures.Rectangle();
@@ -20,24 +22,38 @@ namespace corel_draw.FactoryComponents
         public override void MouseDown(MouseEventArgs e)
         {
             _startPoint = e.Location;
-            _endPoint = e.Location;
+            _isDrawing = true;
         }
 
         public override void MouseMove(MouseEventArgs e)
         {
-            _endPoint = e.Location;
+            if (_isDrawing)
+            {
+                _endPoint = e.Location;
+
+                int x = Math.Min(_startPoint.X, _endPoint.X);
+                int y = Math.Min(_startPoint.Y, _endPoint.Y);
+                int width = Math.Abs(_startPoint.X - _endPoint.X);
+                int height = Math.Abs(_startPoint.Y - _endPoint.Y);
+
+                _rectangle.Location = new Point(x, y);
+                _rectangle.Width = width;
+                _rectangle.Height = height;
+            }
         }
 
         public override void MouseUp(MouseEventArgs e)
         {
-            int x = Math.Min(_startPoint.X, _endPoint.X);
-            int y = Math.Min(_startPoint.Y, _endPoint.Y);
-            int width = Math.Abs(_startPoint.X - _endPoint.X);
-            int height = Math.Abs(_startPoint.Y - _endPoint.Y);
-            _rectangle.Location = new Point(x, y);
-            _rectangle.Width = width;
-            _rectangle.Height = height;
+            _isDrawing = false;
             OnFinished(_rectangle);
+        }
+
+        public override void Draw(Graphics g)
+        {
+            if(_rectangle != null)
+            {
+                g.DrawRectangle(_defaultPen, _rectangle.Location.X, _rectangle.Location.Y, _rectangle.Width, _rectangle.Height);
+            }
         }
     }
 }

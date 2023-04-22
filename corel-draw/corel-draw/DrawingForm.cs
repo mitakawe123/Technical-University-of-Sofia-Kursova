@@ -164,7 +164,7 @@ namespace corel_draw
             if (_figureFactory != null)
             {
                 _figureFactory.MouseDown(e);
-                DrawingBox.Invalidate();
+                DrawingBox.Refresh();
                 return;
             }
             foreach (Figure figure in drawnFigures)
@@ -195,7 +195,7 @@ namespace corel_draw
                 }
             }
         }
-        [DebuggerStepThrough]
+
         private void DrawingBox_MouseMove(object sender, MouseEventArgs e)
         {
             if (isDragging)
@@ -208,7 +208,7 @@ namespace corel_draw
             else if(!isDragging && _figureFactory != null)
             {
                 _figureFactory.MouseMove(e);
-                DrawingBox.Invalidate();   
+                DrawingBox.Refresh();   
             }
         }
 
@@ -226,7 +226,7 @@ namespace corel_draw
             else if (!isDragging && _figureFactory != null) 
             {
                 _figureFactory.MouseUp(e);
-                DrawingBox.Invalidate();
+                DrawingBox.Refresh();
             }
         }
 
