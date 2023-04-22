@@ -195,7 +195,7 @@ namespace corel_draw
                 }
             }
         }
-
+        [DebuggerStepThrough]
         private void DrawingBox_MouseMove(object sender, MouseEventArgs e)
         {
             if (isDragging)

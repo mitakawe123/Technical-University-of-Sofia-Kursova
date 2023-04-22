@@ -6,7 +6,6 @@ C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-d
 C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\corel-draw\obj\Debug\corel-draw.csproj.AssemblyReference.cache
 C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\corel-draw\obj\Debug\corel-draw.csproj.SuggestedBindingRedirects.cache
 C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\corel-draw\obj\Debug\corel_draw.DrawingForm.resources
-C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\corel-draw\obj\Debug\corel_draw.PolygonSides.resources
 C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\corel-draw\obj\Debug\corel_draw.Properties.Resources.resources
 C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\corel-draw\obj\Debug\corel-draw.csproj.GenerateResource.cache
 C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\corel-draw\obj\Debug\corel-draw.csproj.CoreCompileInputs.cache
