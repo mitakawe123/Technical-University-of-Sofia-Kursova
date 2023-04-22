@@ -50,6 +50,7 @@ namespace corel_draw
             commandManager = new CommandManager();
             additionalInfo = new AdditionalInfo();
             drawnFigures = new List<Figure>();
+            this.KeyPreview = true;
             _figureFactories = figureFactories;
         }
 
@@ -323,6 +324,27 @@ namespace corel_draw
             catch (Exception ex)
             {
                 MessageBox.Show($"Error loading file: {ex.Message}");
+            }
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            if(e.Control && e.KeyCode == Keys.Z)
+            {
+                if (commandManager.CanUndo())
+                {
+                    commandManager.Undo();
+                    DrawingBox.Invalidate();
+                }
+            }
+            if (e.Control && e.KeyCode == Keys.Y)
+            {
+                if (commandManager.CanRedo())
+                {
+                    commandManager.Redo();
+                    DrawingBox.Invalidate();
+                }
             }
         }
     }
