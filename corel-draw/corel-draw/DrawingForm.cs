@@ -80,6 +80,8 @@ namespace corel_draw
                     _isFilling = false;
                 };
                 Controls.Add(button);
+
+                
                 _figureFinishedHandler = (figure) =>
                 {
                     ICommand addCommand = new AddCommand(figure, _drawnFigures);

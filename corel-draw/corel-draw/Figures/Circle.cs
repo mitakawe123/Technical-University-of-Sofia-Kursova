@@ -7,8 +7,6 @@ namespace corel_draw.Figures
     {
         public Circle(int x, int y, int radius) : base(new Point(x, y), radius * 2, radius * 2)
         {
-            Color = Color.Black;
-
         }
         public override double CalcArea()
         {

@@ -7,12 +7,10 @@ namespace corel_draw.Figures
     internal class Polygon : Figure
     {
         private List<Point> _points;
-        public List<Point> Points {  get { return _points; }  private set { _points = value; } } 
-        public Polygon(List<Point> points) :base(GetLocationAndSize(points, out int width,out int height),width, height)
+        public List<Point> Points { get { return _points; } private set { _points = value; } }
+        public Polygon(List<Point> points) : base(GetLocationAndSize(points, out int width,out int height),width, height)
         {
             _points = points;
-            Color = Color.Black;
-            FillColor = Color.White;
         }
 
         private static Point GetLocationAndSize(List<Point> points, out int width,out int height)

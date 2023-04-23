@@ -3,15 +3,15 @@
     {
       "$type": "corel_draw.Figures.Polygon, corel-draw",
       "Points": [
-        "393, 83",
-        "525, 203",
-        "295, 251"
+        "567, 96",
+        "776, 278",
+        "265, 212"
       ],
-      "Location": "295, 83",
+      "Location": "265, 96",
       "Color": "Black",
       "FillColor": "White",
-      "Width": 230,
-      "Height": 168
+      "Width": 511,
+      "Height": 182
     }
   ]
 }
