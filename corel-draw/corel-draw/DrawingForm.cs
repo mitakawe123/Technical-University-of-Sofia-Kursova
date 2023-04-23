@@ -91,6 +91,7 @@ namespace corel_draw
                 actionList.Items.Add($"Delete {_currentFigure.GetType().Name}");
                 _currentFigure = null;
                 DrawingBox.Invalidate();
+                return;
             }
         }
 
@@ -109,7 +110,8 @@ namespace corel_draw
 
                     actionList.Items.Add($"Change {_currentFigure.GetType().Name} Color with {_currentFigure.Color.Name}");
                     _currentFigure.Color = newColor;
-                    DrawingBox.Invalidate();
+                    DrawingBox.Invalidate(); 
+                    return;
                 }
             }
         }
@@ -160,6 +162,7 @@ namespace corel_draw
                     actionList.Items.Add($"Change {_currentFigure.GetType().Name} Fill Color with {_currentFigure.FillColor.Name}");
                     _currentFigure.FillColor = newFilling;
                     DrawingBox.Invalidate();
+                    return;
                 }
             }
         }
@@ -232,8 +235,10 @@ namespace corel_draw
                 _lastPoint = e.Location;
                 _currentFigure.Move(delta);
                 DrawingBox.Invalidate();
+                return;
             }
-            else if(!_isDragging && _figureFactory != null)
+            
+            if( _figureFactory != null)
             {
                 _figureFactory.MouseMove(e);
                 DrawingBox.Refresh();   
@@ -242,15 +247,17 @@ namespace corel_draw
 
         private void DrawingBox_MouseUp(object sender, MouseEventArgs e)
         {
-            if(_isDragging)
+            if (_isDragging)
             {
                 ICommand moveCommand = new MoveCommand(_currentFigure, _currentFigure.Location);
                 _commandManager.AddCommand(moveCommand);
                 actionList.Items.Add($"Move {_currentFigure.GetType().Name}");
                 _isDragging = false;
                 _lastPoint = Point.Empty;
-            } 
-            else if (!_isDragging && _figureFactory != null) 
+                return;
+            }
+
+            if (_figureFactory != null)
             {
                 _figureFactory.MouseUp(e);
                 DrawingBox.Refresh();
@@ -333,27 +340,28 @@ namespace corel_draw
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            base.OnKeyDown(e);
-            if(e.Control && e.KeyCode == Keys.Z)
+            switch (e.KeyCode)
             {
-                if (_commandManager.CanUndo)
-                {
-                    _commandManager.Undo();
-                    DrawingBox.Invalidate();
-                }
-            }
-            if (e.Control && e.KeyCode == Keys.Y)
-            {
-                if (_commandManager.CanRedo)
-                {
-                    _commandManager.Redo();
-                    DrawingBox.Invalidate();
-                }
-            }
-            if (e.KeyCode == Keys.Escape)
-            {
-                _figureFactory = null;
-                DrawingBox.Refresh();
+                case Keys.Z when e.Control:
+                    if (_commandManager.CanUndo)
+                    {
+                        _commandManager.Undo();
+                        DrawingBox.Invalidate();
+                    }
+                    break;
+
+                case Keys.Y when e.Control:
+                    if (_commandManager.CanRedo)
+                    {
+                        _commandManager.Redo();
+                        DrawingBox.Invalidate();
+                    }
+                    break;
+
+                case Keys.Escape:
+                    _figureFactory = null;
+                    DrawingBox.Refresh();
+                    break;
             }
         }
     }
