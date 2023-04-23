@@ -170,14 +170,18 @@ namespace corel_draw
             Figure smallestFigure = _drawnFigures.OrderBy(f => f.CalcArea()).First();
             Figure firstFigure = _drawnFigures.First();
             Figure lastFigure = _drawnFigures.Last();
-            int maxSides = _drawnFigures.OfType<Polygon>().Select(polygon => polygon.Points.Count).Max();
-            Figure polygonMostSides = _drawnFigures.FirstOrDefault(polygon => polygon is Polygon polygon1 && polygon1.Points.Count == maxSides);
+
+            if(_drawnFigures.Any(type => type is Polygon))
+            {
+                int maxSides = _drawnFigures.OfType<Polygon>().Select(polygon => polygon.Points.Count).Max();
+                Figure polygonMostSides = _drawnFigures.FirstOrDefault(polygon => polygon is Polygon polygon1 && polygon1.Points.Count == maxSides);
+                _specialTags.Add("Polygon with Most Sides", polygonMostSides);
+            }
 
             _specialTags.Add("Biggest Figure by Area",largestFigure);
             _specialTags.Add("Smallest Figure by Area",smallestFigure);
             _specialTags.Add("First Created Figure", firstFigure);
             _specialTags.Add("Last Created Figure", lastFigure);
-            _specialTags.Add("Polygon with Most Sides", polygonMostSides);
             MessageBox.Show(_specialTags.Count.ToString());
             AdditionalInfo additionalInfo = new AdditionalInfo(_specialTags);
             additionalInfo.ShowDialog();
@@ -240,7 +244,7 @@ namespace corel_draw
         {
             if(_isDragging)
             {
-                ICommand moveCommand = new MoveCommand(_currentFigure, _currentFigure.Location, _initialPosition);
+                ICommand moveCommand = new MoveCommand(_currentFigure, _currentFigure.Location);
                 _commandManager.AddCommand(moveCommand);
                 actionList.Items.Add($"Move {_currentFigure.GetType().Name}");
                 _isDragging = false;

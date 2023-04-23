@@ -12,6 +12,10 @@ namespace corel_draw
         {
             InitializeComponent();
             this._specialTags = _specialTags;
+            foreach (var kvp in _specialTags)
+            {
+                additional_info.Text += $"{kvp.Key}: {kvp.Value.GetType().Name}\n";
+            }
         }
 
         private void Close_btn_Click(object sender, EventArgs e)
