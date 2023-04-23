@@ -27,10 +27,5 @@ namespace corel_draw.Components
                 _oldFigures.Remove(figure); 
             }
         }
-
-        public void Redo()
-        {
-            _oldFigures.AddRange(_newFigures);
-        }
     }
 }

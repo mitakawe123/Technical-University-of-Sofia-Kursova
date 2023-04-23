@@ -31,10 +31,5 @@ namespace corel_draw.Components
         {
             _figure.FillColor = _oldFilling;
         }
-
-        public void Redo()
-        {
-            _figure.FillColor = _newFilling;
-        }
     }
 }

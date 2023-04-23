@@ -7,31 +7,24 @@ namespace corel_draw.Components
     public class MoveCommand : ICommand
     {
         private readonly Figure _figure;
-        private readonly Point _delta;
-        private readonly Point _initialPosition;
-        private Point _finalPosition;
+        private readonly Point _oldPosition;
+        private readonly Point _newPosition;
 
-        public MoveCommand(Figure figure, Point delta, Point initialLocation)
+        public MoveCommand(Figure figure, Point newPosition,Point oldPosition)
         {
             _figure = figure;
-            _delta = delta;
-            _initialPosition = initialLocation;
+            _oldPosition = oldPosition;
+            _newPosition = newPosition;
         }
 
         public void Do()
         {
-            _figure.Move(_delta);
-            _finalPosition = _figure.Location;
+            _figure.Location = _newPosition;
         }
 
         public void Undo()
         {
-             _figure.Location = _initialPosition;
-        }
-
-        public void Redo()
-        {
-             _figure.Location = _finalPosition;
+             _figure.Location = _oldPosition;
         }
     }
 }

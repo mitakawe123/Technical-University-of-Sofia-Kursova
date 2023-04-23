@@ -43,7 +43,7 @@
             // 
             // Close_btn
             // 
-            this.Close_btn.Location = new System.Drawing.Point(107, 175);
+            this.Close_btn.Location = new System.Drawing.Point(203, 218);
             this.Close_btn.Name = "Close_btn";
             this.Close_btn.Size = new System.Drawing.Size(137, 61);
             this.Close_btn.TabIndex = 0;
@@ -128,24 +128,23 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(48, 148);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(67, 13);
+            this.label3.Size = new System.Drawing.Size(92, 13);
             this.label3.TabIndex = 9;
-            this.label3.Text = "Special Prop";
+            this.label3.Text = "Special Properties";
             // 
             // additional_info
             // 
             this.additional_info.AutoSize = true;
             this.additional_info.Location = new System.Drawing.Point(247, 148);
             this.additional_info.Name = "additional_info";
-            this.additional_info.Size = new System.Drawing.Size(35, 13);
+            this.additional_info.Size = new System.Drawing.Size(0, 13);
             this.additional_info.TabIndex = 10;
-            this.additional_info.Text = "label4";
             // 
             // AdditionalInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(366, 245);
+            this.ClientSize = new System.Drawing.Size(529, 302);
             this.Controls.Add(this.additional_info);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.area_info);

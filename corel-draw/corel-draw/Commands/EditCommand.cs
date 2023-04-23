@@ -25,10 +25,5 @@ namespace corel_draw.Components
         {
             _oldState.CopyState(_initialState);
         }
-
-        public void Redo()
-        {
-            _oldState.CopyState(_newState);
-        }
     }
 }

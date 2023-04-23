@@ -33,7 +33,7 @@ namespace CorelLibary
             {
                 commandIndex++;
                 ICommand command = commandHistory[commandIndex];
-                command.Redo();
+                command.Do();
             }
         }
     }

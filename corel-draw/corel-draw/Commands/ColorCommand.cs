@@ -25,10 +25,5 @@ namespace corel_draw.Components
         {
             _figure.Color = _oldColor;
         }
-
-        public void Redo()
-        {
-            _figure.Color = _newColor;
-        }
     }
 }

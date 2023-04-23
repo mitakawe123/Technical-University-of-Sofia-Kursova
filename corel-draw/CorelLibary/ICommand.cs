@@ -5,6 +5,5 @@ namespace CorelLibary
     {
         void Do();
         void Undo();
-        void Redo();
     }
 }

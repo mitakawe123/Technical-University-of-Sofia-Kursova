@@ -8,10 +8,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
 using Button = System.Windows.Forms.Button;
 
@@ -21,9 +19,9 @@ namespace corel_draw
     {
         private readonly List<Figure> _drawnFigures;
         private readonly IReadOnlyList<FigureFactory> _figureFactories;
-        private readonly AdditionalInfo _additionalInfo;
         private readonly CommandManager _commandManager;
-        
+        private readonly Dictionary<string, Figure> _specialTags = new Dictionary<string, Figure>();
+
         private FigureFactory _figureFactory;
         private Figure _currentFigure;
         private Action<Figure> _figureFinishedHandler;
@@ -36,20 +34,10 @@ namespace corel_draw
 
         private const string PATH = "../../JsonFiles/DataFigures.json";
 
-        enum SpecialTags
-        {
-            BiggestFigure,
-            MostSidesForPolygon,
-            FirstFigure,
-            LastFigure,
-            EditedFigure
-        }
-
         public DrawingForm(IReadOnlyList<FigureFactory> figureFactories)
         {
             InitializeComponent(); 
             _commandManager = new CommandManager();
-            _additionalInfo = new AdditionalInfo();
             _drawnFigures = new List<Figure>();
             this.KeyPreview = true;
             _figureFactories = figureFactories;
@@ -155,12 +143,44 @@ namespace corel_draw
             };
         }
 
+        private void FillMenuItem_Click(object sender, EventArgs e)
+        {
+            ColorDialog colorDialog = new ColorDialog();
+            if (colorDialog.ShowDialog() == DialogResult.OK)
+            {
+                if (_currentFigure != null)
+                {
+                    Color oldFilling = _currentFigure.FillColor;
+                    Color newFilling = colorDialog.Color;
+                    _isFilling = true;
+
+                    ICommand command = new FillCommand(_currentFigure, oldFilling, newFilling);
+                    _commandManager.AddCommand(command);
+
+                    actionList.Items.Add($"Change {_currentFigure.GetType().Name} Fill Color with {_currentFigure.FillColor.Name}");
+                    _currentFigure.FillColor = newFilling;
+                    DrawingBox.Invalidate();
+                }
+            }
+        }
+
         private void AdditionalInfoMenuItem_Click(object sender, EventArgs e)
         {
             Figure largestFigure = _drawnFigures.OrderByDescending(f => f.CalcArea()).First();
             Figure smallestFigure = _drawnFigures.OrderBy(f => f.CalcArea()).First();
-            
-            _additionalInfo.ShowDialog();
+            Figure firstFigure = _drawnFigures.First();
+            Figure lastFigure = _drawnFigures.Last();
+            int maxSides = _drawnFigures.OfType<Polygon>().Select(polygon => polygon.Points.Count).Max();
+            Figure polygonMostSides = _drawnFigures.FirstOrDefault(polygon => polygon is Polygon polygon1 && polygon1.Points.Count == maxSides);
+
+            _specialTags.Add("Biggest Figure by Area",largestFigure);
+            _specialTags.Add("Smallest Figure by Area",smallestFigure);
+            _specialTags.Add("First Created Figure", firstFigure);
+            _specialTags.Add("Last Created Figure", lastFigure);
+            _specialTags.Add("Polygon with Most Sides", polygonMostSides);
+            MessageBox.Show(_specialTags.Count.ToString());
+            AdditionalInfo additionalInfo = new AdditionalInfo(_specialTags);
+            additionalInfo.ShowDialog();
         }
 
         private void DrawingBox_MouseDown(object sender, MouseEventArgs e)
@@ -220,8 +240,7 @@ namespace corel_draw
         {
             if(_isDragging)
             {
-                Point delta = new Point(e.X - _lastPoint.X, e.Y - _lastPoint.Y);
-                ICommand moveCommand = new MoveCommand(_currentFigure, delta, _initialPosition);
+                ICommand moveCommand = new MoveCommand(_currentFigure, _currentFigure.Location, _initialPosition);
                 _commandManager.AddCommand(moveCommand);
                 actionList.Items.Add($"Move {_currentFigure.GetType().Name}");
                 _isDragging = false;
@@ -243,27 +262,6 @@ namespace corel_draw
                 if(_isFilling)
                 {
                     figure.Fill(e.Graphics);
-                }
-            }
-        }
-
-        private void FillMenuItem_Click(object sender, EventArgs e)
-        {
-            ColorDialog colorDialog = new ColorDialog();
-            if (colorDialog.ShowDialog() == DialogResult.OK)
-            {
-                if (_currentFigure != null)
-                {
-                    Color oldFilling = _currentFigure.FillColor;
-                    Color newFilling = colorDialog.Color;
-                    _isFilling = true;
-
-                    ICommand command = new FillCommand(_currentFigure, oldFilling, newFilling);
-                    _commandManager.AddCommand(command);
-
-                    actionList.Items.Add($"Change {_currentFigure.GetType().Name} Fill Color with {_currentFigure.FillColor.Name}");
-                    _currentFigure.FillColor = newFilling;
-                    DrawingBox.Invalidate();
                 }
             }
         }
@@ -305,7 +303,6 @@ namespace corel_draw
                 MessageBox.Show($"Error saving file: {ex.Message}");
             }
         }
-
 
         private void LoadFromFile_Click(object sender, EventArgs e)
         {

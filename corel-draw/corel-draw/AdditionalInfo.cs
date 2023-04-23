@@ -1,20 +1,17 @@
-﻿using System;
+﻿using corel_draw.Figures;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace corel_draw
 {
     public partial class AdditionalInfo : Form
     {
-        public AdditionalInfo()
+        private readonly Dictionary<string, Figure> _specialTags = new Dictionary<string, Figure>();
+        public AdditionalInfo(Dictionary<string, Figure> _specialTags)
         {
             InitializeComponent();
+            this._specialTags = _specialTags;
         }
 
         private void Close_btn_Click(object sender, EventArgs e)
