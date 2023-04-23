@@ -195,7 +195,7 @@ namespace corel_draw
             if (_figureFactory != null)
             {
                 _figureFactory.MouseDown(e);
-                DrawingBox.Refresh();
+                DrawingBox.Invalidate();
                 return;
             }
             foreach (Figure figure in _drawnFigures)
@@ -241,7 +241,7 @@ namespace corel_draw
             if( _figureFactory != null)
             {
                 _figureFactory.MouseMove(e);
-                DrawingBox.Refresh();   
+                DrawingBox.Invalidate();   
             }
         }
 
@@ -260,7 +260,7 @@ namespace corel_draw
             if (_figureFactory != null)
             {
                 _figureFactory.MouseUp(e);
-                DrawingBox.Refresh();
+                DrawingBox.Invalidate();
             }
         }
 
@@ -327,15 +327,15 @@ namespace corel_draw
 
                 ICommand loadCommand = new LoadCommand(_drawnFigures, loadedFigures);
                 _commandManager.AddCommand(loadCommand);
-
-                DrawingBox.Invalidate();
-                MessageBox.Show("File loaded successfully.");
-                actionList.Items.Add("Load figures from file");
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error loading file: {ex.Message}");
             }
+
+            DrawingBox.Invalidate();
+            MessageBox.Show("File loaded successfully.");
+            actionList.Items.Add("Load figures from file");
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
