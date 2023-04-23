@@ -1,20 +1,17 @@
 {
   "DrawnFigures": [
     {
-      "$type": "corel_draw.Figures.Rectangle, corel-draw",
+      "$type": "corel_draw.Figures.Polygon, corel-draw",
+      "Points": [
+        "393, 83",
+        "525, 203",
+        "295, 251"
+      ],
+      "Location": "295, 83",
       "Color": "Black",
-      "FillColor": "",
-      "Location": "165, 61",
-      "Width": 606,
-      "Height": 201
-    },
-    {
-      "$type": "corel_draw.Figures.Square, corel-draw",
-      "Color": "Black",
-      "FillColor": "",
-      "Location": "833, 158",
-      "Width": 62,
-      "Height": 62
+      "FillColor": "White",
+      "Width": 230,
+      "Height": 168
     }
   ]
 }

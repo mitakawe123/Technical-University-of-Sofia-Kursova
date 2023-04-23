@@ -13,7 +13,6 @@ namespace corel_draw.FactoryComponents
         private bool _isDrawing;
         public override void BeginCreateFigure()
         {
-            _circle = new Circle();
             _isDrawing = false;
         }
 
@@ -32,10 +31,7 @@ namespace corel_draw.FactoryComponents
                 int x = (_startPoint.X + _endPoint.X) / 2;
                 int y = (_startPoint.Y + _endPoint.Y) / 2;
                 int radius = (int)Math.Sqrt(Math.Pow(_startPoint.X - x, 2) + Math.Pow(_startPoint.Y - y, 2));
-
-                _circle.Location = new Point(x - radius, y - radius);
-                _circle.Width = radius * 2;
-                _circle.Height = radius * 2;
+                _circle = new Circle(x - radius, y - radius, radius);
             }
         }
 

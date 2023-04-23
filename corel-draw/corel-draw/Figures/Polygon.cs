@@ -1,24 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 
 namespace corel_draw.Figures
 {
     internal class Polygon : Figure
     {
         private List<Point> _points;
-
-        public List<Point> Points
-        {
-            get { return _points; }
-            set { _points = value; }
-        }
-
-        public Polygon() 
-        {
-        }
-
+        public List<Point> Points {  get { return _points; }  private set { _points = value; } } 
         public Polygon(List<Point> points) :base(GetLocationAndSize(points, out int width,out int height),width, height)
         {
             _points = points;
@@ -78,11 +67,11 @@ namespace corel_draw.Figures
 
         public override void Draw(Graphics g)
         {
-            g.DrawPolygon(new Pen(Color, 5), _points.ToArray());
+            g.DrawPolygon(_pen, _points.ToArray());
         }
         public override void Fill(Graphics g)
         {
-            g.FillPolygon(new SolidBrush(FillColor), _points.ToArray());
+            g.FillPolygon(_brush, _points.ToArray());
         }
 
         //Jordan Curve Theorem

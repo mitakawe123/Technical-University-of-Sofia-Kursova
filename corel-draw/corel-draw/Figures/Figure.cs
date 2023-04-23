@@ -9,20 +9,40 @@ namespace corel_draw.Figures
         private Point _location;
         private int _width;
         private int _height;
+        private Color _fillColor;
+        private Color _color;
+        protected SolidBrush _brush { get; private set; }
+        protected Pen _pen { get; private set; }
 
-        public Color Color { get; set; }
-        public Color FillColor { get; set; }
+        public Color Color 
+        {
+            get { return _color; }
+            set 
+            {
+                _color = value;
+                _pen = new Pen(_color,5);
+            } 
+        }
+        public Color FillColor 
+        {
+            get { return _fillColor; }
+            set
+            {
+                _fillColor = value;
+                _brush = new SolidBrush(_fillColor);
+            }
+        }
 
         public string Name { get; set; }
         public virtual Point Location { get => _location; set => _location = value; }
         public int Width { get => _width; set => _width = value; }
-
         public int Height { get => _height; set => _height = value; }
-        
-        public Figure() 
+
+        public Figure()
         {
-            Color = Color.Black;
+
         }
+
         public Figure(Point location, int width, int height)
         {
             _location = location;

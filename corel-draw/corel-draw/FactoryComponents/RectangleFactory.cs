@@ -17,7 +17,6 @@ namespace corel_draw.FactoryComponents
         private bool _isDrawing;
         public override void BeginCreateFigure()
         {            
-            _rectangle = new Figures.Rectangle();
             _isDrawing = false;
         }
         public override void MouseDown(MouseEventArgs e)
@@ -37,9 +36,7 @@ namespace corel_draw.FactoryComponents
                 int width = Math.Abs(_startPoint.X - _endPoint.X);
                 int height = Math.Abs(_startPoint.Y - _endPoint.Y);
 
-                _rectangle.Location = new Point(x, y);
-                _rectangle.Width = width;
-                _rectangle.Height = height;
+                _rectangle = new Figures.Rectangle(x,y,width,height);
             }
         }
 

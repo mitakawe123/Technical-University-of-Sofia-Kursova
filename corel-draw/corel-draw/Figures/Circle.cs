@@ -5,11 +5,10 @@ namespace corel_draw.Figures
 {
     internal class Circle:Figure
     {
-        public Circle() 
-        {
-        }
         public Circle(int x, int y, int radius) : base(new Point(x, y), radius * 2, radius * 2)
         {
+            Color = Color.Black;
+
         }
         public override double CalcArea()
         {
@@ -18,11 +17,11 @@ namespace corel_draw.Figures
         }
         public override void Draw(Graphics g)
         {
-            g.DrawEllipse(new Pen(Color, 5), Location.X, Location.Y, Width, Height);
+            g.DrawEllipse(_pen, Location.X, Location.Y, Width, Height);
         }
         public override void Fill(Graphics g)
         {
-            g.FillEllipse(new SolidBrush(FillColor), Location.X, Location.Y, Width, Height);
+            g.FillEllipse(_brush, Location.X, Location.Y, Width, Height);
         }
         public override Figure Clone()
         {

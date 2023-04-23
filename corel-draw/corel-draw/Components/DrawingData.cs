@@ -8,6 +8,5 @@ namespace corel_draw.Components
     internal class DrawingData
     {
         public List<Figure> DrawnFigures { get; set; }
-
     }
 }

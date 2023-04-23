@@ -55,14 +55,14 @@
     <Compile Include="AdditionalInfo.Designer.cs">
       <DependentUpon>AdditionalInfo.cs</DependentUpon>
     </Compile>
-    <Compile Include="Components\AddCommand.cs" />
-    <Compile Include="Components\ColorCommand.cs" />
-    <Compile Include="Components\DeleteCommand.cs" />
+    <Compile Include="Commands\AddCommand.cs" />
+    <Compile Include="Commands\ColorCommand.cs" />
+    <Compile Include="Commands\DeleteCommand.cs" />
     <Compile Include="Components\DrawingData.cs" />
-    <Compile Include="Components\EditCommand.cs" />
-    <Compile Include="Components\FillCommand.cs" />
-    <Compile Include="Components\LoadCommand.cs" />
-    <Compile Include="Components\MoveCommand.cs" />
+    <Compile Include="Commands\EditCommand.cs" />
+    <Compile Include="Commands\FillCommand.cs" />
+    <Compile Include="Commands\LoadCommand.cs" />
+    <Compile Include="Commands\MoveCommand.cs" />
     <Compile Include="DrawingForm.cs">
       <SubType>Form</SubType>
     </Compile>

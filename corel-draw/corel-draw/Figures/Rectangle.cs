@@ -4,7 +4,6 @@ namespace corel_draw.Figures
 {
     internal class Rectangle : Figure
     {
-        public Rectangle() { }
         public Rectangle(int x, int y, int width, int height) : base(new Point(x, y), width, height)
         {
         }
@@ -13,11 +12,11 @@ namespace corel_draw.Figures
         }
         public override void Draw(Graphics g)
         {            
-            g.DrawRectangle(new Pen(Color, 5), Location.X, Location.Y, Width, Height);
+            g.DrawRectangle(_pen, Location.X, Location.Y, Width, Height);
         }
         public override void Fill(Graphics g)
         {
-            g.FillRectangle(new SolidBrush(FillColor), Location.X, Location.Y, Width, Height);
+            g.FillRectangle(_brush, Location.X, Location.Y, Width, Height);
         }
         public override Figure Clone()
         {

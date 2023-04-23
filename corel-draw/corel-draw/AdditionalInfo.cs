@@ -12,7 +12,6 @@ namespace corel_draw
 {
     public partial class AdditionalInfo : Form
     {
-        public string BiggestFigure { get; set; }
         public AdditionalInfo()
         {
             InitializeComponent();
@@ -25,7 +24,6 @@ namespace corel_draw
 
         private void AdditionalInfo_Load(object sender, EventArgs e)
         {
-            additional_info.Text = BiggestFigure;
         }
     }
 }

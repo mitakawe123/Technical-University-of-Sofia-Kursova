@@ -25,7 +25,6 @@ namespace corel_draw.FactoryComponents
         private int _selectedPointIndex;
         public override void BeginCreateFigure()
         {
-            _polygon = new Polygon();
             _isPolygonFinishedDrawing = false;
             _clickedPoints.Clear();
             _isDrawing = false;
@@ -86,7 +85,7 @@ namespace corel_draw.FactoryComponents
             {
                 using (GraphicsPath path = new GraphicsPath())
                 {
-                    for (int i = 0; i < _clickedPoints.Count; i++)
+                    for (int i = 0; i < _clickedPoints.Count; i++)  
                     {
                         if (i < _clickedPoints.Count - 1)
                         {
@@ -113,7 +112,7 @@ namespace corel_draw.FactoryComponents
                 g.DrawLines(_defaultPen, _clickedPoints.ToArray());
                 g.DrawLine(_defaultPen, _clickedPoints[_clickedPoints.Count - 1], _clickedPoints[0]);
 
-                _polygon.Points = _clickedPoints.ToList();
+                _polygon = new Polygon(_clickedPoints.ToList());
                 OnFinished(_polygon);
                 _clickedPoints.Clear();
             }

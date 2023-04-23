@@ -13,7 +13,6 @@ namespace corel_draw.FactoryComponents
         private bool _isDrawing;
         public override void BeginCreateFigure()
         {
-            _square = new Square();
             _isDrawing = false;
         }
         public override void MouseDown(MouseEventArgs e)
@@ -33,9 +32,7 @@ namespace corel_draw.FactoryComponents
                 int width = Math.Abs(_endPoint.X - _startPoint.X);
                 int height = width;
 
-                _square.Location = new Point(x, y);
-                _square.Width = width;
-                _square.Height = height;
+                _square = new Square(x,y,width,height);
             }
         }
 

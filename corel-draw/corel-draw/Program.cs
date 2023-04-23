@@ -1,4 +1,5 @@
 ﻿using corel_draw.FactoryComponents;
+using corel_draw.Figures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,9 +20,8 @@ namespace corel_draw
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            Type[] figureFactoryTypes = Assembly.GetExecutingAssembly().GetTypes()
-                .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(FigureFactory)))
-                .ToArray();
+            Type[] figureFactoryTypes = typeof(FigureFactory).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(FigureFactory))).ToArray();
+
 
             var figureFactories = new List<FigureFactory>();
             foreach (var figureFactoryType in figureFactoryTypes)
