@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Drawing;
 
 namespace corel_draw.Figures
@@ -46,13 +47,26 @@ namespace corel_draw.Figures
             Color = Color.Black;
             FillColor = Color.White;
         }
+        protected Figure() { }
 
         public virtual void Move(Point delta)
         {
             _location = new Point(_location.X + delta.X, _location.Y + delta.Y);
         }
 
-        public abstract Figure Clone();
+        public virtual Figure Clone()
+        {
+            Figure clone = (Figure)Activator.CreateInstance(this.GetType());
+
+            clone.Width = this.Width;
+            clone.Height = this.Height;
+            clone.Location = this.Location;
+            clone.Name = this.Name;
+            clone.Color = this.Color;
+            clone.FillColor = this.FillColor;
+
+            return clone;
+        }
 
         public virtual void CopyState(Figure figure)
         {

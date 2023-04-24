@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using Button = System.Windows.Forms.Button;
 
@@ -28,13 +29,14 @@ namespace corel_draw
 
         private FigureFactory _figureFactory;
         private Figure _currentFigure;
-            
+        private Action<Figure> _onActionFinished;
+
         private Point _lastPoint = Point.Empty;
         private Point _initialPosition = Point.Empty;
 
         private bool _isDragging = false;
         private bool _isFilling = false;
-
+        private bool _isAddClicked = false;
         public DrawingForm(IReadOnlyList<FigureFactory> figureFactories)
         {
             InitializeComponent(); 
@@ -51,13 +53,18 @@ namespace corel_draw
             contextMenuStrip.Items.Add("Info").Click += AdditionalInfoMenuItem_Click;
             contextMenuStrip.Items[2].Tag = _currentFigure;
 
-            foreach (var item in figureFactories)
+        }
+        private void FigureFactoryFinished(Figure figure)
+        {
+            if (_isAddClicked)
             {
-                item.Finished += AddFigureSubscription;
-                item.Finished += EditSubscription;
+                AddFigureSubscription(figure);
+            }
+            else if (!_isAddClicked)
+            {
+                EditSubscription(figure);
             }
         }
-
         private void DrawingForm_Load(object sender, EventArgs e)
         {
             Type[] figureTypes = typeof(Figure).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(Figure))).ToArray();
@@ -81,13 +88,14 @@ namespace corel_draw
                     _figureFactory = _figureFactories[index];
                     _figureFactory.BeginCreateFigure();
                     _isFilling = false;
+                    _isAddClicked = true;
                 };
                 Controls.Add(button);
+            }
 
-                _figureFactories[index].Finished = (figure) =>
-                {
-                    AddFigureSubscription(figure);
-                };
+            foreach (var figureFactory in _figureFactories)
+            {
+                figureFactory.Finished += FigureFactoryFinished;
             }
         }
 
@@ -101,7 +109,8 @@ namespace corel_draw
         }
 
         private void EditToolStripMenuItem_Click(object sender, EventArgs e)
-        { 
+        {
+            _isAddClicked = false;
             int matchingIndex = -1;
             Type[] figureTypes = typeof(Figure).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(Figure))).ToArray();
 
@@ -117,10 +126,15 @@ namespace corel_draw
             _figureFactory = _figureFactories[matchingIndex];
             _figureFactory.BeginCreateFigure();
 
-            _figureFactories[matchingIndex].Finished = (figure) =>
+            _figureFactories[matchingIndex].Finished += FigureFactoryFinished;
+
+            /*_figureFactories[matchingIndex].Finished -= _onActionFinished;
+            _onActionFinished = (figure) =>
             {
                 EditSubscription(figure);
+                return;
             };
+            _figureFactories[matchingIndex].Finished += _onActionFinished;*/
         }
 
         private void EditSubscription(Figure figure)

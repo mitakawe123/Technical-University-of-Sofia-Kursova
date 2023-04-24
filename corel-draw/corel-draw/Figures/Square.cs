@@ -4,6 +4,7 @@ namespace corel_draw.Figures
 {
     internal  class Square : Figure
     {
+        public Square() { }
         public Square(int x, int y, int width, int height) : base(new Point(x, y), width,height)
         {
         }
@@ -21,7 +22,14 @@ namespace corel_draw.Figures
         }
         public override Figure Clone()
         {
-            return new Square(Location.X, Location.Y, Width, Width) { Color = Color, Name = Name, FillColor = FillColor };
+            Square  clone = (Square)base.Clone();
+            clone.Location = Location;
+            clone.Width = Width;
+            clone.Height = Height;
+            clone.Name = Name;
+            clone.Color = Color;
+            clone.FillColor = FillColor;
+            return clone;
         }
     }
 }

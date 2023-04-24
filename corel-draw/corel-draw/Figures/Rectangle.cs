@@ -4,6 +4,7 @@ namespace corel_draw.Figures
 {
     internal class Rectangle : Figure
     {
+        public Rectangle() { }
         public Rectangle(int x, int y, int width, int height) : base(new Point(x, y), width, height)
         {
         }
@@ -20,7 +21,14 @@ namespace corel_draw.Figures
         }
         public override Figure Clone()
         {
-            return new Rectangle(Location.X, Location.Y, Width, Height) { Color = Color, Name = Name, FillColor = FillColor };
+            Rectangle clone = (Rectangle)base.Clone();
+            clone.Location = Location;
+            clone.Width = Width;
+            clone.Height = Height;
+            clone.Name = Name;
+            clone.Color = Color;
+            clone.FillColor = FillColor;
+            return clone;
         }
     }
 }

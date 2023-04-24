@@ -5,6 +5,7 @@ namespace corel_draw.Figures
 {
     internal class Circle:Figure
     {
+        public Circle() { }
         public Circle(int x, int y, int radius) : base(new Point(x, y), radius * 2, radius * 2)
         {
         }
@@ -23,7 +24,14 @@ namespace corel_draw.Figures
         }
         public override Figure Clone()
         {
-            return new Circle(Location.X, Location.Y, Width / 2) { Color = Color, Name = Name, FillColor = FillColor };
+            Circle clone = (Circle)base.Clone();
+            clone.Location = Location;
+            clone.Width = Width;
+            clone.Height = Height;
+            clone.Name = Name;
+            clone.Color = Color;
+            clone.FillColor = FillColor;
+            return clone;
         }
     }
 }

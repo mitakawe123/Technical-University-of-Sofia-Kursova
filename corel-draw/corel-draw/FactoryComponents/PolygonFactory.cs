@@ -66,7 +66,7 @@ namespace corel_draw.FactoryComponents
 
         public override void MouseUp(MouseEventArgs e)
         {
-            //_startPoint = e.Location;
+            _startPoint = e.Location;
             if (_isDragging && _selectedPointIndex < _clickedPoints.Count)
             {
                 _clickedPoints[_selectedPointIndex] = e.Location;

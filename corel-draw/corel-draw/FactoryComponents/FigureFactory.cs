@@ -11,8 +11,14 @@ namespace corel_draw.FactoryComponents
         //Ctrl -> move point
         protected readonly Pen _defaultPen = new Pen(Color.Black, 2f);
 
-        public bool _shouldExecuteAddFunctionality = true;
-        public Action<Figure> Finished;
+        private event Action<Figure> _finished;
+
+        public event Action<Figure> Finished
+        {
+            add { _finished += value; }
+            remove { _finished -= value; }
+        }
+
         public abstract void BeginCreateFigure();
         public abstract void MouseDown(MouseEventArgs e);
         public abstract void MouseMove(MouseEventArgs e);
@@ -21,7 +27,7 @@ namespace corel_draw.FactoryComponents
 
         public void OnFinished(Figure figure)
         {
-            Finished?.Invoke(figure);
+            _finished?.Invoke(figure);
         }
     }
 }
