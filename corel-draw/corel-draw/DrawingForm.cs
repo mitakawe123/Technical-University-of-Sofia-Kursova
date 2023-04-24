@@ -17,36 +17,49 @@ namespace corel_draw
 {
     public partial class DrawingForm : Form
     {
+        private const string PATH = "../../JsonFiles/DataFigures.json";
+        private const int WIDTH = 75;
+        private const int HEIGHT = 150;
+
         private readonly List<Figure> _drawnFigures;
         private readonly IReadOnlyList<FigureFactory> _figureFactories;
         private readonly CommandManager _commandManager;
-        private readonly Dictionary<string, Figure> _specialTags = new Dictionary<string, Figure>();
+        private readonly Dictionary<string, Figure> _specialTags;
+        private readonly ContextMenuStrip contextMenuStrip;
 
         private FigureFactory _figureFactory;
         private Figure _currentFigure;
         private Action<Figure> _figureFinishedHandler;
-        
+
         private Point _lastPoint = Point.Empty;
         private Point _initialPosition = Point.Empty;
 
         private bool _isDragging = false;
         private bool _isFilling = false;
 
-        private const string PATH = "../../JsonFiles/DataFigures.json";
-
         public DrawingForm(IReadOnlyList<FigureFactory> figureFactories)
         {
             InitializeComponent(); 
             _commandManager = new CommandManager();
             _drawnFigures = new List<Figure>();
-            this.KeyPreview = true;
             _figureFactories = figureFactories;
+            _specialTags = new Dictionary<string, Figure>();
+            KeyPreview = true;
+
+            contextMenuStrip = new ContextMenuStrip();
+
+            contextMenuStrip.Items.Add("Delete").Click += DeleteMenuItem_Click;
+            contextMenuStrip.Items.Add("Change Border Color").Click += ColorMenuItem_Click;
+            contextMenuStrip.Items.Add("Fill Figure").Click += FillMenuItem_Click;
+            contextMenuStrip.Items.Add("Edit").Click += EditToolStripMenuItem_Click;
+            contextMenuStrip.Items.Add("Info").Click += AdditionalInfoMenuItem_Click;
+            contextMenuStrip.Items[2].Tag = _currentFigure;
         }
 
         private void DrawingForm_Load(object sender, EventArgs e)
         {
             Type[] figureTypes = typeof(Figure).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(Figure))).ToArray();
-            int buttonWidth = (Width - 150) / figureTypes.Length;
+            int buttonWidth = (Width - HEIGHT) / figureTypes.Length;
             for (int i = 0; i < _figureFactories.Count; i++)
             {
                 Type figureType = figureTypes[i];
@@ -55,10 +68,10 @@ namespace corel_draw
                 {
                     Text = figureType.Name,
                     Tag = figureType,
-                    Height = 75,
+                    Height = WIDTH,
                     Width = buttonWidth,
-                    Left = i * buttonWidth + 75,
-                    Top = Height - 150
+                    Left = i * buttonWidth + WIDTH,
+                    Top = Height - HEIGHT
                 };
 
                 button.Click += (object sender1, EventArgs e1) =>
@@ -69,7 +82,6 @@ namespace corel_draw
                 };
                 Controls.Add(button);
 
-                
                 _figureFinishedHandler = (figure) =>
                 {
                     ICommand addCommand = new AddCommand(figure, _drawnFigures);
@@ -77,9 +89,40 @@ namespace corel_draw
                     _figureFactory = null;
                     actionList.Items.Add($"Added {figure.GetType().Name} with area of {figure.CalcArea():F2}");
                     DrawingBox.Invalidate();
-                }; 
+                };
                 _figureFactories[index].Finished += _figureFinishedHandler;
             }
+        }
+
+        private void EditToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Figure oldState = _currentFigure;
+            int matchingIndex = -1;
+            Type[] figureTypes = typeof(Figure).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(Figure))).ToArray();
+
+            for (int i = 0; i < figureTypes.Length; i++)
+            {
+                if (_currentFigure.GetType() == figureTypes[i])
+                {
+                    matchingIndex = i;
+                    break;
+                }
+            }
+
+            _figureFactory = _figureFactories[matchingIndex];
+            _figureFactory.BeginCreateFigure();
+
+            _figureFactories[matchingIndex].Finished -= _figureFinishedHandler;
+            _figureFinishedHandler = (figure) =>
+            {
+                ICommand command = new EditCommand(oldState, figure);
+                _commandManager.AddCommand(command);
+                _figureFactory = null;
+                _currentFigure = figure;
+                actionList.Items.Add($"Edit {oldState.GetType().Name} with new area of {figure.CalcArea():F2}");
+                DrawingBox.Invalidate();
+            };
+            _figureFactories[matchingIndex].Finished += _figureFinishedHandler;
         }
 
         private void DeleteMenuItem_Click(object sender, EventArgs e)
@@ -114,35 +157,6 @@ namespace corel_draw
                     return;
                 }
             }
-        }
-
-        private void EditToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Figure oldState = _currentFigure;
-            int matchingIndex = -1;
-            Type[] figureTypes = typeof(Figure).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(Figure))).ToArray();
-
-            for (int i = 0; i < figureTypes.Length; i++)
-            {
-                if (_currentFigure.GetType() == figureTypes[i])
-                {
-                    matchingIndex = i;
-                    break;
-                }
-            }
-            _figureFactory = _figureFactories[matchingIndex];
-            _figureFactory.BeginCreateFigure();
-
-            _figureFactories[matchingIndex].Finished -= _figureFinishedHandler;
-            _figureFactories[matchingIndex].Finished += (figure) =>
-            {
-                ICommand command = new EditCommand(oldState, figure);
-                _commandManager.AddCommand(command);
-                _figureFactory = null;
-                _currentFigure = figure;
-                actionList.Items.Add($"Edit {oldState.GetType().Name} with new area of {figure.CalcArea():F2}");
-                DrawingBox.Invalidate();
-            };
         }
 
         private void FillMenuItem_Click(object sender, EventArgs e)
@@ -192,12 +206,6 @@ namespace corel_draw
 
         private void DrawingBox_MouseDown(object sender, MouseEventArgs e)
         {
-            if (_figureFactory != null)
-            {
-                _figureFactory.MouseDown(e);
-                DrawingBox.Invalidate();
-                return;
-            }
             foreach (Figure figure in _drawnFigures)
             {
                 if (figure.Contains(e.Location))
@@ -207,23 +215,20 @@ namespace corel_draw
                     {
                         _isDragging = true;
                         _lastPoint = e.Location;
-                        _initialPosition = figure.Location;
-                    }
-                    else if (e.Button == MouseButtons.Right)
+                        _initialPosition = e.Location;
+                        return;
+                    } else if(e.Button == MouseButtons.Right)
                     {
-                        ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
-
-                        contextMenuStrip.Items.Add("Delete").Click += DeleteMenuItem_Click;
-                        contextMenuStrip.Items.Add("Change Border Color").Click += ColorMenuItem_Click;
-                        contextMenuStrip.Items.Add("Fill Figure").Click += FillMenuItem_Click;
-                        contextMenuStrip.Items.Add("Edit").Click += EditToolStripMenuItem_Click;
-                        contextMenuStrip.Items.Add("Info").Click += AdditionalInfoMenuItem_Click;
-                        contextMenuStrip.Items[2].Tag = _currentFigure;
-
                         contextMenuStrip.Show(DrawingBox, e.Location);
+                        return;
                     }
-                    break;
                 }
+            }
+            if (_figureFactory != null)
+            {
+                _figureFactory.MouseDown(e);
+                DrawingBox.Invalidate();
+                return;
             }
         }
 
@@ -241,7 +246,8 @@ namespace corel_draw
             if( _figureFactory != null)
             {
                 _figureFactory.MouseMove(e);
-                DrawingBox.Invalidate();   
+                DrawingBox.Invalidate();
+                return;
             }
         }
 
@@ -249,7 +255,7 @@ namespace corel_draw
         {
             if (_isDragging)
             {
-                ICommand moveCommand = new MoveCommand(_currentFigure, _currentFigure.Location);
+                ICommand moveCommand = new MoveCommand(_currentFigure, _initialPosition, _currentFigure.Location);
                 _commandManager.AddCommand(moveCommand);
                 actionList.Items.Add($"Move {_currentFigure.GetType().Name}");
                 _isDragging = false;
@@ -261,6 +267,7 @@ namespace corel_draw
             {
                 _figureFactory.MouseUp(e);
                 DrawingBox.Invalidate();
+                return;
             }
         }
 
@@ -283,6 +290,7 @@ namespace corel_draw
             {
                 _commandManager.Redo();
                 DrawingBox.Invalidate();
+                return;
             }
         }
 
@@ -292,6 +300,7 @@ namespace corel_draw
             {
                 _commandManager.Undo();
                 DrawingBox.Invalidate();
+                return;
             }
         }
 
@@ -300,19 +309,16 @@ namespace corel_draw
             try
             {
                 DrawingData drawingData = new DrawingData { DrawnFigures = _drawnFigures.ToList() };
-                JsonSerializerSettings settings = new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.Auto
-                };
-                string json = JsonConvert.SerializeObject(drawingData, Formatting.Indented, settings);
+                string json = JsonConvert.SerializeObject(drawingData, Formatting.Indented, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
                 File.WriteAllText(PATH, json);
-                MessageBox.Show("File saved successfully.");
-                actionList.Items.Add("Save figures to file");
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error saving file: {ex.Message}");
+                return;
             }
+            MessageBox.Show("File saved successfully.");
+            actionList.Items.Add("Save figures to file");
         }
 
         private void LoadFromFile_Click(object sender, EventArgs e)
@@ -331,6 +337,7 @@ namespace corel_draw
             catch (Exception ex)
             {
                 MessageBox.Show($"Error loading file: {ex.Message}");
+                return;
             }
 
             DrawingBox.Invalidate();

@@ -7,7 +7,6 @@ namespace corel_draw.FactoryComponents
 {
     public abstract class FigureFactory
     {
-
         //Shift -> inser point
         //Ctrl -> move point
         protected readonly Pen _defaultPen = new Pen(Color.Black, 2f);

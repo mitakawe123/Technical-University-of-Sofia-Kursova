@@ -1,17 +1,16 @@
 {
-  "DrawnFigures": [
-    {
-      "$type": "corel_draw.Figures.Polygon, corel-draw",
-      "Points": [
-        "567, 96",
-        "776, 278",
-        "265, 212"
-      ],
-      "Location": "265, 96",
-      "Color": "Black",
-      "FillColor": "White",
-      "Width": 511,
-      "Height": 182
-    }
-  ]
+  "$type": "corel_draw.Components.DrawingData, corel-draw",
+  "DrawnFigures": {
+    "$type": "System.Collections.Generic.List`1[[corel_draw.Figures.Figure, corel-draw]], mscorlib",
+    "$values": [
+      {
+        "$type": "corel_draw.Figures.Circle, corel-draw",
+        "Color": "Black",
+        "FillColor": "White",
+        "Location": "83, 85",
+        "Width": 84,
+        "Height": 84
+      }
+    ]
+  }
 }

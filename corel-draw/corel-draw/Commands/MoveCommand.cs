@@ -10,15 +10,15 @@ namespace corel_draw.Components
         private readonly Point _newPosition;
         private Point _oldPosition;
 
-        public MoveCommand(Figure figure, Point newPosition)
+        public MoveCommand(Figure figure, Point oldPosition, Point newPosition)
         {
             _figure = figure;
+            _oldPosition = oldPosition;
             _newPosition = newPosition;
         }
 
         public void Do()
         {
-            _oldPosition = _figure.Location;
             _figure.Location = _newPosition;
         }
 
