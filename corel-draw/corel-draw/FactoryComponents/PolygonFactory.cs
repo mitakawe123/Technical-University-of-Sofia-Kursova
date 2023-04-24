@@ -20,7 +20,6 @@ namespace corel_draw.FactoryComponents
 
         private Point _startPoint;
         private Point _endPoint;
-        private Point _lastPoint;
 
         private int _selectedPointIndex;
         public override void BeginCreateFigure()

@@ -180,30 +180,8 @@ namespace corel_draw
 
         private void AdditionalInfoMenuItem_Click(object sender, EventArgs e)
         {
-            Figure largestFigure = _drawnFigures.OrderByDescending(f => f.CalcArea()).First();
-            Figure smallestFigure = _drawnFigures.OrderBy(f => f.CalcArea()).First();
-            Figure firstFigure = _drawnFigures.First();
-            Figure lastFigure = _drawnFigures.Last();
-            Polygon polygonMostSides = _drawnFigures.OfType<Polygon>().OrderByDescending(p => p.Points.Count).FirstOrDefault();
-
-            Dictionary<string,Figure> _specialTags = new Dictionary<string, Figure>
-            {
-                {"Biggest Figure by Area", largestFigure },
-                {"Smallest Figure by Area", smallestFigure },
-                {"First Created Figure", firstFigure },
-                {"Last Created Figure", lastFigure },
-                {"Polygon with Most Sides", polygonMostSides }
-            };
-
-            List<string> _defaultTags = new List<string>
-            {
-                _currentFigure.GetType().Name,
-                _currentFigure.Color.Name,
-                _currentFigure.FillColor.Name,
-                _currentFigure.CalcArea().ToString("F2")
-            };
-
-            AdditionalInfo additionalInfo = new AdditionalInfo(_specialTags, _defaultTags);
+            FigureInfo.FigureInfo figureInfo = new FigureInfo.FigureInfo(_drawnFigures,_currentFigure);
+            AdditionalInfo additionalInfo = new AdditionalInfo(figureInfo);
             additionalInfo.ShowDialog();
         }
 

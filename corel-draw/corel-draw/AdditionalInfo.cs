@@ -7,19 +7,30 @@ namespace corel_draw
 {
     public partial class AdditionalInfo : Form
     {
-        public AdditionalInfo(Dictionary<string, Figure> _specialTags,List<string> _defaultTags)
+        public AdditionalInfo(FigureInfo.FigureInfo figureInfo)
         {
             InitializeComponent();
 
-            type_info.Text = _defaultTags[0];
-            border_info.Text = _defaultTags[1];
-            fill_info.Text = _defaultTags[2];
-            area_info.Text = _defaultTags[3]; 
-            
-            foreach (var kvp in _specialTags)
+            type_info.Text = figureInfo.TypeOfFigure;
+            border_info.Text = figureInfo.BorderColor;
+            fill_info.Text = figureInfo.FillColor;
+            area_info.Text = figureInfo.AreaOfFigure;
+
+            Dictionary<string, Figure> specialTags = new Dictionary<string, Figure>
             {
-                if (_defaultTags[0] == kvp.Value.GetType().Name)
+                {"Biggest Figure by Area", figureInfo.BiggestFigure },
+                {"Smallest Figure by Area", figureInfo.SmallestFigure },
+                {"First Created Figure", figureInfo.FirstFigure },
+                {"Last Created Figure", figureInfo.LastFigure },
+                {"Polygon with Most Sides", figureInfo.PolygonWithMostSides }
+            };
+
+            foreach (var kvp in specialTags)
+            {
+                if (kvp.Value != null)
+                {
                     additional_info.Text += $"{kvp.Key}: {kvp.Value.GetType().Name}\n";
+                }
             }
         }
 
