@@ -1,6 +1,7 @@
 ﻿using corel_draw.Figures;
 using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace corel_draw.FactoryComponents
@@ -11,13 +12,8 @@ namespace corel_draw.FactoryComponents
         //Ctrl -> move point
         protected readonly Pen _defaultPen = new Pen(Color.Black, 2f);
 
-        private event Action<Figure> _finished;
-
-        public event Action<Figure> Finished
-        {
-            add { _finished += value; }
-            remove { _finished -= value; }
-        }
+        public event Action<Figure> Finished;
+        public static readonly Type[] FigureTypes;
 
         public abstract void BeginCreateFigure();
         public abstract void MouseDown(MouseEventArgs e);
@@ -27,7 +23,12 @@ namespace corel_draw.FactoryComponents
 
         public void OnFinished(Figure figure)
         {
-            _finished?.Invoke(figure);
+            Finished?.Invoke(figure);
+        }
+
+        static FigureFactory()
+        {
+            FigureTypes = typeof(FigureFactory).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(FigureFactory))).ToArray();
         }
     }
 }

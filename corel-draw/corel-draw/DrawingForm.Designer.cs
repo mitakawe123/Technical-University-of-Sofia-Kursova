@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.DrawingBox = new System.Windows.Forms.PictureBox();
             this.Undo_Btn = new System.Windows.Forms.Button();
@@ -35,7 +36,14 @@
             this.actionList = new System.Windows.Forms.ListBox();
             this.SaveToFile = new System.Windows.Forms.Button();
             this.LoadFromFile = new System.Windows.Forms.Button();
+            this.ContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.DeleteStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ChangeBorderColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ChangeFillColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.EditToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.InfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.DrawingBox)).BeginInit();
+            this.ContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -109,11 +117,58 @@
             this.LoadFromFile.UseVisualStyleBackColor = true;
             this.LoadFromFile.Click += new System.EventHandler(this.LoadFromFile_Click);
             // 
+            // ContextMenu
+            // 
+            this.ContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.DeleteStripMenuItem,
+            this.ChangeBorderColorToolStripMenuItem,
+            this.ChangeFillColorToolStripMenuItem,
+            this.EditToolStripMenuItem,
+            this.InfoToolStripMenuItem});
+            this.ContextMenu.Name = "contextMenuStrip1";
+            this.ContextMenu.Size = new System.Drawing.Size(186, 114);
+            // 
+            // DeleteStripMenuItem
+            // 
+            this.DeleteStripMenuItem.Name = "DeleteStripMenuItem";
+            this.DeleteStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.DeleteStripMenuItem.Text = "Delete";
+            this.DeleteStripMenuItem.Click += new System.EventHandler(this.DeleteMenuItem_Click);
+            // 
+            // ChangeBorderColorToolStripMenuItem
+            // 
+            this.ChangeBorderColorToolStripMenuItem.Name = "ChangeBorderColorToolStripMenuItem";
+            this.ChangeBorderColorToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.ChangeBorderColorToolStripMenuItem.Text = "Change Border Color";
+            this.ChangeBorderColorToolStripMenuItem.Click += new System.EventHandler(this.ColorMenuItem_Click);
+            // 
+            // ChangeFillColorToolStripMenuItem
+            // 
+            this.ChangeFillColorToolStripMenuItem.Name = "ChangeFillColorToolStripMenuItem";
+            this.ChangeFillColorToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.ChangeFillColorToolStripMenuItem.Text = "Change Fill Color";
+            this.ChangeFillColorToolStripMenuItem.Click += new System.EventHandler(this.FillMenuItem_Click);
+            // 
+            // EditToolStripMenuItem
+            // 
+            this.EditToolStripMenuItem.Name = "EditToolStripMenuItem";
+            this.EditToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.EditToolStripMenuItem.Text = "Edit";
+            this.EditToolStripMenuItem.Click += new System.EventHandler(this.EditSizeToolStripMenuItem_Click);
+            // 
+            // InfoToolStripMenuItem
+            // 
+            this.InfoToolStripMenuItem.Name = "InfoToolStripMenuItem";
+            this.InfoToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.InfoToolStripMenuItem.Text = "Info";
+            this.InfoToolStripMenuItem.Click += new System.EventHandler(this.AdditionalInfoMenuItem_Click);
+            // 
             // DrawingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1344, 630);
+            this.ContextMenuStrip = this.ContextMenu;
             this.Controls.Add(this.LoadFromFile);
             this.Controls.Add(this.SaveToFile);
             this.Controls.Add(this.actionList);
@@ -121,10 +176,12 @@
             this.Controls.Add(this.Undo_Btn);
             this.Controls.Add(this.DrawingBox);
             this.Controls.Add(this.label1);
+            this.KeyPreview = true;
             this.Name = "DrawingForm";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.DrawingForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.DrawingBox)).EndInit();
+            this.ContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -138,6 +195,12 @@
         private System.Windows.Forms.ListBox actionList;
         private System.Windows.Forms.Button SaveToFile;
         private System.Windows.Forms.Button LoadFromFile;
+        private System.Windows.Forms.ContextMenuStrip ContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem DeleteStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ChangeBorderColorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ChangeFillColorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem EditToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem InfoToolStripMenuItem;
     }
 }
 
