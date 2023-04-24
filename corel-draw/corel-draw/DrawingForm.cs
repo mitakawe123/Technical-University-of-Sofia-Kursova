@@ -72,7 +72,6 @@ namespace corel_draw
             for (int i = 0; i < FigureTypes.Length; i++)
             {
                 Type figureType = FigureTypes[i];
-                int index = i;
                 Button button = new Button
                 {
                     Text = figureType.Name.Replace(FACTORY_SUFFIX, ""),
@@ -82,9 +81,10 @@ namespace corel_draw
                     Top = Height - HEIGHT
                 };
 
+                FigureFactory factory = _figureFactories[i];
                 button.Click += (object sender1, EventArgs e1) =>
                 {
-                    _figureFactory = _figureFactories[index];
+                    _figureFactory = factory;
                     _figureFactory.BeginCreateFigure();
                     _isFilling = false;
                     _isAddClicked = true;
