@@ -180,38 +180,30 @@ namespace corel_draw
 
         private void AdditionalInfoMenuItem_Click(object sender, EventArgs e)
         {
-            Dictionary<string, Figure> _specialTags = new Dictionary<string, Figure>() ;
-            List<string> _defaultTags = new List<string>();
-
-            string typeOfFigure = _currentFigure.GetType().Name;
-            string borderColor = _currentFigure.Color.Name;
-            string fillColor = _currentFigure.FillColor.Name;
-            double area = _currentFigure.CalcArea();
-            string areaString = area.ToString("F2");
-
             Figure largestFigure = _drawnFigures.OrderByDescending(f => f.CalcArea()).First();
             Figure smallestFigure = _drawnFigures.OrderBy(f => f.CalcArea()).First();
             Figure firstFigure = _drawnFigures.First();
             Figure lastFigure = _drawnFigures.Last();
+            Polygon polygonMostSides = _drawnFigures.OfType<Polygon>().OrderByDescending(p => p.Points.Count).FirstOrDefault();
 
-            if(_drawnFigures.Any(type => type is Polygon))
+            Dictionary<string,Figure> _specialTags = new Dictionary<string, Figure>
             {
-                int maxSides = _drawnFigures.OfType<Polygon>().Select(polygon => polygon.Points.Count).Max();
-                Figure polygonMostSides = _drawnFigures.FirstOrDefault(polygon => polygon is Polygon polygon1 && polygon1.Points.Count == maxSides);
-                _specialTags.Add("Polygon with Most Sides", polygonMostSides);
-            }
+                {"Biggest Figure by Area", largestFigure },
+                {"Smallest Figure by Area", smallestFigure },
+                {"First Created Figure", firstFigure },
+                {"Last Created Figure", lastFigure },
+                {"Polygon with Most Sides", polygonMostSides }
+            };
 
-            _defaultTags.Add(typeOfFigure);
-            _defaultTags.Add(borderColor);
-            _defaultTags.Add(fillColor);
-            _defaultTags.Add(areaString);
+            List<string> _defaultTags = new List<string>
+            {
+                _currentFigure.GetType().Name,
+                _currentFigure.Color.Name,
+                _currentFigure.FillColor.Name,
+                _currentFigure.CalcArea().ToString("F2")
+            };
 
-            _specialTags.Add("Biggest Figure by Area", largestFigure);
-            _specialTags.Add("Smallest Figure by Area", smallestFigure);
-            _specialTags.Add("First Created Figure", firstFigure);
-            _specialTags.Add("Last Created Figure", lastFigure);
-
-            AdditionalInfo additionalInfo = new AdditionalInfo(_specialTags,_defaultTags);
+            AdditionalInfo additionalInfo = new AdditionalInfo(_specialTags, _defaultTags);
             additionalInfo.ShowDialog();
         }
 
