@@ -19,6 +19,7 @@ namespace corel_draw.Components
 
         public void Do()
         {
+            //_oldPosition = _figure.Location;
             _figure.Location = _newPosition;
         }
 

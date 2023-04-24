@@ -24,7 +24,6 @@ namespace corel_draw
         private readonly List<Figure> _drawnFigures;
         private readonly IReadOnlyList<FigureFactory> _figureFactories;
         private readonly CommandManager _commandManager;
-        private readonly Dictionary<string, Figure> _specialTags;
         private readonly ContextMenuStrip contextMenuStrip;
 
         private FigureFactory _figureFactory;
@@ -43,9 +42,7 @@ namespace corel_draw
             _commandManager = new CommandManager();
             _drawnFigures = new List<Figure>();
             _figureFactories = figureFactories;
-            _specialTags = new Dictionary<string, Figure>();
             KeyPreview = true;
-
             contextMenuStrip = new ContextMenuStrip();
 
             contextMenuStrip.Items.Add("Delete").Click += DeleteMenuItem_Click;
@@ -183,6 +180,15 @@ namespace corel_draw
 
         private void AdditionalInfoMenuItem_Click(object sender, EventArgs e)
         {
+            Dictionary<string, Figure> _specialTags = new Dictionary<string, Figure>() ;
+            List<string> _defaultTags = new List<string>();
+
+            string typeOfFigure = _currentFigure.GetType().Name;
+            string borderColor = _currentFigure.Color.Name;
+            string fillColor = _currentFigure.FillColor.Name;
+            double area = _currentFigure.CalcArea();
+            string areaString = area.ToString("F2");
+
             Figure largestFigure = _drawnFigures.OrderByDescending(f => f.CalcArea()).First();
             Figure smallestFigure = _drawnFigures.OrderBy(f => f.CalcArea()).First();
             Figure firstFigure = _drawnFigures.First();
@@ -195,12 +201,17 @@ namespace corel_draw
                 _specialTags.Add("Polygon with Most Sides", polygonMostSides);
             }
 
-            _specialTags.Add("Biggest Figure by Area",largestFigure);
-            _specialTags.Add("Smallest Figure by Area",smallestFigure);
+            _defaultTags.Add(typeOfFigure);
+            _defaultTags.Add(borderColor);
+            _defaultTags.Add(fillColor);
+            _defaultTags.Add(areaString);
+
+            _specialTags.Add("Biggest Figure by Area", largestFigure);
+            _specialTags.Add("Smallest Figure by Area", smallestFigure);
             _specialTags.Add("First Created Figure", firstFigure);
             _specialTags.Add("Last Created Figure", lastFigure);
-            MessageBox.Show(_specialTags.Count.ToString());
-            AdditionalInfo additionalInfo = new AdditionalInfo(_specialTags);
+
+            AdditionalInfo additionalInfo = new AdditionalInfo(_specialTags,_defaultTags);
             additionalInfo.ShowDialog();
         }
 

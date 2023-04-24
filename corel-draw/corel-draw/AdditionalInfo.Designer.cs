@@ -158,7 +158,6 @@
             this.Controls.Add(this.Close_btn);
             this.Name = "AdditionalInfo";
             this.Text = "AdditionalInfo";
-            this.Load += new System.EventHandler(this.AdditionalInfo_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
