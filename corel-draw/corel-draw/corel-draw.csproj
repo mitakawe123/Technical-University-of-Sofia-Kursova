@@ -60,7 +60,7 @@
     <Compile Include="Commands\DeleteCommand.cs" />
     <Compile Include="FigureInfo\FigureInfo.cs" />
     <Compile Include="SerializableData\DrawingData.cs" />
-    <Compile Include="Commands\EditCommand.cs" />
+    <Compile Include="Commands\EditSizeCommand.cs" />
     <Compile Include="Commands\FillCommand.cs" />
     <Compile Include="Commands\LoadCommand.cs" />
     <Compile Include="Commands\MoveCommand.cs" />

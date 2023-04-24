@@ -3,13 +3,13 @@ using CorelLibary;
 
 namespace corel_draw.Components
 {
-    internal class EditCommand : ICommand
+    internal class EditSizeCommand : ICommand
     {
         private readonly Figure _oldState;
         private readonly Figure _newState;
         private readonly Figure _initialState;
 
-        public EditCommand(Figure oldState, Figure newState)
+        public EditSizeCommand(Figure oldState, Figure newState)
         {
             _oldState = oldState;
             _newState = newState;

@@ -9,11 +9,11 @@ namespace corel_draw.Figures
         }
         public override void Draw(Graphics g)
         { 
-            g.DrawRectangle(_pen, Location.X, Location.Y, Width, Width);
+            g.DrawRectangle(Pen, Location.X, Location.Y, Width, Width);
         }
         public override void Fill(Graphics g)
         {
-            g.FillRectangle(_brush, Location.X, Location.Y, Width, Width);
+            g.FillRectangle(Brush, Location.X, Location.Y, Width, Width);
         }
         public override double CalcArea()
         {

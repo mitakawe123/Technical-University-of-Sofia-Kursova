@@ -15,6 +15,7 @@ namespace corel_draw.FactoryComponents
         private Point _endPoint;
         private Figures.Rectangle _rectangle;
         private bool _isDrawing;
+
         public override void BeginCreateFigure()
         {            
             _isDrawing = false;

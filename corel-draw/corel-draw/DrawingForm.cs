@@ -28,8 +28,7 @@ namespace corel_draw
 
         private FigureFactory _figureFactory;
         private Figure _currentFigure;
-        private Action<Figure> _figureFinishedHandler;
-
+            
         private Point _lastPoint = Point.Empty;
         private Point _initialPosition = Point.Empty;
 
@@ -51,6 +50,12 @@ namespace corel_draw
             contextMenuStrip.Items.Add("Edit").Click += EditToolStripMenuItem_Click;
             contextMenuStrip.Items.Add("Info").Click += AdditionalInfoMenuItem_Click;
             contextMenuStrip.Items[2].Tag = _currentFigure;
+
+            foreach (var item in figureFactories)
+            {
+                item.Finished += AddFigureSubscription;
+                item.Finished += EditSubscription;
+            }
         }
 
         private void DrawingForm_Load(object sender, EventArgs e)
@@ -79,21 +84,24 @@ namespace corel_draw
                 };
                 Controls.Add(button);
 
-                _figureFinishedHandler = (figure) =>
+                _figureFactories[index].Finished = (figure) =>
                 {
-                    ICommand addCommand = new AddCommand(figure, _drawnFigures);
-                    _commandManager.AddCommand(addCommand);
-                    _figureFactory = null;
-                    actionList.Items.Add($"Added {figure.GetType().Name} with area of {figure.CalcArea():F2}");
-                    DrawingBox.Invalidate();
+                    AddFigureSubscription(figure);
                 };
-                _figureFactories[index].Finished += _figureFinishedHandler;
             }
         }
 
-        private void EditToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AddFigureSubscription(Figure figure)
         {
-            Figure oldState = _currentFigure;
+            ICommand addCommand = new AddCommand(figure, _drawnFigures);
+            _commandManager.AddCommand(addCommand);
+            _figureFactory = null;
+            actionList.Items.Add($"Added {figure.GetType().Name} with area of {figure.CalcArea():F2}");
+            DrawingBox.Invalidate();
+        }
+
+        private void EditToolStripMenuItem_Click(object sender, EventArgs e)
+        { 
             int matchingIndex = -1;
             Type[] figureTypes = typeof(Figure).Assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(Figure))).ToArray();
 
@@ -109,17 +117,21 @@ namespace corel_draw
             _figureFactory = _figureFactories[matchingIndex];
             _figureFactory.BeginCreateFigure();
 
-            _figureFactories[matchingIndex].Finished -= _figureFinishedHandler;
-            _figureFinishedHandler = (figure) =>
+            _figureFactories[matchingIndex].Finished = (figure) =>
             {
-                ICommand command = new EditCommand(oldState, figure);
-                _commandManager.AddCommand(command);
-                _figureFactory = null;
-                _currentFigure = figure;
-                actionList.Items.Add($"Edit {oldState.GetType().Name} with new area of {figure.CalcArea():F2}");
-                DrawingBox.Invalidate();
+                EditSubscription(figure);
             };
-            _figureFactories[matchingIndex].Finished += _figureFinishedHandler;
+        }
+
+        private void EditSubscription(Figure figure)
+        {
+            Figure oldState = _currentFigure;
+            ICommand command = new EditSizeCommand(oldState, figure);
+            _commandManager.AddCommand(command);
+            _figureFactory = null;
+            _currentFigure = figure;
+            actionList.Items.Add($"Edit {oldState.GetType().Name} with new area of {figure.CalcArea():F2}");
+            DrawingBox.Invalidate();
         }
 
         private void DeleteMenuItem_Click(object sender, EventArgs e)

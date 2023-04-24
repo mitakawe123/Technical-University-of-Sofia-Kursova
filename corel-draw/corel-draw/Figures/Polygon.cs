@@ -69,11 +69,11 @@ namespace corel_draw.Figures
 
         public override void Draw(Graphics g)
         {
-            g.DrawPolygon(_pen, _points.ToArray());
+            g.DrawPolygon(Pen, _points.ToArray());
         }
         public override void Fill(Graphics g)
         {
-            g.FillPolygon(_brush, _points.ToArray());
+            g.FillPolygon(Brush, _points.ToArray());
         }
 
         //Jordan Curve Theorem

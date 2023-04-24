@@ -15,11 +15,11 @@ namespace corel_draw.Figures
         }
         public override void Draw(Graphics g)
         {
-            g.DrawEllipse(_pen, Location.X, Location.Y, Width, Height);
+            g.DrawEllipse(Pen, Location.X, Location.Y, Width, Height);
         }
         public override void Fill(Graphics g)
         {
-            g.FillEllipse(_brush, Location.X, Location.Y, Width, Height);
+            g.FillEllipse(Brush, Location.X, Location.Y, Width, Height);
         }
         public override Figure Clone()
         {

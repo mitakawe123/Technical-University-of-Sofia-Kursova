@@ -12,11 +12,11 @@ namespace corel_draw.Figures
         }
         public override void Draw(Graphics g)
         {            
-            g.DrawRectangle(_pen, Location.X, Location.Y, Width, Height);
+            g.DrawRectangle(Pen, Location.X, Location.Y, Width, Height);
         }
         public override void Fill(Graphics g)
         {
-            g.FillRectangle(_brush, Location.X, Location.Y, Width, Height);
+            g.FillRectangle(Brush, Location.X, Location.Y, Width, Height);
         }
         public override Figure Clone()
         {

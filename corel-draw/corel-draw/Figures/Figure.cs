@@ -11,8 +11,8 @@ namespace corel_draw.Figures
         private int _height;
         private Color _fillColor;
         private Color _color;
-        protected SolidBrush _brush { get; private set; }
-        protected Pen _pen { get; private set; }
+        protected SolidBrush Brush { get; private set; }
+        protected Pen Pen { get; private set; }
 
         public Color Color 
         {
@@ -20,7 +20,7 @@ namespace corel_draw.Figures
             set 
             {
                 _color = value;
-                _pen = new Pen(_color,5);
+                Pen = new Pen(_color,5);
             } 
         }
         public Color FillColor 
@@ -29,7 +29,7 @@ namespace corel_draw.Figures
             set
             {
                 _fillColor = value;
-                _brush = new SolidBrush(_fillColor);
+                Brush = new SolidBrush(_fillColor);
             }
         }
 
