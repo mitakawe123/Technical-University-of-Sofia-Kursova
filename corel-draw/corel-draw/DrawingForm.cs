@@ -16,6 +16,8 @@ namespace corel_draw
 {
     public partial class DrawingForm : Form
     {
+        private static readonly Type[] FigureTypes = typeof(Figure).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(Figure))).ToArray();
+
         private const string FACTORY_SUFFIX = "Factory";
         private const string PATH = "../../JsonFiles/DataFigures.json";
         private const int WIDTH = 75;
@@ -34,6 +36,7 @@ namespace corel_draw
         private bool _isDragging = false;
         private bool _isFilling = false;
         private bool _isAddClicked = false;
+
         public DrawingForm(IReadOnlyList<FigureFactory> figureFactories)
         {
             InitializeComponent(); 
@@ -41,9 +44,7 @@ namespace corel_draw
             _drawnFigures = new List<Figure>();
             _figureFactories = figureFactories;
             foreach(var figureFactory in _figureFactories)
-            {
                 figureFactory.Finished += FigureFactoryFinished;
-            }
         }
 
         private void FigureFactoryFinished(Figure figure)
@@ -53,13 +54,24 @@ namespace corel_draw
             else 
                 EditSubscription(figure);
         }
+        private int FindFigureFactoryIndex(Type figureType)
+        {
+            for (int i = 0; i < FigureTypes.Length; i++)
+            {
+                if (figureType.Name + FACTORY_SUFFIX == FigureTypes[i].Name)
+                {
+                    return i;
+                }
+            }
+            return -1; 
+        }
 
         private void DrawingForm_Load(object sender, EventArgs e)
         {
-            int buttonWidth = Width / (FigureFactory.FigureTypes.Length + 1);
-            for (int i = 0; i < FigureFactory.FigureTypes.Length; i++)
+            int buttonWidth = Width / (FigureTypes.Length + 1);
+            for (int i = 0; i < FigureTypes.Length; i++)
             {
-                Type figureType = FigureFactory.FigureTypes[i];
+                Type figureType = FigureTypes[i];
                 int index = i;
                 Button button = new Button
                 {
@@ -93,19 +105,13 @@ namespace corel_draw
         private void EditSizeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _isAddClicked = false;
-            int matchingIndex = -1;
+            int matchingIndex = FindFigureFactoryIndex(_currentFigure.GetType());
 
-            for (int i = 0; i < FigureFactory.FigureTypes.Length; i++)
+            if (matchingIndex != -1)
             {
-                if (_currentFigure.GetType().Name + FACTORY_SUFFIX == FigureFactory.FigureTypes[i].Name)
-                {
-                    matchingIndex = i;
-                    break;
-                }
+                _figureFactory = _figureFactories[matchingIndex];
+                _figureFactory.BeginCreateFigure();
             }
-
-            _figureFactory = _figureFactories[matchingIndex];
-            _figureFactory.BeginCreateFigure();
         }
 
         private void EditSubscription(Figure figure)

@@ -13,8 +13,6 @@ namespace corel_draw.FactoryComponents
         protected readonly Pen _defaultPen = new Pen(Color.Black, 2f);
 
         public event Action<Figure> Finished;
-        public static readonly Type[] FigureTypes;
-
         public abstract void BeginCreateFigure();
         public abstract void MouseDown(MouseEventArgs e);
         public abstract void MouseMove(MouseEventArgs e);
@@ -24,11 +22,6 @@ namespace corel_draw.FactoryComponents
         public void OnFinished(Figure figure)
         {
             Finished?.Invoke(figure);
-        }
-
-        static FigureFactory()
-        {
-            FigureTypes = typeof(FigureFactory).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(FigureFactory))).ToArray();
         }
     }
 }
