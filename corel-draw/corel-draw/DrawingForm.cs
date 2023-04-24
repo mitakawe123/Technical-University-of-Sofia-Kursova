@@ -6,11 +6,9 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
 using Button = System.Windows.Forms.Button;
 
@@ -29,7 +27,6 @@ namespace corel_draw
 
         private FigureFactory _figureFactory;
         private Figure _currentFigure;
-        private Action<Figure> _onActionFinished;
 
         private Point _lastPoint = Point.Empty;
         private Point _initialPosition = Point.Empty;
@@ -127,14 +124,6 @@ namespace corel_draw
             _figureFactory.BeginCreateFigure();
 
             _figureFactories[matchingIndex].Finished += FigureFactoryFinished;
-
-            /*_figureFactories[matchingIndex].Finished -= _onActionFinished;
-            _onActionFinished = (figure) =>
-            {
-                EditSubscription(figure);
-                return;
-            };
-            _figureFactories[matchingIndex].Finished += _onActionFinished;*/
         }
 
         private void EditSubscription(Figure figure)

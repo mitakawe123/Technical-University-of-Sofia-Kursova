@@ -12,7 +12,6 @@ namespace corel_draw.Figures
             get { return _points; } 
             private set { _points = value; } 
         }
-        public Polygon() { }
         public Polygon(List<Point> points) : base(GetLocationAndSize(points, out int width,out int height),width, height)
         {
             _points = points;
@@ -51,9 +50,7 @@ namespace corel_draw.Figures
 
         public override Figure Clone()
         {
-            Polygon clone = (Polygon)base.Clone();
-            clone.Points = this.Points;
-            return clone;    
+            return new Polygon(_points);
         }
 
         public override void CopyState(Figure figure)
