@@ -10,7 +10,7 @@ namespace corel_draw.FactoryComponents
 {
     internal class PolygonFactory : FigureFactory
     {
-        private readonly List<Point> _clickedPoints = new List<Point>();
+        private List<Point> _clickedPoints = new List<Point>();
         private readonly Pen _penDashed = new Pen(Color.Black, 5) { DashStyle = DashStyle.Dash };
         private Polygon _polygon;
        
@@ -49,7 +49,7 @@ namespace corel_draw.FactoryComponents
         public override void MouseMove(MouseEventArgs e)
         {
             _endPoint = e.Location;
-            if (Control.ModifierKeys == Keys.Control && e.Button == MouseButtons.Left)
+           /* if (Control.ModifierKeys == Keys.Control && e.Button == MouseButtons.Left)
             {
                 for (int i = 0; i < _clickedPoints.Count; i++)
                 {
@@ -64,7 +64,7 @@ namespace corel_draw.FactoryComponents
             else
             {
                 _isDragging = false;
-            }
+            }*/
         }
 
         public override void MouseUp(MouseEventArgs e)
@@ -77,20 +77,18 @@ namespace corel_draw.FactoryComponents
             _isDragging = false;
         }
 
-        public override void MouseWheel(MouseEventArgs e,Figure currentFigure)
+        public override void MouseWheel(MouseEventArgs e, Figure currentFigure)
         {
             _isScrolling = true;
             if (e.Delta > 0)
-            {
-            }
+                currentFigure.Resize(currentFigure.Width + 10,currentFigure.Height + 10);
             else
-            {
-            }
+                currentFigure.Resize(currentFigure.Width - 10, currentFigure.Height - 10);
         }
 
         public override void Draw(Graphics g)
         {
-            if (_isDrawing)
+            if (_isDrawing && !_isScrolling)
             {
                 g.DrawLine(_penDashed, _startPoint, _endPoint);
             }
@@ -120,14 +118,13 @@ namespace corel_draw.FactoryComponents
                     g.FillPath(Brushes.Black, path);
                 }
             }
-            else
+            else if(!_isScrolling)
             {
                 g.DrawLines(_defaultPen, _clickedPoints.ToArray());
                 g.DrawLine(_defaultPen, _clickedPoints[_clickedPoints.Count - 1], _clickedPoints[0]);
 
                 _polygon = new Polygon(_clickedPoints.ToList());
                 OnFinished(_polygon);
-                _clickedPoints.Clear();
             }
         }
     }

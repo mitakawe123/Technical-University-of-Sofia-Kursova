@@ -9,8 +9,8 @@ namespace corel_draw.Figures
         private List<Point> _points;
         public List<Point> Points 
         { 
-            get { return _points; } 
-            private set { _points = value; } 
+            get => _points; 
+            private set => _points = value; 
         }
         public Polygon(List<Point> points) : base(GetLocationAndSize(points, out int width,out int height),width, height)
         {
@@ -48,33 +48,36 @@ namespace corel_draw.Figures
             }
         }
 
-        public override Figure Clone()
-        {
-            return new Polygon(_points);
-        }
+        public override Figure Clone() => new Polygon(_points);
 
         public override void CopyState(Figure figure)
         {
             base.CopyState(figure);
             if (figure is Polygon polygon)
-            {
                 _points = new List<Point>(polygon._points);
+        }
+        public override void Resize(int width,int height)
+        {
+            int currentWidth = Width;
+            int currentHeight = Height;
+
+            Width = width;
+            Height = height;
+
+            Point center = new Point(Location.X + currentWidth / 2, Location.Y + currentHeight / 2);
+            for (int i = 0; i < _points.Count; i++)
+            {
+                int deltaX = (int)Math.Round((_points[i].X - center.X) * (double)width / currentWidth);
+                int deltaY = (int)Math.Round((_points[i].Y - center.Y) * (double)height / currentHeight);
+                _points[i] = new Point(center.X + deltaX, center.Y + deltaY);
             }
         }
 
-        public override void Move(Point newPoint)
-        {
-            Location = new Point(Location.X + newPoint.X, Location.Y + newPoint.Y);
-        }
+        public override void Move(Point newPoint) => Location = new Point(Location.X + newPoint.X, Location.Y + newPoint.Y);
 
-        public override void Draw(Graphics g)
-        {
-            g.DrawPolygon(Pen, _points.ToArray());
-        }
-        public override void Fill(Graphics g)
-        {
-            g.FillPolygon(Brush, _points.ToArray());
-        }
+        public override void Draw(Graphics g) => g.DrawPolygon(Pen, _points.ToArray());
+        
+        public override void Fill(Graphics g) => g.FillPolygon(Brush, _points.ToArray());
 
         //Jordan Curve Theorem
         public override bool Contains(Point point)

@@ -17,7 +17,7 @@ namespace corel_draw.Figures
 
         public Color Color 
         {
-            get { return _color; }
+            get => _color;
             set 
             {
                 _color = value;
@@ -26,7 +26,7 @@ namespace corel_draw.Figures
         }
         public Color FillColor 
         {
-            get { return _fillColor; }
+            get => _fillColor; 
             set
             {
                 _fillColor = value;
@@ -47,10 +47,9 @@ namespace corel_draw.Figures
             Color = Color.Black;
             FillColor = Color.White;
         }
-        public virtual void Move(Point delta)
-        {
-            _location = new Point(_location.X + delta.X, _location.Y + delta.Y);
-        }
+        public virtual void Move(Point delta) =>_location = new Point(_location.X + delta.X, _location.Y + delta.Y);
+
+        public virtual void Resize(int width, int height) { }
 
         public abstract Figure Clone();
 

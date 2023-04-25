@@ -196,6 +196,7 @@ namespace corel_draw
                     else if(e.Button == MouseButtons.Right)
                         ContextMenu.Show(DrawingBox, e.Location);
                 }
+                //not opening context menu right
             }
 
             if (_figureFactory == null) return;
