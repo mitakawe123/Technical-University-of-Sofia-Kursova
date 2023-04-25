@@ -16,7 +16,7 @@ namespace corel_draw
 {
     public partial class DrawingForm : Form
     {
-        private static readonly Type[] FigureTypes = typeof(Figure).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(Figure))).ToArray();
+        private static readonly Type[] FigureTypes = typeof(FigureFactory).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(FigureFactory))).ToArray();
 
         private const string FACTORY_SUFFIX = "Factory";
         private const string PATH = "../../JsonFiles/DataFigures.json";
@@ -43,17 +43,19 @@ namespace corel_draw
             _commandManager = new CommandManager();
             _drawnFigures = new List<Figure>();
             _figureFactories = figureFactories;
-            foreach(var figureFactory in _figureFactories)
+            DrawingBox.MouseWheel += DrawingBox_OnMouseWheel;
+            foreach (var figureFactory in _figureFactories)
                 figureFactory.Finished += FigureFactoryFinished;
         }
 
         private void FigureFactoryFinished(Figure figure)
         {
             if (_isAddClicked) 
-                AddFigureSubscription(figure);
-            else 
-                EditSubscription(figure);
+                AddFigure(figure);
+            else
+                EditSize(figure);
         }
+
         private int FindFigureFactoryIndex(Type figureType)
         {
             for (int i = 0; i < FigureTypes.Length; i++)
@@ -93,7 +95,7 @@ namespace corel_draw
             }
         }
 
-        private void AddFigureSubscription(Figure figure)
+        private void AddFigure(Figure figure)
         {
             ICommand addCommand = new AddCommand(figure, _drawnFigures);
             _commandManager.AddCommand(addCommand);
@@ -102,19 +104,7 @@ namespace corel_draw
             DrawingBox.Invalidate();
         }
 
-        private void EditSizeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            _isAddClicked = false;
-            int matchingIndex = FindFigureFactoryIndex(_currentFigure.GetType());
-
-            if (matchingIndex != -1)
-            {
-                _figureFactory = _figureFactories[matchingIndex];
-                _figureFactory.BeginCreateFigure();
-            }
-        }
-
-        private void EditSubscription(Figure figure)
+        private void EditSize(Figure figure)
         {
             ICommand command = new EditSizeCommand(_currentFigure, figure);
             _commandManager.AddCommand(command);
@@ -122,6 +112,17 @@ namespace corel_draw
             _currentFigure = figure;
             actionList.Items.Add($"Edit {figure.GetType().Name} with new area of {figure.CalcArea():F2}");
             DrawingBox.Invalidate();
+        }
+
+        private void EditSizeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _isAddClicked = false;
+            int matchingIndex = FindFigureFactoryIndex(_currentFigure.GetType());
+
+            if (matchingIndex == -1) return;
+            
+            _figureFactory = _figureFactories[matchingIndex];
+            _figureFactory.BeginCreateFigure();
         }
 
         private void DeleteMenuItem_Click(object sender, EventArgs e)
@@ -140,18 +141,17 @@ namespace corel_draw
             if (_currentFigure == null) return;
 
             ColorDialog colorDialog = new ColorDialog();
-            if (colorDialog.ShowDialog() == DialogResult.OK)
-            {
-                Color oldColor = _currentFigure.Color;
-                Color newColor = colorDialog.Color;
+            if (colorDialog.ShowDialog() != DialogResult.OK) return;
+            
+            Color oldColor = _currentFigure.Color;
+            Color newColor = colorDialog.Color;
 
-                ICommand colorCommand = new ColorCommand(_currentFigure, oldColor, newColor);
-                _commandManager.AddCommand(colorCommand);
+            ICommand colorCommand = new ColorCommand(_currentFigure, oldColor, newColor);
+            _commandManager.AddCommand(colorCommand);
 
-                actionList.Items.Add($"Change {_currentFigure.GetType().Name} Color with {_currentFigure.Color.Name}");
-                _currentFigure.Color = newColor;
-                DrawingBox.Invalidate(); 
-            }
+            actionList.Items.Add($"Change {_currentFigure.GetType().Name} Color with {_currentFigure.Color.Name}");
+            _currentFigure.Color = newColor;
+            DrawingBox.Invalidate(); 
         }
 
         private void FillMenuItem_Click(object sender, EventArgs e)
@@ -159,19 +159,18 @@ namespace corel_draw
             if (_currentFigure == null) return;
 
             ColorDialog colorDialog = new ColorDialog();
-            if (colorDialog.ShowDialog() == DialogResult.OK)
-            {
-                Color oldFilling = _currentFigure.FillColor;
-                Color newFilling = colorDialog.Color;
-                _isFilling = true;
+            if (colorDialog.ShowDialog() != DialogResult.OK) return;
+            
+            Color oldFilling = _currentFigure.FillColor;
+            Color newFilling = colorDialog.Color;
+            _isFilling = true;
 
-                ICommand command = new FillCommand(_currentFigure, oldFilling, newFilling);
-                _commandManager.AddCommand(command);
+            ICommand command = new FillCommand(_currentFigure, oldFilling, newFilling);
+            _commandManager.AddCommand(command);
 
-                actionList.Items.Add($"Change {_currentFigure.GetType().Name} Fill Color with {_currentFigure.FillColor.Name}");
-                _currentFigure.FillColor = newFilling;
-                DrawingBox.Invalidate(); 
-            }
+            actionList.Items.Add($"Change {_currentFigure.GetType().Name} Fill Color with {_currentFigure.FillColor.Name}");
+            _currentFigure.FillColor = newFilling;
+            DrawingBox.Invalidate(); 
         }
 
         private void AdditionalInfoMenuItem_Click(object sender, EventArgs e)
@@ -193,10 +192,9 @@ namespace corel_draw
                         _isDragging = true;
                         _lastPoint = e.Location;
                         _initialPosition = e.Location;
-                    } else if(e.Button == MouseButtons.Right)
-                    {
-                        ContextMenu.Show(DrawingBox, e.Location);
                     }
+                    else if(e.Button == MouseButtons.Right)
+                        ContextMenu.Show(DrawingBox, e.Location);
                 }
             }
 
@@ -238,6 +236,27 @@ namespace corel_draw
 
             _figureFactory.MouseUp(e);
             DrawingBox.Invalidate();
+        }
+
+        protected void DrawingBox_OnMouseWheel(object sender, MouseEventArgs e)
+        {
+            foreach (Figure figure in _drawnFigures)
+            {
+                if (figure.Contains(e.Location))
+                {
+                    int matchingIndex = FindFigureFactoryIndex(figure.GetType());
+                    if (matchingIndex == -1) return;
+
+                    _figureFactory = _figureFactories[matchingIndex];
+
+                    if (_figureFactory == null) return;
+
+                    _figureFactory.MouseWheel(e, figure);
+                    DrawingBox.Invalidate();
+
+                    break;
+                }
+            }
         }
 
         private void DrawingBox_Paint(object sender, PaintEventArgs e)
@@ -325,7 +344,6 @@ namespace corel_draw
                 _commandManager.Redo();
             } 
             else if (e.KeyCode == Keys.Escape)
-            
                 _figureFactory = null;
             
             DrawingBox.Invalidate();

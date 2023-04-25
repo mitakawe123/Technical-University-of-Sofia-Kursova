@@ -11,25 +11,27 @@ namespace corel_draw.FactoryComponents
     internal class PolygonFactory : FigureFactory
     {
         private readonly List<Point> _clickedPoints = new List<Point>();
-        private Polygon _polygon;
         private readonly Pen _penDashed = new Pen(Color.Black, 5) { DashStyle = DashStyle.Dash };
+        private Polygon _polygon;
        
         private bool _isPolygonFinishedDrawing = false;
-        private bool _isDrawing;
         private bool _isDragging;
 
         private Point _startPoint;
         private Point _endPoint;
 
         private int _selectedPointIndex;
+
         public override void BeginCreateFigure()
         {
             _isPolygonFinishedDrawing = false;
-            _clickedPoints.Clear();
             _isDrawing = false;
             _isDragging = false;
+            _isScrolling = false;
             _selectedPointIndex = -1;
+            _clickedPoints.Clear();
         }
+
         public override void MouseDown(MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -43,6 +45,7 @@ namespace corel_draw.FactoryComponents
                 _isPolygonFinishedDrawing = true;
             }
         }
+
         public override void MouseMove(MouseEventArgs e)
         {
             _endPoint = e.Location;
@@ -72,6 +75,17 @@ namespace corel_draw.FactoryComponents
                 _clickedPoints[_selectedPointIndex] = e.Location;
             }
             _isDragging = false;
+        }
+
+        public override void MouseWheel(MouseEventArgs e,Figure currentFigure)
+        {
+            _isScrolling = true;
+            if (e.Delta > 0)
+            {
+            }
+            else
+            {
+            }
         }
 
         public override void Draw(Graphics g)

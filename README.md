@@ -15,7 +15,6 @@ The project is a graphic design editor where the user can create and edit variou
 - Create basic shapes such as squares, circles, triangles, and polygons
 - Edit the size, color, and position of shapes
 - Move and arrange shapes on the canvas
-- Use various tools to modify shapes, such as the knife tool, shape tool, and perspective tool
 
 ## Installation
 

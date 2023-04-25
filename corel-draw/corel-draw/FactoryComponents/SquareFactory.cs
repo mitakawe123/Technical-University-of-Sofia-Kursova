@@ -10,11 +10,13 @@ namespace corel_draw.FactoryComponents
         private Point _startPoint;
         private Point _endPoint;
         private Square _square;
-        private bool _isDrawing;
+
         public override void BeginCreateFigure()
         {
             _isDrawing = false;
+            _isScrolling = false;
         }
+
         public override void MouseDown(MouseEventArgs e)
         {
             _startPoint = e.Location;
@@ -40,6 +42,22 @@ namespace corel_draw.FactoryComponents
         {
             _isDrawing = false;
             OnFinished(_square);
+        }
+
+        public override void MouseWheel(MouseEventArgs e, Figure currentFigure)
+        {
+            _isScrolling = true;
+
+            if (e.Delta > 0)
+            {
+                currentFigure.Height += SCALE_SUFFIX;
+                currentFigure.Width += SCALE_SUFFIX;
+            }
+            else
+            {
+                currentFigure.Height -= SCALE_SUFFIX;
+                currentFigure.Width -= SCALE_SUFFIX;
+            }
         }
 
         public override void Draw(Graphics g)
