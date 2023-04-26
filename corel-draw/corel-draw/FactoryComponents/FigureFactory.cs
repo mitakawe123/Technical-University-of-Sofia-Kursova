@@ -34,9 +34,6 @@ namespace corel_draw.FactoryComponents
 
         public abstract void Draw(Graphics g);
 
-        public void OnFinished(Figure figure)
-        {
-            Finished?.Invoke(figure);
-        }
+        public void OnFinished(Figure figure) => Finished?.Invoke(figure);
     }
 }

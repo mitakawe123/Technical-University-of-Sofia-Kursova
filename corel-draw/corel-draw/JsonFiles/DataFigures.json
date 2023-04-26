@@ -4,12 +4,22 @@
     "$type": "System.Collections.Generic.List`1[[corel_draw.Figures.Figure, corel-draw]], mscorlib",
     "$values": [
       {
-        "$type": "corel_draw.Figures.Circle, corel-draw",
+        "$type": "corel_draw.Figures.Polygon, corel-draw",
+        "Points": {
+          "$type": "System.Collections.Generic.List`1[[System.Drawing.Point, System.Drawing]], mscorlib",
+          "$values": [
+            "531, 47",
+            "648, 308",
+            "647, 307",
+            "283, 339",
+            "285, 339"
+          ]
+        },
+        "Location": "283, 47",
         "Color": "Black",
         "FillColor": "White",
-        "Location": "226, 137",
-        "Width": 190,
-        "Height": 190
+        "Width": 365,
+        "Height": 292
       }
     ]
   }

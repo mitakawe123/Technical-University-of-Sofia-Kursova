@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace corel_draw.Figures
 {
@@ -47,7 +49,7 @@ namespace corel_draw.Figures
             Color = Color.Black;
             FillColor = Color.White;
         }
-        public virtual void Move(Point delta) =>_location = new Point(_location.X + delta.X, _location.Y + delta.Y);
+        public virtual void Move(Point delta) => _location = new Point(_location.X + delta.X, _location.Y + delta.Y);
 
         public virtual void Resize(int width, int height) { }
 

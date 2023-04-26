@@ -16,12 +16,12 @@ namespace corel_draw
 {
     public partial class DrawingForm : Form
     {
-        private static readonly Type[] FigureTypes = typeof(FigureFactory).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(FigureFactory))).ToArray();
-
         private const string FACTORY_SUFFIX = "Factory";
         private const string PATH = "../../JsonFiles/DataFigures.json";
         private const int WIDTH = 75;
         private const int HEIGHT = 150;
+
+        private static readonly Type[] FigureTypes = typeof(FigureFactory).Assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(FigureFactory))).ToArray();
 
         private readonly IReadOnlyList<FigureFactory> _figureFactories;
         private readonly List<Figure> _drawnFigures;
@@ -59,12 +59,9 @@ namespace corel_draw
         private int FindFigureFactoryIndex(Type figureType)
         {
             for (int i = 0; i < FigureTypes.Length; i++)
-            {
                 if (figureType.Name + FACTORY_SUFFIX == FigureTypes[i].Name)
-                {
                     return i;
-                }
-            }
+               
             return -1; 
         }
 
@@ -193,17 +190,21 @@ namespace corel_draw
                         _lastPoint = e.Location;
                         _initialPosition = e.Location;
                     }
-                    else if(e.Button == MouseButtons.Right)
-                        ContextMenu.Show(DrawingBox, e.Location);
+                    else if (e.Button == MouseButtons.Right)
+                    {
+                        ContextMenu.Enabled = true;
+                    }
                 }
-                //not opening context menu right
+                else ContextMenu.Enabled = false;
             }
 
-            if (_figureFactory == null) return;
+            if (_figureFactory == null)
+                return;
 
             _figureFactory.MouseDown(e);
             DrawingBox.Invalidate();
         }
+
 
         private void DrawingBox_MouseMove(object sender, MouseEventArgs e)
         {
@@ -267,9 +268,7 @@ namespace corel_draw
             {
                 figure.Draw(e.Graphics);
                 if(_isFilling)
-                {
                     figure.Fill(e.Graphics);
-                }
             }
         }
 
@@ -332,22 +331,24 @@ namespace corel_draw
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Z && e.Control)
+            if (e.Control)
             {
-                if (!_commandManager.CanUndo) return;
-                
-                _commandManager.Undo();
-            } 
-            else if (e.KeyCode == Keys.Y && e.Control)
-            {
-                if (!_commandManager.CanRedo) return;
-
-                _commandManager.Redo();
-            } 
+                if (e.KeyCode == Keys.Z 
+                    && _commandManager.CanUndo)
+                    _commandManager.Undo();
+                else if (e.KeyCode == Keys.Y 
+                    && _commandManager.CanRedo)
+                    _commandManager.Redo();
+            }
             else if (e.KeyCode == Keys.Escape)
                 _figureFactory = null;
             
             DrawingBox.Invalidate();
+        }
+
+        private void ContextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            
         }
     }
 }

@@ -119,6 +119,7 @@
             // 
             // ContextMenu
             // 
+            this.ContextMenu.Enabled = false;
             this.ContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.DeleteStripMenuItem,
             this.ChangeBorderColorToolStripMenuItem,
@@ -126,7 +127,8 @@
             this.EditToolStripMenuItem,
             this.InfoToolStripMenuItem});
             this.ContextMenu.Name = "contextMenuStrip1";
-            this.ContextMenu.Size = new System.Drawing.Size(186, 114);
+            this.ContextMenu.Size = new System.Drawing.Size(186, 136);
+            this.ContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenu_Opening);
             // 
             // DeleteStripMenuItem
             // 

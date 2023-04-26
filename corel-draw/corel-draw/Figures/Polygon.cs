@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace corel_draw.Figures
 {
@@ -34,7 +35,13 @@ namespace corel_draw.Figures
             height = maxY - minY;
             return new Point(minX, minY);
         }
-
+        public void GetPolygonBounds(List<Point> polygon, out int minX, out int minY, out int maxX, out int maxY)
+        {
+            minX = polygon.Min(p => p.X);
+            minY = polygon.Min(p => p.Y);
+            maxX = polygon.Max(p => p.X);
+            maxY = polygon.Max(p => p.Y);
+        }
         public override Point Location
         {
             get => base.Location;
