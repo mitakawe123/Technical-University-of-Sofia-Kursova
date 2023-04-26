@@ -39,12 +39,15 @@ namespace corel_draw.FactoryComponents
         public override void MouseDown(MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
-            { 
-                _startPoint = e.Location;
-                _isDrawing = true;
-                _clickedPoints.Add(e.Location);
-
-                if (Control.ModifierKeys != Keys.Control) return; 
+            {
+                if (Control.ModifierKeys != Keys.Control)
+                {
+                    _startPoint = e.Location;
+                    _isDrawing = true;
+                    _clickedPoints.Add(e.Location);
+                    return;
+                }
+                
 
                 for (int i = 0; i < _clickedPoints.Count; i++)
                 {
@@ -64,9 +67,8 @@ namespace corel_draw.FactoryComponents
         public override void MouseMove(MouseEventArgs e)
         {
             _endPoint = e.Location;
-            if (!_dragginPoint) return;
-         
-            _clickedPoints[_selectedPointIndex] = e.Location;
+            if (_dragginPoint) 
+                _clickedPoints[_selectedPointIndex] = e.Location;
         }
 
         public override void MouseUp(MouseEventArgs e)
@@ -87,7 +89,7 @@ namespace corel_draw.FactoryComponents
 
         public override void Draw(Graphics g)
         {
-            if (_isDrawing && !_isScrolling)
+            if (_isDrawing && !_isScrolling && !_dragginPoint)
             {
                 g.DrawLine(_penDashed, _startPoint, _endPoint);
             }
@@ -101,7 +103,7 @@ namespace corel_draw.FactoryComponents
                         {
                             g.DrawLine(_penDashed, _clickedPoints[i], _clickedPoints[i + 1]);
                         }
-                        else if(!_dragginPoint)
+                        else 
                         {
                             g.DrawLine(_penDashed, _clickedPoints[i], _clickedPoints[0]);
                         }
@@ -109,10 +111,10 @@ namespace corel_draw.FactoryComponents
                         {
                             g.FillEllipse(Brushes.Red, _clickedPoints[i].X - 8, _clickedPoints[i].Y - 8, 16, 16);
                         }
-                       /* else 
+                        else
                         {
                             g.FillEllipse(Brushes.Black, _clickedPoints[i].X - 4, _clickedPoints[i].Y - 4, 8, 8);
-                        }*/
+                        }
                     }
                     g.FillPath(Brushes.Black, path);
                 }
