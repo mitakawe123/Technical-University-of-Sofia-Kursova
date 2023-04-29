@@ -9,7 +9,6 @@ namespace corel_draw.FactoryComponents
 {
     public abstract class FigureFactory
     {
-        //Shift -> inser point
         protected const int SCALE_SUFFIX = 20;
         protected readonly Pen _defaultPen = new Pen(Color.Black, 2f);
         protected bool _isScrolling;
@@ -24,7 +23,7 @@ namespace corel_draw.FactoryComponents
         public abstract void MouseMove(MouseEventArgs e);
 
         public abstract void MouseUp(MouseEventArgs e);
-        //bug on mousewheel drawing figures while active
+
         public abstract void MouseWheel(MouseEventArgs e,Figure currentFigure);
 
         public abstract void Draw(Graphics g);

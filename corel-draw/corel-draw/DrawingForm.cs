@@ -48,7 +48,7 @@ namespace corel_draw
         private bool _isFilling = false;
         private bool _isAddClicked = false;
         private bool _isResizing = false;
-        private bool _isCurrentlyEditing = false;
+
         public DrawingForm(IReadOnlyList<FigureFactory> figureFactories)
         {
             InitializeComponent(); 
@@ -66,19 +66,17 @@ namespace corel_draw
             {
                 ICommand addCommand = new AddCommand(figure, _drawnFigures);
                 _commandManager.AddCommand(addCommand);
-                _figureFactory = null;
                 actionList.Items.Add($"Added {figure.GetType().Name} with area of {figure.CalcArea():F2}");
-                DrawingBox.Invalidate();
             }
             else
             {
                 ICommand command = new EditSizeCommand(_currentFigure, figure);
                 _commandManager.AddCommand(command);
-                _figureFactory = null;
                 _currentFigure = figure;
                 actionList.Items.Add($"Edit {figure.GetType().Name} with new area of {figure.CalcArea():F2}");
-                DrawingBox.Invalidate();
             }
+            _figureFactory = null;
+            DrawingBox.Invalidate();
         }
 
         private int FindFigureFactoryIndex(Type figureType)
@@ -112,7 +110,6 @@ namespace corel_draw
                     _figureFactory.BeginCreateFigure();
                     _isFilling = false;
                     _isAddClicked = true;
-                    _isCurrentlyEditing = false;
                 };
                 Controls.Add(button);
             }
@@ -120,8 +117,8 @@ namespace corel_draw
 
         private void EditSizeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _isCurrentlyEditing = true;
             _isAddClicked = false;
+            _isDragging = false;
             int matchingIndex = FindFigureFactoryIndex(_currentFigure.GetType());
 
             if (matchingIndex == -1) 
@@ -194,13 +191,8 @@ namespace corel_draw
 
         private void ScaleFigure(MouseEventArgs e)
         {
-            if (_currentFigure.IsInsideBoundingBox(e.Location))
-            {
-                int newWidth = _initialWidth + (e.Location.X - _initialPosition.X);
-                int newHeight = _initialHeight + (e.Location.Y - _initialPosition.Y);
-
-                _currentFigure.Resize(newWidth, newHeight);
-            }
+            if (_currentFigure.IsInsideBoundingBox(e.Location))            
+                _currentFigure.Resize(_initialWidth + (e.Location.X - _initialPosition.X), _initialHeight + (e.Location.Y - _initialPosition.Y));
             else if (e.Button == MouseButtons.Right)
             {
                 _isResizing = false;
@@ -214,7 +206,7 @@ namespace corel_draw
             foreach (Figure figure in _drawnFigures)
             {
                 if (!figure.Contains(e.Location))
-                    continue; 
+                    continue;
 
                 _currentFigure = figure;
                 if (e.Button == MouseButtons.Left)
@@ -224,9 +216,13 @@ namespace corel_draw
                     _initialPosition = figure.Location;
                     _initialWidth = figure.Width;
                     _initialHeight = figure.Height;
+                    return; 
                 }
                 else if (e.Button == MouseButtons.Right)
+                {
                     ContextMenuCommands.Show(DrawingBox, e.Location);
+                    return; 
+                }
             }
 
             if (_figureFactory == null)
@@ -235,13 +231,13 @@ namespace corel_draw
             _figureFactory.MouseDown(e);
             DrawingBox.Invalidate();
         }
-        
+
         private void DrawingBox_MouseMove(object sender, MouseEventArgs e)
         {
             if(_isResizing)
                 ScaleFigure(e);
 
-            if (_isDragging && !_isCurrentlyEditing)
+            if (_isDragging)
             {
                 Point delta = new Point(e.X - _lastPoint.X, e.Y - _lastPoint.Y);
                 _lastPoint = e.Location;
@@ -249,7 +245,8 @@ namespace corel_draw
                 DrawingBox.Invalidate();
             }
 
-            if (_figureFactory == null) return;
+            if (_figureFactory == null) 
+                return;
 
             _figureFactory.MouseMove(e);
             DrawingBox.Invalidate();

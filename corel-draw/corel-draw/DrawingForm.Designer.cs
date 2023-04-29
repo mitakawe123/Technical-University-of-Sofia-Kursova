@@ -42,7 +42,7 @@
             this.BorderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.FillToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.InfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.resizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ResizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.DrawingBox)).BeginInit();
             this.ContextMenuCommands.SuspendLayout();
             this.SuspendLayout();
@@ -126,7 +126,7 @@
             this.BorderToolStripMenuItem,
             this.FillToolStripMenuItem,
             this.InfoToolStripMenuItem,
-            this.resizeToolStripMenuItem});
+            this.ResizeToolStripMenuItem});
             this.ContextMenuCommands.Name = "ContextMenuCommands";
             this.ContextMenuCommands.Size = new System.Drawing.Size(186, 158);
             // 
@@ -165,12 +165,12 @@
             this.InfoToolStripMenuItem.Text = "Info";
             this.InfoToolStripMenuItem.Click += new System.EventHandler(this.AdditionalInfoMenuItem_Click);
             // 
-            // resizeToolStripMenuItem
+            // ResizeToolStripMenuItem
             // 
-            this.resizeToolStripMenuItem.Name = "resizeToolStripMenuItem";
-            this.resizeToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.resizeToolStripMenuItem.Text = "Resize";
-            this.resizeToolStripMenuItem.Click += new System.EventHandler(this.ResizeToolStripMenuItem_Click);
+            this.ResizeToolStripMenuItem.Name = "ResizeToolStripMenuItem";
+            this.ResizeToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.ResizeToolStripMenuItem.Text = "Resize";
+            this.ResizeToolStripMenuItem.Click += new System.EventHandler(this.ResizeToolStripMenuItem_Click);
             // 
             // DrawingForm
             // 
@@ -209,7 +209,7 @@
         private System.Windows.Forms.ToolStripMenuItem BorderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem FillToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem InfoToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem resizeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ResizeToolStripMenuItem;
     }
 }
 
