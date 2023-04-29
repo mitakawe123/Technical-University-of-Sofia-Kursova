@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 
 namespace corel_draw.Figures
 {
     internal class Polygon : Figure
     {
+        private readonly Pen _dashPen = new Pen(Color.Blue, 10) { DashStyle = DashStyle.Dot };
+        private System.Drawing.Rectangle _boundingRect;
         private List<Point> _points;
         public List<Point> Points 
         { 
@@ -82,8 +85,24 @@ namespace corel_draw.Figures
 
         public override void Move(Point newPoint) => Location = new Point(Location.X + newPoint.X, Location.Y + newPoint.Y);
 
-        public override void Draw(Graphics g) => g.DrawPolygon(Pen, _points.ToArray());
-        
+        public override void Draw(Graphics g)
+        {
+            g.DrawPolygon(Pen, _points.ToArray());
+         
+            if (ShowPolygonBoundingBox)
+            {
+                GetPolygonBounds(_points, out int minX, out int minY, out int maxX, out int maxY);
+                _boundingRect = new System.Drawing.Rectangle(minX, minY, maxX - minX, maxY - minY);
+                g.DrawRectangle(_dashPen, _boundingRect);
+            }
+        }
+
+        public override bool IsInsideBoundingBox(Point point)
+        {
+            System.Drawing.Rectangle expandedRect = new System.Drawing.Rectangle(_boundingRect.X - 5, _boundingRect.Y - 5, _boundingRect.Width + 20, _boundingRect.Height + 20);
+            return expandedRect.Contains(point);
+        }
+
         public override void Fill(Graphics g) => g.FillPolygon(Brush, _points.ToArray());
 
         //Jordan Curve Theorem

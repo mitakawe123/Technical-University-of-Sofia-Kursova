@@ -16,7 +16,7 @@ namespace corel_draw.Figures
         private Color _color;
         protected SolidBrush Brush { get; private set; }
         protected Pen Pen { get; private set; }
-
+        public bool ShowPolygonBoundingBox { get; set; }
         public Color Color 
         {
             get => _color;
@@ -68,6 +68,7 @@ namespace corel_draw.Figures
         public abstract void Draw(Graphics g);
 
         public abstract void Fill(Graphics g);
+
         public abstract double CalcArea();
 
         public virtual bool Contains(Point point)
@@ -77,5 +78,7 @@ namespace corel_draw.Figures
 
             return isInsideX && isInsideY;
         }
+
+        public virtual bool IsInsideBoundingBox(Point point) => false; 
     }
 }

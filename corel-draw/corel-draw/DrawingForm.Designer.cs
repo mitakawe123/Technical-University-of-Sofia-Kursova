@@ -36,14 +36,15 @@
             this.actionList = new System.Windows.Forms.ListBox();
             this.SaveToFile = new System.Windows.Forms.Button();
             this.LoadFromFile = new System.Windows.Forms.Button();
-            this.ContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.DeleteStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ChangeBorderColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ChangeFillColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.EditToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ContextMenuCommands = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.DeleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.EdittoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.BorderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.FillToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.InfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.DrawingBox)).BeginInit();
-            this.ContextMenu.SuspendLayout();
+            this.ContextMenuCommands.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -117,46 +118,45 @@
             this.LoadFromFile.UseVisualStyleBackColor = true;
             this.LoadFromFile.Click += new System.EventHandler(this.LoadFromFile_Click);
             // 
-            // ContextMenu
+            // ContextMenuCommands
             // 
-            this.ContextMenu.Enabled = false;
-            this.ContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.DeleteStripMenuItem,
-            this.ChangeBorderColorToolStripMenuItem,
-            this.ChangeFillColorToolStripMenuItem,
-            this.EditToolStripMenuItem,
-            this.InfoToolStripMenuItem});
-            this.ContextMenu.Name = "contextMenuStrip1";
-            this.ContextMenu.Size = new System.Drawing.Size(186, 136);
-            this.ContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenu_Opening);
+            this.ContextMenuCommands.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.DeleteToolStripMenuItem,
+            this.EdittoolStripMenuItem,
+            this.BorderToolStripMenuItem,
+            this.FillToolStripMenuItem,
+            this.InfoToolStripMenuItem,
+            this.resizeToolStripMenuItem});
+            this.ContextMenuCommands.Name = "ContextMenuCommands";
+            this.ContextMenuCommands.Size = new System.Drawing.Size(186, 158);
             // 
-            // DeleteStripMenuItem
+            // DeleteToolStripMenuItem
             // 
-            this.DeleteStripMenuItem.Name = "DeleteStripMenuItem";
-            this.DeleteStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.DeleteStripMenuItem.Text = "Delete";
-            this.DeleteStripMenuItem.Click += new System.EventHandler(this.DeleteMenuItem_Click);
+            this.DeleteToolStripMenuItem.Name = "DeleteToolStripMenuItem";
+            this.DeleteToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.DeleteToolStripMenuItem.Text = "Delete";
+            this.DeleteToolStripMenuItem.Click += new System.EventHandler(this.DeleteMenuItem_Click);
             // 
-            // ChangeBorderColorToolStripMenuItem
+            // EdittoolStripMenuItem
             // 
-            this.ChangeBorderColorToolStripMenuItem.Name = "ChangeBorderColorToolStripMenuItem";
-            this.ChangeBorderColorToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.ChangeBorderColorToolStripMenuItem.Text = "Change Border Color";
-            this.ChangeBorderColorToolStripMenuItem.Click += new System.EventHandler(this.ColorMenuItem_Click);
+            this.EdittoolStripMenuItem.Name = "EdittoolStripMenuItem";
+            this.EdittoolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.EdittoolStripMenuItem.Text = "Edit";
+            this.EdittoolStripMenuItem.Click += new System.EventHandler(this.EditSizeToolStripMenuItem_Click);
             // 
-            // ChangeFillColorToolStripMenuItem
+            // BorderToolStripMenuItem
             // 
-            this.ChangeFillColorToolStripMenuItem.Name = "ChangeFillColorToolStripMenuItem";
-            this.ChangeFillColorToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.ChangeFillColorToolStripMenuItem.Text = "Change Fill Color";
-            this.ChangeFillColorToolStripMenuItem.Click += new System.EventHandler(this.FillMenuItem_Click);
+            this.BorderToolStripMenuItem.Name = "BorderToolStripMenuItem";
+            this.BorderToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.BorderToolStripMenuItem.Text = "Change Border Color";
+            this.BorderToolStripMenuItem.Click += new System.EventHandler(this.ColorMenuItem_Click);
             // 
-            // EditToolStripMenuItem
+            // FillToolStripMenuItem
             // 
-            this.EditToolStripMenuItem.Name = "EditToolStripMenuItem";
-            this.EditToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.EditToolStripMenuItem.Text = "Edit";
-            this.EditToolStripMenuItem.Click += new System.EventHandler(this.EditSizeToolStripMenuItem_Click);
+            this.FillToolStripMenuItem.Name = "FillToolStripMenuItem";
+            this.FillToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.FillToolStripMenuItem.Text = "Change Fill Color";
+            this.FillToolStripMenuItem.Click += new System.EventHandler(this.FillMenuItem_Click);
             // 
             // InfoToolStripMenuItem
             // 
@@ -165,12 +165,18 @@
             this.InfoToolStripMenuItem.Text = "Info";
             this.InfoToolStripMenuItem.Click += new System.EventHandler(this.AdditionalInfoMenuItem_Click);
             // 
+            // resizeToolStripMenuItem
+            // 
+            this.resizeToolStripMenuItem.Name = "resizeToolStripMenuItem";
+            this.resizeToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.resizeToolStripMenuItem.Text = "Resize";
+            this.resizeToolStripMenuItem.Click += new System.EventHandler(this.ResizeToolStripMenuItem_Click);
+            // 
             // DrawingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1344, 630);
-            this.ContextMenuStrip = this.ContextMenu;
             this.Controls.Add(this.LoadFromFile);
             this.Controls.Add(this.SaveToFile);
             this.Controls.Add(this.actionList);
@@ -183,7 +189,7 @@
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.DrawingForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.DrawingBox)).EndInit();
-            this.ContextMenu.ResumeLayout(false);
+            this.ContextMenuCommands.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -197,12 +203,13 @@
         private System.Windows.Forms.ListBox actionList;
         private System.Windows.Forms.Button SaveToFile;
         private System.Windows.Forms.Button LoadFromFile;
-        private System.Windows.Forms.ContextMenuStrip ContextMenu;
-        private System.Windows.Forms.ToolStripMenuItem DeleteStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem ChangeBorderColorToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem ChangeFillColorToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem EditToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip ContextMenuCommands;
+        private System.Windows.Forms.ToolStripMenuItem DeleteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem EdittoolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem BorderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem FillToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem InfoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem resizeToolStripMenuItem;
     }
 }
 

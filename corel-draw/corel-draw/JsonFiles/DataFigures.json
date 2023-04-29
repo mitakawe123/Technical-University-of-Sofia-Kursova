@@ -8,18 +8,17 @@
         "Points": {
           "$type": "System.Collections.Generic.List`1[[System.Drawing.Point, System.Drawing]], mscorlib",
           "$values": [
-            "531, 47",
-            "648, 308",
-            "647, 307",
-            "283, 339",
-            "285, 339"
+            "483, 27",
+            "889, 260",
+            "445, 199"
           ]
         },
-        "Location": "283, 47",
+        "Location": "480, 14",
+        "ShowPolygonBoundingBox": false,
         "Color": "Black",
         "FillColor": "White",
-        "Width": 365,
-        "Height": 292
+        "Width": 444,
+        "Height": 217
       }
     ]
   }

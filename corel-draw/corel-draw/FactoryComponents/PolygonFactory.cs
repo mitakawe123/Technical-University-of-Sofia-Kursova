@@ -12,16 +12,15 @@ namespace corel_draw.FactoryComponents
     {
         private const int SELECTION_THRESHOLD = 20;
 
-        private List<Point> _clickedPoints = new List<Point>();
-        private Polygon _polygon;
         private readonly Pen _penDashed = new Pen(Color.Black, 5) { DashStyle = DashStyle.Dash };
-
-        private bool _isPolygonFinishedDrawing;
-        private bool _isDragging;
-        private bool _dragginPoint;
+        private readonly List<Point> _clickedPoints = new List<Point>();
+        private Polygon _polygon;
 
         private Point _startPoint;
         private Point _endPoint;
+        
+        private bool _isPolygonFinishedDrawing;
+        private bool _dragginPoint;
 
         private int _selectedPointIndex;
         
@@ -29,7 +28,6 @@ namespace corel_draw.FactoryComponents
         {
             _isPolygonFinishedDrawing = false;
             _isDrawing = false;
-            _isDragging = false;
             _isScrolling = false;
             _dragginPoint = false;
             _selectedPointIndex = -1;
@@ -48,7 +46,6 @@ namespace corel_draw.FactoryComponents
                     return;
                 }
                 
-
                 for (int i = 0; i < _clickedPoints.Count; i++)
                 {
                     if (Math.Abs(e.Location.X - _clickedPoints[i].X) < SELECTION_THRESHOLD &&
@@ -74,7 +71,6 @@ namespace corel_draw.FactoryComponents
         public override void MouseUp(MouseEventArgs e)
         {
             _startPoint = e.Location;
-            _isDragging = false; 
             _dragginPoint = false;
         }
 
@@ -90,9 +86,8 @@ namespace corel_draw.FactoryComponents
         public override void Draw(Graphics g)
         {
             if (_isDrawing && !_isScrolling && !_dragginPoint)
-            {
                 g.DrawLine(_penDashed, _startPoint, _endPoint);
-            }
+            
             if (!_isPolygonFinishedDrawing)
             {
                 using (GraphicsPath path = new GraphicsPath())
@@ -100,21 +95,13 @@ namespace corel_draw.FactoryComponents
                     for (int i = 0; i < _clickedPoints.Count; i++)  
                     {
                         if (i < _clickedPoints.Count - 1)
-                        {
                             g.DrawLine(_penDashed, _clickedPoints[i], _clickedPoints[i + 1]);
-                        }
                         else 
-                        {
                             g.DrawLine(_penDashed, _clickedPoints[i], _clickedPoints[0]);
-                        }
                         if (i == _selectedPointIndex)
-                        {
                             g.FillEllipse(Brushes.Red, _clickedPoints[i].X - 8, _clickedPoints[i].Y - 8, 16, 16);
-                        }
                         else
-                        {
                             g.FillEllipse(Brushes.Black, _clickedPoints[i].X - 4, _clickedPoints[i].Y - 4, 8, 8);
-                        }
                     }
                     g.FillPath(Brushes.Black, path);
                 }
@@ -125,11 +112,6 @@ namespace corel_draw.FactoryComponents
                 g.DrawLine(_defaultPen, _clickedPoints[_clickedPoints.Count - 1], _clickedPoints[0]);
 
                 _polygon = new Polygon(_clickedPoints.ToList());
-
-                //_polygon.GetPolygonBounds(_clickedPoints, out int minX, out int minY, out int maxX, out int maxY);
-                //System.Drawing.Rectangle boundingRect = new System.Drawing.Rectangle(minX, minY, maxX - minX, maxY - minY);
-                //g.DrawRectangle(_penDashed, boundingRect);
-
                 OnFinished(_polygon);
             }
         }
