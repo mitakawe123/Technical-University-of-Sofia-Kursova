@@ -41,6 +41,7 @@ namespace corel_draw
         private bool _isFilling = false;
         private bool _isAddClicked = false;
         private bool _isResizing = false;
+        private bool _isCurrentlyEditing = false;
 
         private int _initialWidth;
         private int _initialHeight;
@@ -108,6 +109,7 @@ namespace corel_draw
                     _figureFactory.BeginCreateFigure();
                     _isFilling = false;
                     _isAddClicked = true;
+                    _isCurrentlyEditing = false;
                 };
                 Controls.Add(button);
             }
@@ -115,6 +117,7 @@ namespace corel_draw
 
         private void EditSizeToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            _isCurrentlyEditing = true;
             _isAddClicked = false;
             int matchingIndex = FindFigureFactoryIndex(_currentFigure.GetType());
 
@@ -234,7 +237,7 @@ namespace corel_draw
             if(_isResizing)
                 ScaleFigure(e);
 
-            if (_isDragging)
+            if (_isDragging && !_isCurrentlyEditing)
             {
                 Point delta = new Point(e.X - _lastPoint.X, e.Y - _lastPoint.Y);
                 _lastPoint = e.Location;
