@@ -128,7 +128,7 @@
             this.InfoToolStripMenuItem,
             this.ResizeToolStripMenuItem});
             this.ContextMenuCommands.Name = "ContextMenuCommands";
-            this.ContextMenuCommands.Size = new System.Drawing.Size(186, 158);
+            this.ContextMenuCommands.Size = new System.Drawing.Size(186, 136);
             // 
             // DeleteToolStripMenuItem
             // 
@@ -141,7 +141,7 @@
             // 
             this.EdittoolStripMenuItem.Name = "EdittoolStripMenuItem";
             this.EdittoolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.EdittoolStripMenuItem.Text = "Edit";
+            this.EdittoolStripMenuItem.Text = "Change Size";
             this.EdittoolStripMenuItem.Click += new System.EventHandler(this.EditSizeToolStripMenuItem_Click);
             // 
             // BorderToolStripMenuItem
