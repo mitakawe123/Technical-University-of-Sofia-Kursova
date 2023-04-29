@@ -10,11 +10,11 @@ namespace corel_draw.FigureInfo
         public List<string> SpecialProps { get; private set; }
         public List<string> DefaultProps{ get; private set; }
 
-        private Figure _biggestFigure;
-        private Figure _smallestFigure;
-        private Figure _firstFigure;
-        private Figure _lastFigure;
-        private Figure _polygonWithMostSides;
+        private readonly Figure _biggestFigure;
+        private readonly Figure _smallestFigure;
+        private readonly Figure _firstFigure;
+        private readonly Figure _lastFigure;
+        private readonly Figure _polygonWithMostSides;
 
         public FigureInfo(List<Figure> drawnFigures,Figure currentFigure)
         {

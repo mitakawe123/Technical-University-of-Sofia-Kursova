@@ -27,25 +27,28 @@ namespace corel_draw
             .IsSubclassOf(typeof(FigureFactory)))
             .ToArray();
 
+        private static readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.All
+        };
         private readonly IReadOnlyList<FigureFactory> _figureFactories;
         private readonly List<Figure> _drawnFigures;
         private readonly CommandManager _commandManager;
-
+        
         private FigureFactory _figureFactory;
         private Figure _currentFigure;
 
         private Point _lastPoint = Point.Empty;
         private Point _initialPosition = Point.Empty;
 
+        private int _initialWidth;
+        private int _initialHeight;
+
         private bool _isDragging = false;
         private bool _isFilling = false;
         private bool _isAddClicked = false;
         private bool _isResizing = false;
         private bool _isCurrentlyEditing = false;
-
-        private int _initialWidth;
-        private int _initialHeight;
-
         public DrawingForm(IReadOnlyList<FigureFactory> figureFactories)
         {
             InitializeComponent(); 
@@ -121,7 +124,8 @@ namespace corel_draw
             _isAddClicked = false;
             int matchingIndex = FindFigureFactoryIndex(_currentFigure.GetType());
 
-            if (matchingIndex == -1) return;
+            if (matchingIndex == -1) 
+                return;
             
             _figureFactory = _figureFactories[matchingIndex];
             _figureFactory.BeginCreateFigure();
@@ -209,20 +213,20 @@ namespace corel_draw
         {
             foreach (Figure figure in _drawnFigures)
             {
-                if (figure.Contains(e.Location))
-                {   
-                    _currentFigure = figure;
-                    if (e.Button == MouseButtons.Left)
-                    {
-                        _isDragging = true;
-                        _lastPoint = e.Location;
-                        _initialPosition = figure.Location;
-                        _initialWidth = figure.Width;
-                        _initialHeight = figure.Height;
-                    }
-                    else if (e.Button == MouseButtons.Right)
-                        ContextMenuCommands.Show(DrawingBox, e.Location);
+                if (!figure.Contains(e.Location))
+                    continue; 
+
+                _currentFigure = figure;
+                if (e.Button == MouseButtons.Left)
+                {
+                    _isDragging = true;
+                    _lastPoint = e.Location;
+                    _initialPosition = figure.Location;
+                    _initialWidth = figure.Width;
+                    _initialHeight = figure.Height;
                 }
+                else if (e.Button == MouseButtons.Right)
+                    ContextMenuCommands.Show(DrawingBox, e.Location);
             }
 
             if (_figureFactory == null)
@@ -262,15 +266,15 @@ namespace corel_draw
                 _lastPoint = Point.Empty;
                 Invalidate();
             }
-
             if (_isResizing)
-            { 
+            {
                 _isResizing = false;
-                _currentFigure.ShowPolygonBoundingBox = false; 
+                _currentFigure.ShowPolygonBoundingBox = false;
                 Refresh();
             }
 
-            if (_figureFactory == null) return;
+            if (_figureFactory == null) 
+                return;
 
             _figureFactory.MouseUp(e);
             DrawingBox.Invalidate();
@@ -280,18 +284,18 @@ namespace corel_draw
         {
             foreach (Figure figure in _drawnFigures)
             {
-                if (figure.Contains(e.Location))
-                {
-                    int matchingIndex = FindFigureFactoryIndex(figure.GetType());
-                    if (matchingIndex == -1)
-                        return;
+                if (!figure.Contains(e.Location))
+                    continue;
 
-                    _figureFactory = _figureFactories[matchingIndex];
-                    _figureFactory.MouseWheel(e, figure);
-                    DrawingBox.Invalidate();
+                int matchingIndex = FindFigureFactoryIndex(figure.GetType());
+                if (matchingIndex == -1)
+                    return;
 
-                    break;
-                }
+                _figureFactory = _figureFactories[matchingIndex];
+                _figureFactory.MouseWheel(e, figure);
+                DrawingBox.Invalidate();
+
+                break;
             }
         }
 
@@ -327,7 +331,7 @@ namespace corel_draw
             try
             {
                 DrawingData drawingData = new DrawingData { DrawnFigures = _drawnFigures.ToList() };
-                string json = JsonConvert.SerializeObject(drawingData, Formatting.Indented, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+                string json = JsonConvert.SerializeObject(drawingData, Formatting.Indented, _jsonSettings);
                 File.WriteAllText(PATH, json);
             }
             catch (Exception ex)
@@ -344,12 +348,9 @@ namespace corel_draw
             try
             {
                 string json = File.ReadAllText(PATH);
-                DrawingData drawingData = JsonConvert.DeserializeObject<DrawingData>(json, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+                DrawingData drawingData = JsonConvert.DeserializeObject<DrawingData>(json, _jsonSettings);
 
-                List<Figure> loadedFigures = new List<Figure>();
-                loadedFigures.AddRange(drawingData.DrawnFigures);
-
-                ICommand loadCommand = new LoadCommand(_drawnFigures, loadedFigures);
+                ICommand loadCommand = new LoadCommand(_drawnFigures, drawingData.DrawnFigures);
                 _commandManager.AddCommand(loadCommand);
             }
             catch (Exception ex)

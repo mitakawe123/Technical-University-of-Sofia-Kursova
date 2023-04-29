@@ -98,6 +98,7 @@ namespace corel_draw.FactoryComponents
                             g.DrawLine(_penDashed, _clickedPoints[i], _clickedPoints[i + 1]);
                         else 
                             g.DrawLine(_penDashed, _clickedPoints[i], _clickedPoints[0]);
+
                         if (i == _selectedPointIndex)
                             g.FillEllipse(Brushes.Red, _clickedPoints[i].X - 8, _clickedPoints[i].Y - 8, 16, 16);
                         else
