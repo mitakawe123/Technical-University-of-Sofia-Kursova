@@ -1,38 +1,48 @@
 ﻿using corel_draw.Figures;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace corel_draw.FigureInfo
 {
     public class FigureInfo
     {
-        public List<Figure> DrawnFigures { get; private set; }
-        public Figure CurrentFigure { get; private set; }
-        public Figure BiggestFigure { get; private set; }
-        public Figure SmallestFigure { get; private set; }
-        public Figure FirstFigure { get; private set; }
-        public Figure LastFigure { get; private set; }
-        public Figure PolygonWithMostSides { get; private set; }
-        public string TypeOfFigure { get; private set; }
-        public string BorderColor { get; private set; }
-        public string FillColor { get; private set; }
-        public string AreaOfFigure {get;private set;}
+        public List<string> SpecialProps { get; private set; }
+        public List<string> DefaultProps{ get; private set; }
+
+        private Figure _biggestFigure;
+        private Figure _smallestFigure;
+        private Figure _firstFigure;
+        private Figure _lastFigure;
+        private Figure _polygonWithMostSides;
 
         public FigureInfo(List<Figure> drawnFigures,Figure currentFigure)
         {
-            DrawnFigures = drawnFigures;
-            CurrentFigure = currentFigure;
+            SpecialProps = new List<string>();
+            DefaultProps = new List<string>()
+            {
+                currentFigure.GetType().Name,
+                currentFigure.Color.Name,
+                currentFigure.FillColor.Name,
+                currentFigure.CalcArea().ToString("F2")
+            };  
 
-            BiggestFigure = drawnFigures.OrderByDescending(f => f.CalcArea()).First();
-            SmallestFigure = drawnFigures.OrderBy(f => f.CalcArea()).First();
-            FirstFigure = drawnFigures.First();
-            LastFigure = drawnFigures.Last();
-            PolygonWithMostSides = drawnFigures.OfType<Polygon>().OrderByDescending(p => p.Points.Count).FirstOrDefault();
+            _biggestFigure = drawnFigures.OrderByDescending(f => f.CalcArea()).First();
+            _smallestFigure = drawnFigures.OrderBy(f => f.CalcArea()).First();
+            _firstFigure = drawnFigures.First();
+            _lastFigure = drawnFigures.Last();
+            _polygonWithMostSides = drawnFigures.OfType<Polygon>().OrderByDescending(p => p.Points.Count).FirstOrDefault();
 
-            TypeOfFigure = currentFigure.GetType().Name;
-            BorderColor = currentFigure.Color.Name;
-            FillColor = currentFigure.FillColor.Name;
-            AreaOfFigure = currentFigure.CalcArea().ToString("F2");
+            if (currentFigure == _biggestFigure)
+                SpecialProps.Add("Biggest Figure by Area");
+            if (currentFigure == _smallestFigure) 
+                SpecialProps.Add("Smallest Figure by Area");
+            if (currentFigure == _firstFigure)
+                SpecialProps.Add("First Created Figure");
+            if (currentFigure == _lastFigure) 
+                SpecialProps.Add("Last Created Figure");
+            if (currentFigure == _polygonWithMostSides) 
+                SpecialProps.Add("Polygon with Most Sides");
         }
     }
 }
