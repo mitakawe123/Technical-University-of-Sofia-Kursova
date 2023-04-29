@@ -58,10 +58,23 @@ namespace corel_draw
 
         private void FigureFactoryFinished(Figure figure)
         {
-            if (_isAddClicked) 
-                AddFigure(figure);
+            if (_isAddClicked)
+            {
+                ICommand addCommand = new AddCommand(figure, _drawnFigures);
+                _commandManager.AddCommand(addCommand);
+                _figureFactory = null;
+                actionList.Items.Add($"Added {figure.GetType().Name} with area of {figure.CalcArea():F2}");
+                DrawingBox.Invalidate();
+            }
             else
-                EditSize(figure);
+            {
+                ICommand command = new EditSizeCommand(_currentFigure, figure);
+                _commandManager.AddCommand(command);
+                _figureFactory = null;
+                _currentFigure = figure;
+                actionList.Items.Add($"Edit {figure.GetType().Name} with new area of {figure.CalcArea():F2}");
+                DrawingBox.Invalidate();
+            }
         }
 
         private int FindFigureFactoryIndex(Type figureType)
@@ -98,25 +111,6 @@ namespace corel_draw
                 };
                 Controls.Add(button);
             }
-        }
-
-        private void AddFigure(Figure figure)
-        {
-            ICommand addCommand = new AddCommand(figure, _drawnFigures);
-            _commandManager.AddCommand(addCommand);
-            _figureFactory = null;
-            actionList.Items.Add($"Added {figure.GetType().Name} with area of {figure.CalcArea():F2}");
-            DrawingBox.Invalidate();
-        }
-
-        private void EditSize(Figure figure)
-        {
-            ICommand command = new EditSizeCommand(_currentFigure, figure);
-            _commandManager.AddCommand(command);
-            _figureFactory = null;
-            _currentFigure = figure;
-            actionList.Items.Add($"Edit {figure.GetType().Name} with new area of {figure.CalcArea():F2}");
-            DrawingBox.Invalidate();
         }
 
         private void EditSizeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -219,7 +213,7 @@ namespace corel_draw
                     {
                         _isDragging = true;
                         _lastPoint = e.Location;
-                        _initialPosition = e.Location;
+                        _initialPosition = figure.Location;
                         _initialWidth = figure.Width;
                         _initialHeight = figure.Height;
                     }
@@ -266,7 +260,7 @@ namespace corel_draw
                 Invalidate();
             }
 
-            if (_isResizing) 
+            if (_isResizing)
             { 
                 _isResizing = false;
                 _currentFigure.ShowPolygonBoundingBox = false; 
