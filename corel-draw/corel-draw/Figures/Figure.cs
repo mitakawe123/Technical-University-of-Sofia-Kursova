@@ -1,8 +1,5 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 
 namespace corel_draw.Figures
 {
@@ -10,10 +7,10 @@ namespace corel_draw.Figures
     public abstract class Figure
     {
         private Point _location;
-        private int _width;
-        private int _height;
         private Color _fillColor;
         private Color _color;
+        private int _width;
+        private int _height;
         protected SolidBrush Brush { get; private set; }
         protected Pen Pen { get; private set; }
         public bool ShowPolygonBoundingBox { get; set; }

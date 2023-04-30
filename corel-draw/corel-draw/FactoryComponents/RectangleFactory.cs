@@ -67,9 +67,7 @@ namespace corel_draw.FactoryComponents
         public override void Draw(Graphics g)
         {
             if(_rectangle != null)
-            {
                 g.DrawRectangle(_defaultPen, _rectangle.Location.X, _rectangle.Location.Y, _rectangle.Width, _rectangle.Height);
-            }
         }
     }
 }

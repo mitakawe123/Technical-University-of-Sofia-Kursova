@@ -16,14 +16,8 @@ namespace corel_draw.Components
             _initialState = oldState.Clone();
         }
 
-        public void Do()
-        {
-            _oldState.CopyState(_newState);
-        }
+        public void Do() => _oldState.CopyState(_newState);
 
-        public void Undo()
-        {
-            _oldState.CopyState(_initialState);
-        }
+        public void Undo() => _oldState.CopyState(_initialState);
     }
 }

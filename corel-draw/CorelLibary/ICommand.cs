@@ -1,5 +1,4 @@
-﻿
-namespace CorelLibary
+﻿namespace CorelLibary
 {
     public interface ICommand
     {

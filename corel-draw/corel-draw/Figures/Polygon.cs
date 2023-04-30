@@ -11,11 +11,13 @@ namespace corel_draw.Figures
         private readonly Pen _dashPen = new Pen(Color.Blue, 10) { DashStyle = DashStyle.Dot };
         private System.Drawing.Rectangle _boundingRect;
         private List<Point> _points;
+        
         public List<Point> Points 
         { 
             get => _points; 
             private set => _points = value; 
         }
+        
         public Polygon(List<Point> points) : base(GetLocationAndSize(points, out int width,out int height),width, height)
         {
             _points = points;

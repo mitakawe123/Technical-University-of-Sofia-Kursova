@@ -130,7 +130,8 @@ namespace corel_draw
 
         private void DeleteMenuItem_Click(object sender, EventArgs e)
         {
-            if (_currentFigure == null) return;
+            if (_currentFigure == null) 
+                return;
             
             ICommand removeCommand = new DeleteCommand(_currentFigure, _drawnFigures);
             _commandManager.AddCommand(removeCommand);
@@ -141,10 +142,12 @@ namespace corel_draw
 
         private void ColorMenuItem_Click(object sender, EventArgs e)
         {
-            if (_currentFigure == null) return;
+            if (_currentFigure == null) 
+                return;
 
             ColorDialog colorDialog = new ColorDialog();
-            if (colorDialog.ShowDialog() != DialogResult.OK) return;
+            if (colorDialog.ShowDialog() != DialogResult.OK) 
+                return;
             
             Color oldColor = _currentFigure.Color;
             Color newColor = colorDialog.Color;
@@ -159,10 +162,12 @@ namespace corel_draw
 
         private void FillMenuItem_Click(object sender, EventArgs e)
         {
-            if (_currentFigure == null) return;
+            if (_currentFigure == null) 
+                return;
 
             ColorDialog colorDialog = new ColorDialog();
-            if (colorDialog.ShowDialog() != DialogResult.OK) return;
+            if (colorDialog.ShowDialog() != DialogResult.OK) 
+                return;
             
             Color oldFilling = _currentFigure.FillColor;
             Color newFilling = colorDialog.Color;
@@ -309,7 +314,8 @@ namespace corel_draw
 
         private void Redo_Btn_Click(object sender, EventArgs e)
         {
-            if (!_commandManager.CanRedo) return;
+            if (!_commandManager.CanRedo) 
+                return;
             
             _commandManager.Redo();
             DrawingBox.Invalidate();
@@ -317,7 +323,8 @@ namespace corel_draw
 
         private void Undo_Btn_Click(object sender, EventArgs e)
         {
-            if (!_commandManager.CanUndo) return;
+            if (!_commandManager.CanUndo) 
+                return;
 
             _commandManager.Undo();
             DrawingBox.Invalidate();

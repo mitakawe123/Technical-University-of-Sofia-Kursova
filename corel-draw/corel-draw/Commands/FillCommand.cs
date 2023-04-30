@@ -1,11 +1,6 @@
 ﻿using corel_draw.Figures;
 using CorelLibary;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace corel_draw.Components
 {
@@ -22,14 +17,8 @@ namespace corel_draw.Components
             _newFilling = newColor;
         }
 
-        public void Do()
-        {
-            _figure.FillColor = _newFilling;
-        }
+        public void Do() => _figure.FillColor = _newFilling;
 
-        public void Undo()
-        {
-            _figure.FillColor = _oldFilling;
-        }
+        public void Undo() => _figure.FillColor = _oldFilling;
     }
 }

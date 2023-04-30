@@ -15,17 +15,13 @@ namespace corel_draw.Components
             _newFigures = newFigures;
         }
 
-        public void Do()
-        {
-            _oldFigures.AddRange(_newFigures); 
-        }
+        public void Do() => _oldFigures.AddRange(_newFigures); 
+        
 
         public void Undo()
         {
             foreach (Figure figure in _newFigures)
-            {
                 _oldFigures.Remove(figure); 
-            }
         }
     }
 }

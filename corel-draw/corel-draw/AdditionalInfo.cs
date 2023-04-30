@@ -1,6 +1,4 @@
-﻿using corel_draw.Figures;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Windows.Forms;
 
 namespace corel_draw

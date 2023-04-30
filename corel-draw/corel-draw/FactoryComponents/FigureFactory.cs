@@ -1,9 +1,7 @@
 ﻿using corel_draw.Figures;
 using System;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
-using static System.Windows.Forms.AxHost;
 
 namespace corel_draw.FactoryComponents
 {

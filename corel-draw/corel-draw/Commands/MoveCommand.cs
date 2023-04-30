@@ -17,14 +17,8 @@ namespace corel_draw.Components
             _newPosition = newPosition;
         }
 
-        public void Do()
-        {
-            _figure.Location = _newPosition;
-        }
+        public void Do() => _figure.Location = _newPosition;
 
-        public void Undo()
-        {
-            _figure.Location = _oldPosition;
-        }
+        public void Undo() => _figure.Location = _oldPosition;
     }
 }

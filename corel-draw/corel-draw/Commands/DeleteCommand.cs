@@ -15,14 +15,8 @@ namespace corel_draw.Components
             _figures = figures;
         }
 
-        public void Do()
-        {
-            _figures.Remove(_figure);
-        }
+        public void Do() => _figures.Remove(_figure);
 
-        public void Undo()
-        {
-            _figures.Add(_figure);
-        }
+        public void Undo() => _figures.Add(_figure);
     }
 }

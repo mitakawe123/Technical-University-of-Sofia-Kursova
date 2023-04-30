@@ -16,14 +16,8 @@ namespace corel_draw.Components
             _newColor = newColor;
         }
 
-        public void Do()
-        {
-            _figure.Color = _newColor;
-        }
+        public void Do() => _figure.Color = _newColor;
 
-        public void Undo()
-        {
-            _figure.Color = _oldColor;
-        }
+        public void Undo() => _figure.Color = _oldColor;
     }
 }

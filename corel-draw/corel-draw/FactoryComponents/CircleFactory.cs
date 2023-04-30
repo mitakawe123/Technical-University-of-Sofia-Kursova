@@ -61,9 +61,7 @@ namespace corel_draw.FactoryComponents
         public override void Draw(Graphics g)
         {
             if (_circle != null)
-            {
                 g.DrawEllipse(_defaultPen, _circle.Location.X, _circle.Location.Y, _circle.Width, _circle.Height);
-            }
         }
     }
 }
