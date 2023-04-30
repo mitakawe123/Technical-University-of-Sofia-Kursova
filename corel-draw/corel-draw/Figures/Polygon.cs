@@ -90,13 +90,13 @@ namespace corel_draw.Figures
         public override void Draw(Graphics g)
         {
             g.DrawPolygon(Pen, _points.ToArray());
-         
-            if (ShowPolygonBoundingBox)
-            {
-                GetPolygonBounds(_points, out int minX, out int minY, out int maxX, out int maxY);
-                _boundingRect = new System.Drawing.Rectangle(minX, minY, maxX - minX, maxY - minY);
-                g.DrawRectangle(_dashPen, _boundingRect);
-            }
+
+            if (!ShowBoundingBox) 
+                return;
+
+            GetPolygonBounds(_points, out int minX, out int minY, out int maxX, out int maxY);
+            _boundingRect = new System.Drawing.Rectangle(minX, minY, maxX - minX, maxY - minY);
+            g.DrawRectangle(_dashPen, _boundingRect);
         }
 
         public override bool IsInsideBoundingBox(Point point)

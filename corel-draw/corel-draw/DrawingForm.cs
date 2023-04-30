@@ -22,15 +22,11 @@ namespace corel_draw
         private const int HEIGHT = 150;
 
         private static readonly Type[] FigureTypes = typeof(FigureFactory).Assembly
-            .GetTypes()
-            .Where(type => type
-            .IsSubclassOf(typeof(FigureFactory)))
-            .ToArray();
+                .GetTypes()
+                .Where(type => type.IsSubclassOf(typeof(FigureFactory)))
+                .ToArray();
 
-        private static readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
-        {
-            TypeNameHandling = TypeNameHandling.All
-        };
+        private static readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
         private readonly IReadOnlyList<FigureFactory> _figureFactories;
         private readonly List<Figure> _drawnFigures;
         private readonly CommandManager _commandManager;
@@ -60,6 +56,44 @@ namespace corel_draw
                 figureFactory.Finished += FigureFactoryFinished;
         }
 
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.Control)
+            {
+                if (e.KeyCode == Keys.Z
+                    && _commandManager.CanUndo)
+
+                    _commandManager.Undo();
+
+                else if (e.KeyCode == Keys.Y
+                    && _commandManager.CanRedo)
+
+                    _commandManager.Redo();
+            }
+            else if (e.KeyCode == Keys.Escape)
+                _figureFactory = null;
+
+            DrawingBox.Invalidate();
+        }
+
+        protected void DrawingBox_OnMouseWheel(object sender, MouseEventArgs e)
+        {
+            foreach (Figure figure in _drawnFigures)
+            {
+                if (!figure.Contains(e.Location))
+                    continue;
+
+                int matchingIndex = FindFigureFactoryIndex(figure.GetType());
+                if (matchingIndex == -1)
+                    return;
+
+                _figureFactory = _figureFactories[matchingIndex];
+                _figureFactory.MouseWheel(e, figure);
+                DrawingBox.Invalidate();
+                break;
+            }
+        }
+            
         private void FigureFactoryFinished(Figure figure)
         {
             if (_isAddClicked)
@@ -75,6 +109,7 @@ namespace corel_draw
                 _currentFigure = figure;
                 actionList.Items.Add($"Edit {figure.GetType().Name} with new area of {figure.CalcArea():F2}");
             }
+
             _figureFactory = null;
             DrawingBox.Invalidate();
         }
@@ -190,19 +225,21 @@ namespace corel_draw
 
         private void ResizeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _currentFigure.ShowPolygonBoundingBox = true;
+            _currentFigure.ShowBoundingBox = true;
             _isResizing = true;
         }
 
         private void ScaleFigure(MouseEventArgs e)
         {
-            if (_currentFigure.IsInsideBoundingBox(e.Location))            
+            if (_currentFigure.IsInsideBoundingBox(e.Location))
                 _currentFigure.Resize(_initialWidth + (e.Location.X - _initialPosition.X), _initialHeight + (e.Location.Y - _initialPosition.Y));
+           
             else if (e.Button == MouseButtons.Right)
             {
                 _isResizing = false;
-                _currentFigure.ShowPolygonBoundingBox = false;
+                _currentFigure.ShowBoundingBox = false;
             }
+
             Refresh();
         }
 
@@ -221,12 +258,13 @@ namespace corel_draw
                     _initialPosition = figure.Location;
                     _initialWidth = figure.Width;
                     _initialHeight = figure.Height;
-                    return; 
+                    return;
                 }
-                else if (e.Button == MouseButtons.Right)
+
+                if (e.Button == MouseButtons.Right)
                 {
                     ContextMenuCommands.Show(DrawingBox, e.Location);
-                    return; 
+                    return;
                 }
             }
 
@@ -239,8 +277,11 @@ namespace corel_draw
 
         private void DrawingBox_MouseMove(object sender, MouseEventArgs e)
         {
-            if(_isResizing)
+            if (_isResizing)
+            {
                 ScaleFigure(e);
+                return;
+            }
 
             if (_isDragging)
             {
@@ -248,6 +289,7 @@ namespace corel_draw
                 _lastPoint = e.Location;
                 _currentFigure.Move(delta);
                 DrawingBox.Invalidate();
+                return;
             }
 
             if (_figureFactory == null) 
@@ -267,12 +309,15 @@ namespace corel_draw
                 _isDragging = false;
                 _lastPoint = Point.Empty;
                 Invalidate();
+                return;
             }
+            
             if (_isResizing)
             {
                 _isResizing = false;
-                _currentFigure.ShowPolygonBoundingBox = false;
+                _currentFigure.ShowBoundingBox = false;
                 Refresh();
+                return;
             }
 
             if (_figureFactory == null) 
@@ -280,25 +325,6 @@ namespace corel_draw
 
             _figureFactory.MouseUp(e);
             DrawingBox.Invalidate();
-        }
-
-        protected void DrawingBox_OnMouseWheel(object sender, MouseEventArgs e)
-        {
-            foreach (Figure figure in _drawnFigures)
-            {
-                if (!figure.Contains(e.Location))
-                    continue;
-
-                int matchingIndex = FindFigureFactoryIndex(figure.GetType());
-                if (matchingIndex == -1)
-                    return;
-
-                _figureFactory = _figureFactories[matchingIndex];
-                _figureFactory.MouseWheel(e, figure);
-                DrawingBox.Invalidate();
-
-                break;
-            }
         }
 
         private void DrawingBox_Paint(object sender, PaintEventArgs e)
@@ -332,9 +358,10 @@ namespace corel_draw
 
         private void SaveToFile_Click(object sender, EventArgs e)
         {
+            DrawingData drawingData = new DrawingData { DrawnFigures = _drawnFigures };
+
             try
             {
-                DrawingData drawingData = new DrawingData { DrawnFigures = _drawnFigures.ToList() };
                 string json = JsonConvert.SerializeObject(drawingData, Formatting.Indented, _jsonSettings);
                 File.WriteAllText(PATH, json);
             }
@@ -343,19 +370,19 @@ namespace corel_draw
                 MessageBox.Show($"Error saving file: {ex.Message}");
                 return;
             }
+
             MessageBox.Show("File saved successfully.");
             actionList.Items.Add("Save figures to file");
         }
 
         private void LoadFromFile_Click(object sender, EventArgs e)
         {
+            DrawingData drawingData;
+
             try
             {
                 string json = File.ReadAllText(PATH);
-                DrawingData drawingData = JsonConvert.DeserializeObject<DrawingData>(json, _jsonSettings);
-
-                ICommand loadCommand = new LoadCommand(_drawnFigures, drawingData.DrawnFigures);
-                _commandManager.AddCommand(loadCommand);
+                drawingData = JsonConvert.DeserializeObject<DrawingData>(json, _jsonSettings);
             }
             catch (Exception ex)
             {
@@ -363,29 +390,11 @@ namespace corel_draw
                 return;
             }
 
+            ICommand loadCommand = new LoadCommand(_drawnFigures, drawingData.DrawnFigures);
+            _commandManager.AddCommand(loadCommand);
             DrawingBox.Invalidate();
             MessageBox.Show("File loaded successfully.");
             actionList.Items.Add("Load figures from file");
-        }
-
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            if (e.Control)
-            {
-                if (e.KeyCode == Keys.Z 
-                    && _commandManager.CanUndo)
-
-                    _commandManager.Undo();
-
-                else if (e.KeyCode == Keys.Y 
-                    && _commandManager.CanRedo)
-
-                    _commandManager.Redo();
-            }
-            else if (e.KeyCode == Keys.Escape)
-                _figureFactory = null;
-            
-            DrawingBox.Invalidate();
         }
     }
 }

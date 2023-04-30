@@ -13,7 +13,7 @@ namespace corel_draw.Figures
         private int _height;
         protected SolidBrush Brush { get; private set; }
         protected Pen Pen { get; private set; }
-        public bool ShowPolygonBoundingBox { get; set; }
+        public bool ShowBoundingBox { get; set; }
         public Color Color 
         {
             get => _color;
