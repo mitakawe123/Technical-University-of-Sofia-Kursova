@@ -38,7 +38,6 @@
             this.LoadFromFile = new System.Windows.Forms.Button();
             this.ContextMenuCommands = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.DeleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.EdittoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.BorderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.FillToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.InfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -122,7 +121,6 @@
             // 
             this.ContextMenuCommands.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.DeleteToolStripMenuItem,
-            this.EdittoolStripMenuItem,
             this.BorderToolStripMenuItem,
             this.FillToolStripMenuItem,
             this.InfoToolStripMenuItem,
@@ -136,13 +134,6 @@
             this.DeleteToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.DeleteToolStripMenuItem.Text = "Delete";
             this.DeleteToolStripMenuItem.Click += new System.EventHandler(this.DeleteMenuItem_Click);
-            // 
-            // EdittoolStripMenuItem
-            // 
-            this.EdittoolStripMenuItem.Name = "EdittoolStripMenuItem";
-            this.EdittoolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-            this.EdittoolStripMenuItem.Text = "Change Size";
-            this.EdittoolStripMenuItem.Click += new System.EventHandler(this.EditSizeToolStripMenuItem_Click);
             // 
             // BorderToolStripMenuItem
             // 
@@ -205,7 +196,6 @@
         private System.Windows.Forms.Button LoadFromFile;
         private System.Windows.Forms.ContextMenuStrip ContextMenuCommands;
         private System.Windows.Forms.ToolStripMenuItem DeleteToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem EdittoolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem BorderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem FillToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem InfoToolStripMenuItem;

@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace corel_draw.Figures
 {
-    internal class Circle:Figure
+    internal class Circle: Figure
     {
         public Circle(int x, int y, int radius) : base(new Point(x, y), radius * 2, radius * 2) {}
 

@@ -48,22 +48,6 @@ namespace corel_draw.FactoryComponents
             OnFinished(_rectangle);
         }
 
-        public override void MouseWheel(MouseEventArgs e, Figure currentFigure)
-        {
-            _isScrolling = true;
-
-            if (e.Delta > 0)
-            {
-                currentFigure.Height += SCALE_SUFFIX;
-                currentFigure.Width += SCALE_SUFFIX;
-            }
-            else
-            {
-                currentFigure.Height -= SCALE_SUFFIX;
-                currentFigure.Width -= SCALE_SUFFIX;
-            }
-        }
-
         public override void Draw(Graphics g)
         {
             if(_rectangle != null)

@@ -1,8 +1,6 @@
-C:\Users\dimitar.kyuchukov\Desktop\NuGetPackage\CorelLibary.dll
-C:\Users\dimitar.kyuchukov\Desktop\NuGetPackage\CorelLibary.pdb
-C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\CorelLibary\obj\Debug\CorelLibary.csproj.AssemblyReference.cache
-C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\CorelLibary\obj\Debug\CorelLibary.csproj.CoreCompileInputs.cache
-C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\CorelLibary\obj\Debug\CorelLibary.dll
-C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\CorelLibary\obj\Debug\CorelLibary.pdb
-C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\CorelLibary\bin\Debug\CorelLibary.dll
-C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\corel-draw\CorelLibary\bin\Debug\CorelLibary.pdb
+C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\Technical-University-of-Sofia-Kursova\corel-draw\CorelLibary\bin\Debug\CorelLibary.dll
+C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\Technical-University-of-Sofia-Kursova\corel-draw\CorelLibary\bin\Debug\CorelLibary.pdb
+C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\Technical-University-of-Sofia-Kursova\corel-draw\CorelLibary\obj\Debug\CorelLibary.csproj.AssemblyReference.cache
+C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\Technical-University-of-Sofia-Kursova\corel-draw\CorelLibary\obj\Debug\CorelLibary.csproj.CoreCompileInputs.cache
+C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\Technical-University-of-Sofia-Kursova\corel-draw\CorelLibary\obj\Debug\CorelLibary.dll
+C:\Users\dimitar.kyuchukov\Desktop\Technical-University-of-Sofia-Kursova\Technical-University-of-Sofia-Kursova\corel-draw\CorelLibary\obj\Debug\CorelLibary.pdb

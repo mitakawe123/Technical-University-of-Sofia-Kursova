@@ -1,29 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Linq;
 
 namespace corel_draw.Figures
 {
     internal class Polygon : Figure
     {
-        private readonly Pen _dashPen = new Pen(Color.Blue, 10) { DashStyle = DashStyle.Dot };
-        private System.Drawing.Rectangle _boundingRect;
         private List<Point> _points;
-        
-        public List<Point> Points 
-        { 
-            get => _points; 
-            private set => _points = value; 
+        public override int Width
+        {
+            get => base.Width;
+            set
+            {
+                for (int i = 0; i < _points.Count; i++)
+                {
+                    float scale = (_points[i].X - Location.X) / (float)base.Width;
+                    int newX = (int)Math.Round(Location.X + value * scale, MidpointRounding.AwayFromZero);
+                    _points[i] = new Point(newX, _points[i].Y);
+                }
+                base.Width = value;
+            }
         }
-        
-        public Polygon(List<Point> points) : base(GetLocationAndSize(points, out int width,out int height),width, height)
+        public override int Height
+        {
+            get => base.Height;
+            set
+            {
+                for (int i = 0; i < _points.Count; i++)
+                {
+                    float scale = (_points[i].Y - Location.Y) / (float)base.Height;
+                    int newY = (int)Math.Round(Location.Y + value * scale, MidpointRounding.AwayFromZero);
+                    _points[i] = new Point(_points[i].X, newY);
+                }
+                base.Height = value;
+            }
+        }
+        public List<Point> Points
+        {
+            get => _points;
+            private set => _points = value;
+        }
+
+        public Polygon(List<Point> points) : base(GetLocationAndSize(points, out int width, out int height), width, height)
         {
             _points = points;
         }
 
-        private static Point GetLocationAndSize(List<Point> points, out int width,out int height)
+        private static Point GetLocationAndSize(List<Point> points, out int width, out int height)
         {
             int minX = points[0].X;
             int maxX = points[0].X;
@@ -40,13 +63,7 @@ namespace corel_draw.Figures
             height = maxY - minY;
             return new Point(minX, minY);
         }
-        public void GetPolygonBounds(List<Point> polygon, out int minX, out int minY, out int maxX, out int maxY)
-        {
-            minX = polygon.Min(p => p.X);
-            minY = polygon.Min(p => p.Y);
-            maxX = polygon.Max(p => p.X);
-            maxY = polygon.Max(p => p.Y);
-        }
+
         public override Point Location
         {
             get => base.Location;
@@ -68,42 +85,10 @@ namespace corel_draw.Figures
             if (figure is Polygon polygon)
                 _points = new List<Point>(polygon._points);
         }
-        public override void Resize(int width,int height)
-        {
-            int currentWidth = Width;
-            int currentHeight = Height;
-
-            Width = width;
-            Height = height;
-
-            Point center = new Point(Location.X + currentWidth / 2, Location.Y + currentHeight / 2);
-            for (int i = 0; i < _points.Count; i++)
-            {
-                int deltaX = (int)Math.Round((_points[i].X - center.X) * (double)width / currentWidth);
-                int deltaY = (int)Math.Round((_points[i].Y - center.Y) * (double)height / currentHeight);
-                _points[i] = new Point(center.X + deltaX, center.Y + deltaY);
-            }
-        }
 
         public override void Move(Point newPoint) => Location = new Point(Location.X + newPoint.X, Location.Y + newPoint.Y);
 
-        public override void Draw(Graphics g)
-        {
-            g.DrawPolygon(Pen, _points.ToArray());
-
-            if (!ShowBoundingBox) 
-                return;
-
-            GetPolygonBounds(_points, out int minX, out int minY, out int maxX, out int maxY);
-            _boundingRect = new System.Drawing.Rectangle(minX, minY, maxX - minX, maxY - minY);
-            g.DrawRectangle(_dashPen, _boundingRect);
-        }
-
-        public override bool IsInsideBoundingBox(Point point)
-        {
-            System.Drawing.Rectangle expandedRect = new System.Drawing.Rectangle(_boundingRect.X - 5, _boundingRect.Y - 5, _boundingRect.Width + 20, _boundingRect.Height + 20);
-            return expandedRect.Contains(point);
-        }
+        public override void Draw(Graphics g) => g.DrawPolygon(Pen, _points.ToArray());
 
         public override void Fill(Graphics g) => g.FillPolygon(Brush, _points.ToArray());
 

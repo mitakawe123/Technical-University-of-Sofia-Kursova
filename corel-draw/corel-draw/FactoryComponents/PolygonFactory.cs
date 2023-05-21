@@ -74,15 +74,6 @@ namespace corel_draw.FactoryComponents
             _dragginPoint = false;
         }
 
-        public override void MouseWheel(MouseEventArgs e, Figure currentFigure)
-        {
-            _isScrolling = true;
-            if (e.Delta > 0)
-                currentFigure.Resize(currentFigure.Width + 10,currentFigure.Height + 10);
-            else
-                currentFigure.Resize(currentFigure.Width - 10, currentFigure.Height - 10);
-        }
-
         public override void Draw(Graphics g)
         {
             if (_isDrawing && !_isScrolling && !_dragginPoint)

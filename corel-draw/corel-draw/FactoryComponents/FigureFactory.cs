@@ -22,8 +22,6 @@ namespace corel_draw.FactoryComponents
 
         public abstract void MouseUp(MouseEventArgs e);
 
-        public abstract void MouseWheel(MouseEventArgs e,Figure currentFigure);
-
         public abstract void Draw(Graphics g);
 
         public void OnFinished(Figure figure) => Finished?.Invoke(figure);
