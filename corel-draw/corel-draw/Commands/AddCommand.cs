@@ -6,8 +6,8 @@ namespace corel_draw.Components
 {
     internal class AddCommand: ICommand
     {
-        private readonly Figure _figure;
         private readonly List<Figure> _figures;
+        private readonly Figure _figure;
 
         public AddCommand(Figure figure, List<Figure> figures)
         {

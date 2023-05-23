@@ -14,8 +14,8 @@ namespace corel_draw.FactoryComponents
 
         private readonly Pen _penDashed = new Pen(Color.Black, 5) { DashStyle = DashStyle.Dash };
         private readonly List<Point> _clickedPoints = new List<Point>();
-        private Polygon _polygon;
 
+        private Polygon _polygon;
         private Point _startPoint;
         private Point _endPoint;
         

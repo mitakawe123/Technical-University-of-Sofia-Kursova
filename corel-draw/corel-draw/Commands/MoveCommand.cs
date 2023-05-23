@@ -8,7 +8,7 @@ namespace corel_draw.Components
     {
         private readonly Figure _figure;
         private readonly Point _newPosition;
-        private Point _oldPosition;
+        private readonly Point _oldPosition;
 
         public MoveCommand(Figure figure, Point oldPosition, Point newPosition)
         {

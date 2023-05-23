@@ -6,8 +6,8 @@ namespace corel_draw.Components
 {
     internal class DeleteCommand : ICommand
     {
-        private readonly Figure _figure;
         private readonly List<Figure> _figures;
+        private readonly Figure _figure;
 
         public DeleteCommand(Figure figure, List<Figure> figures)
         {

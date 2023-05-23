@@ -262,7 +262,7 @@ namespace corel_draw
             _isResizing = false;
             Refresh();
         }
-        [DebuggerStepThrough]
+
         private void DrawingBox_Paint(object sender, PaintEventArgs e)
         {
             _figureFactory?.Draw(e.Graphics); 

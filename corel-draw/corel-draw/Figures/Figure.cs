@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Drawing;
 
 namespace corel_draw.Figures
@@ -34,7 +33,6 @@ namespace corel_draw.Figures
                 Brush = new SolidBrush(_fillColor);
             }
         }
-
         public string Name { get; set; }
         public virtual Point Location { get => _location; set => _location = value; }
         public virtual int Width { get => _width; set => _width = value; }
@@ -48,9 +46,8 @@ namespace corel_draw.Figures
             Color = Color.Black;
             FillColor = Color.White;
         }
-        public virtual void Move(Point delta) => _location = new Point(_location.X + delta.X, _location.Y + delta.Y);
 
-        public abstract Figure Clone();
+        public virtual void Move(Point delta) => _location = new Point(_location.X + delta.X, _location.Y + delta.Y);
 
         public virtual void CopyState(Figure figure)
         {
@@ -62,12 +59,6 @@ namespace corel_draw.Figures
             Name = figure.Name;
         }
 
-        public abstract void Draw(Graphics g);
-
-        public abstract void Fill(Graphics g);
-
-        public abstract double CalcArea();
-
         public virtual bool Contains(Point point)
         {
             bool isInsideX = _location.X <= point.X && point.X <= _location.X + _width;
@@ -76,6 +67,14 @@ namespace corel_draw.Figures
             return isInsideX && isInsideY;
         }
 
-        public virtual bool IsInsideBoundingBox(Point point) => false; 
+        public abstract Figure Clone();
+
+        public abstract void Draw(Graphics g);
+
+        public abstract void Fill(Graphics g);
+
+        public abstract double CalcArea();
+
+        
     }
 }

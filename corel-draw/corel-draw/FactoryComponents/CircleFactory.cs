@@ -7,9 +7,9 @@ namespace corel_draw.FactoryComponents
 {
     internal class CircleFactory : FigureFactory
     {
+        private Circle _circle;
         private Point _startPoint;
         private Point _endPoint;
-        private Circle _circle;
 
         public override void BeginCreateFigure()
         {
