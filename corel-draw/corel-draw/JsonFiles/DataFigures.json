@@ -4,14 +4,68 @@
     "$type": "System.Collections.Generic.List`1[[corel_draw.Figures.Figure, corel-draw]], mscorlib",
     "$values": [
       {
-        "$type": "corel_draw.Figures.Circle, corel-draw",
-        "BoundingBox": "258, 54, 266, 266",
+        "$type": "corel_draw.Figures.Rectangle, corel-draw",
+        "BoundingBox": "590, 277, 324, 100",
+        "ShowBoundingBox": false,
+        "Color": "0, 255, 128",
+        "FillColor": "White",
+        "Location": "590, 277",
+        "Width": 324,
+        "Height": 100
+      },
+      {
+        "$type": "corel_draw.Figures.Polygon, corel-draw",
+        "Width": 566,
+        "Height": 257,
+        "Points": {
+          "$type": "System.Collections.Generic.List`1[[System.Drawing.Point, System.Drawing]], mscorlib",
+          "$values": [
+            "497, -7",
+            "644, 173",
+            "78, 250",
+            "431, 238",
+            "99, 78",
+            "454, 125",
+            "575, 238"
+          ]
+        },
+        "Location": "78, -7",
+        "BoundingBox": "78, -7, 566, 257",
+        "ShowBoundingBox": false,
+        "Color": "Black",
+        "FillColor": "0, 64, 0"
+      },
+      {
+        "$type": "corel_draw.Figures.Rectangle, corel-draw",
+        "BoundingBox": "513, 24, 324, 100",
         "ShowBoundingBox": false,
         "Color": "Black",
         "FillColor": "White",
-        "Location": "258, 54",
-        "Width": 266,
-        "Height": 266
+        "Location": "513, 24",
+        "Width": 324,
+        "Height": 100
+      },
+      {
+        "$type": "corel_draw.Figures.Polygon, corel-draw",
+        "Width": 628,
+        "Height": 308,
+        "Points": {
+          "$type": "System.Collections.Generic.List`1[[System.Drawing.Point, System.Drawing]], mscorlib",
+          "$values": [
+            "741, 42",
+            "908, 258",
+            "280, 350",
+            "670, 338",
+            "300, 142",
+            "698, 209",
+            "838, 338"
+          ]
+        },
+        "Location": "280, 42",
+        "BoundingBox": "280, 42, 628, 308",
+        "ShowBoundingBox": false,
+        "Color": "Black",
+        "FillColor": "0, 64, 0"
       }
     ]
   }

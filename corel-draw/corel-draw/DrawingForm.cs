@@ -106,7 +106,7 @@ namespace corel_draw
                 {
                     _figureFactory = factory;
                     _figureFactory.BeginCreateFigure();
-                    _isFilling = false;
+                    //_isFilling = false;
                     _isResizing = false;
                 };
                 Controls.Add(button);

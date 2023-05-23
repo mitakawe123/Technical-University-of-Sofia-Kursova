@@ -10,7 +10,7 @@ namespace corel_draw.Resize
         public System.Drawing.Rectangle BoundingBox
         {
             get => boundingBox;
-            set => boundingBox = value;
+            private set => boundingBox = value;
         }
         
         public Resize(System.Drawing.Rectangle boundingBox) => this.boundingBox = boundingBox;
